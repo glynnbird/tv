@@ -2,8 +2,8 @@ import { okResponse } from './lib/constants.js'
 
 export default {
   async fetch (request, env, ctx) {
-    // list keys in the KV store, bound to this worker as TODOLIST
-    const r = await env.TODOLIST.list({ prefix: 'prog:' })
+    // list keys in the KV store, bound to this worker as TVKV
+    const r = await env.TVKV.list({ prefix: 'prog:' })
 
     // map to a list of objects
     const output = r.keys.map((k) => {

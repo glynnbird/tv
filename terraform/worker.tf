@@ -18,7 +18,7 @@ resource "cloudflare_worker_script" "add_worker" {
 
   // bind the KV service to this worker
   kv_namespace_binding {
-    name         = "TODOLIST"
+    name         = "TVKV"
     namespace_id = cloudflare_workers_kv_namespace.tv_kv.id
   }
 }
@@ -32,7 +32,7 @@ resource "cloudflare_worker_script" "list_worker" {
 
   // bind the KV service to this worker
   kv_namespace_binding {
-    name         = "TODOLIST"
+    name         = "TVKV"
     namespace_id = cloudflare_workers_kv_namespace.tv_kv.id
   }
 }
@@ -46,7 +46,7 @@ resource "cloudflare_worker_script" "query_network_worker" {
 
   // bind the KV service to this worker
   kv_namespace_binding {
-    name         = "TODOLIST"
+    name         = "TVKV"
     namespace_id = cloudflare_workers_kv_namespace.tv_kv.id
   }
 }
@@ -60,7 +60,7 @@ resource "cloudflare_worker_script" "query_date_worker" {
 
   // bind the KV service to this worker
   kv_namespace_binding {
-    name         = "TODOLIST"
+    name         = "TVKV"
     namespace_id = cloudflare_workers_kv_namespace.tv_kv.id
   }
 }
@@ -74,7 +74,7 @@ resource "cloudflare_worker_script" "delete_worker" {
 
   // bind the KV service to this worker
   kv_namespace_binding {
-    name         = "TODOLIST"
+    name         = "TVKV"
     namespace_id = cloudflare_workers_kv_namespace.tv_kv.id
   }
 }
@@ -88,7 +88,7 @@ resource "cloudflare_worker_script" "get_worker" {
 
   // bind the KV service to this worker
   kv_namespace_binding {
-    name         = "TODOLIST"
+    name         = "TVKV"
     namespace_id = cloudflare_workers_kv_namespace.tv_kv.id
   }
 }
@@ -96,7 +96,7 @@ resource "cloudflare_worker_script" "get_worker" {
 // router worker that is the first thing called with every incoming HTTP request
 resource "cloudflare_worker_script" "router_worker" {
   account_id = var.cloudflare_account_id
-  name       = "router_${terraform.workspace}"
+  name       = "tv_router_${terraform.workspace}"
   content    = file("../code/dist/router.js")
   module     = true
 

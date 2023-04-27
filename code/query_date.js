@@ -6,7 +6,7 @@ export default {
 
     if (json.date) {
       // list keys in the KV store starting with a prefix
-      const r = await env.TODOLIST.list({ prefix: `date:${json.date}` })
+      const r = await env.TVKV.list({ prefix: `date:${json.date}` })
 
       // map to a list of objects
       const output = r.keys.map((k) => {

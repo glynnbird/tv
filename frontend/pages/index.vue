@@ -50,6 +50,5 @@
   }
 </script>
 <template>
-  <PageTitle title="TV"></PageTitle>
   <TVList :list="progList" @delete="deleteProg"></TVList>
 </template>

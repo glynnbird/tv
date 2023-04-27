@@ -11,7 +11,7 @@ export default {
       // create a time-based key
       const id = (new Date().getTime()).toString()
 
-      // write key/value to the KV store, bound to this worker as TODOLIST
+      // write key/value to the KV store, bound to this worker as TVKV
       const metadata = {
         t: json.t,
         n: json.n,
@@ -24,18 +24,18 @@ export default {
       }
       // put the data in "metadata" instead of value, so that it comes back
       // in the .list() request
-      await env.TODOLIST.put(`prog:${id}`, JSON.stringify(value), { metadata })
+      await env.TVKV.put(`prog:${id}`, JSON.stringify(value), { metadata })
 
       // secondary indexes - by network
       if (json.n) {
         const key = `network:${json.n}:${id}`
-        await env.TODOLIST.put(key, null, { metadata })
+        await env.TVKV.put(key, null, { metadata })
       }
 
       // secondary indexes - by date
       if (json.d) {
         const key = `date:${json.d}:${id}`
-        await env.TODOLIST.put(key, null, { metadata })
+        await env.TVKV.put(key, null, { metadata })
       }
 
       // send response

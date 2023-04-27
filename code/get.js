@@ -10,7 +10,7 @@ export default {
     if (json.id) {
       // delete the id from the KV store
       const key = `prog:${json.id}`
-      const { value, metadata } = await env.TODOLIST.getWithMetadata(key)
+      const { value, metadata } = await env.TVKV.getWithMetadata(key)
       const v = JSON.parse(value)
       if (v === null) {
         return new Response(JSON.stringify({ ok: false, msg: 'Missing' }), missingResponse);

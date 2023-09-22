@@ -28,8 +28,7 @@ export const add = async function (json, kv) {
       _freetextIndex: words,
       _index: json.index
     }
-    Object.assign(coreDoc, json.doc)
-    delete coreDoc.metadata
+    delete coreDoc.doc.metadata
     const m = {
       metadata: json.metadata
     }

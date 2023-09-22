@@ -3,7 +3,7 @@ import { mustBePOST, mustBeJSON, apiKey } from './lib/checks.js'
 import { del } from './lib/db.js'
 
 export async function onRequest(context) {
-  // handle POST/JSON/apikey chcecks
+  // handle POST/JSON/apikey checks
   const r = apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
   if (r) return r
 
@@ -13,6 +13,7 @@ export async function onRequest(context) {
   // if there's a id
   if (json.id) {
     // delete the id from the KV store
+    console.log('request to delete', json.id)
     const response = await del(json.id, context.env.TVKV)
 
     // send response

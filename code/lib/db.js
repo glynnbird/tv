@@ -1,4 +1,3 @@
-import { okResponse, notOkResponse, notOk } from './constants.js'
 import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
@@ -24,13 +23,15 @@ export const add = async function (json, kv) {
     const coreDoc = {
       id: json.id,
       doc: json.doc,
-      metadata: json.metadata,
       _ts: new Date().toISOString(),
       _freetext: json.freetext,
       _freetextIndex: words,
       _index: json.index
     }
-    await kv.put(`doc:${json.id}`, JSON.stringify(coreDoc))
+    const m = {
+      metadata: json.metadata
+    }
+    await kv.put(`doc:${json.id}`, JSON.stringify(coreDoc), m)
 
     // write secondary index docs for freetext search
     for (const word of words) {

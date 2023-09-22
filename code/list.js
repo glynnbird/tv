@@ -1,24 +1,16 @@
 import { okResponse } from './lib/constants.js'
 import { mustBePOST, mustBeJSON, apiKey } from './lib/checks.js'
-
+import { list } from './lib/db.js'
+ 
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
   const r = apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
   if (r) return r
 
   // list keys in the KV store, bound to this worker as TVKV
-  const l = await context.env.TVKV.list()
-
-  // map to a list of objects
-  const output = l.keys.map((k) => {
-    // k.name = '1681480420026'
-    return {
-      id: k.name,
-      ...k.metadata
-    }
-  })
+  const response = await list(context.env.TVKV)
 
   // send response
-  return new Response(JSON.stringify({ ok: true, list: output }), okResponse)
+  return new Response(JSON.stringify({ ok: true, list: response }), okResponse)
 
 }

@@ -1,6 +1,18 @@
 import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
+export const list = async function(kv) {
+  const l = await context.env.TVKV.list({ prefix: 'doc:' })
+  const output = l.keys.map((k) => {
+    // k.name = '1681480420026'
+    return {
+      id: k.name,
+      ...k.metadata
+    }
+  })
+  return output
+}
+
 export const add = async function (json, kv) {
   console.log('adding', json)
   if (!json.id) {
@@ -62,8 +74,10 @@ export const del = async function (id, kv) {
   const json = JSON.parse(r)
 
   // delete free-text index
-  for (const word of words['_freetextIndex']) {
-    await kv.delete(`freetext:${word}:${id}`)
+  if (json['_freetextIndex']) {
+    for (const word of json['_freetextIndex']) {
+      await kv.delete(`freetext:${word}:${id}`)
+    }
   }
 
   // write secondary index docs for indexed items

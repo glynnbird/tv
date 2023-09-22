@@ -19,7 +19,7 @@ export async function onRequest(context) {
       title: json.title,
       description: json.description || '',
       stars: json.stars || [],
-      on: json.on,
+      on: json.on || '',
       date: json.date || new Date().toISOString().substring(0,10),
       season: json.season || '',
       pic: json.pic || '',

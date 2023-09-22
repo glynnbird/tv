@@ -30,9 +30,13 @@ export async function onRequest(context) {
       title: doc.title,
       watching: doc.watching
     }
+    const index = {
+      watching: doc.watching.toString(),
+      on: doc.on,
+    }
 
     // add to KV store
-    const response = await add({ id, doc, metadata }, context.env.TVKV)
+    const response = await add({ id, doc, metadata, index }, context.env.TVKV)
 
     // send response
     return new Response(JSON.stringify(response), okResponse)

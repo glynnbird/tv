@@ -56,7 +56,7 @@ export const add = async function (json, kv) {
 
 export const del = async function (id, kv) {
   console.log('deleting doc', id)
-  const r = await context.env.TVKV.get(`doc:${json.id}`)
+  const r = await kv.get(`doc:${json.id}`)
   const json = JSON.parse(r)
 
   // delete free-text index

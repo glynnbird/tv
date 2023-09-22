@@ -1,5 +1,6 @@
 import { okResponse, notOkResponse, notOk } from './lib/constants.js'
 import { mustBePOST, mustBeJSON, apiKey } from './lib/checks.js'
+import { add } from './lib/db.js'
 
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
@@ -12,20 +13,29 @@ export async function onRequest(context) {
   // if there's a title
   if (json.title) {
     // create a time-based key
-    const key = (new Date().getTime()).toString()
+    const id = (new Date().getTime()).toString()
 
-    // write key/value to the KV store, bound to this worker as TVKV
-    const metadata = {
-      time: new Date().toISOString(),
+    const doc = {
       title: json.title,
-      description: json.description
+      description: json.description || '',
+      stars: json.stars || [],
+      on: json.on,
+      date: json.date || new Date().toISOString().substring(0,10),
+      season: json.season || '',
+      pic: json.pic || '',
+      watching: json.watching || false
     }
-    // put the data in "metadata" instead of value, so that it comes back
-    // in the .list() request
-    await context.env.TVKV.put(key, null, { metadata })
+    const metadata = {
+      date: doc.date,
+      title: doc.title,
+      watching: doc.watching
+    }
+
+    // add to KV store
+    const response = await add({ id, doc, metadata }, context.env.TVKV)
 
     // send response
-    return new Response(JSON.stringify({ ok: true, id: key }), okResponse)
+    return new Response(JSON.stringify(response), okResponse)
   }
   
   // everyone else gets a 400 response

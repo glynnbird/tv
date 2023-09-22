@@ -15,11 +15,34 @@ As we only have simple KeyValue store and the Cloudflare KV.list() operation onl
 
 | key           | value |  metadata                                                                        |
 |---------------|-------|----------------------------------------------------------------------------------|
-| 1681893518478 | null  | {"time":"2023-04-19T08:38:38.478Z","title":"Grapes","description":"Big ones"}    |
-| 1681894657902 | null  | {"time":"2023-04-19T08:57:37.902Z","title":"Lemonade","description":"Cloudy"}    |
-| 1681897942565 | null  | {"time":"2023-04-19T09:52:22.565Z","title":"Bread","description":"French stick"} |
+| 1681893518478 | null  | {"date":"2023-01-05","title":"Line Of Duty","watching":true}                     |
 
-The keys is a timestamp. This allows us to get time-ordered list of todo titles with just the `TVKV.list()` function. The value is left blank because we're able to fit everything in the `metadata` object which has to be < 1kB, but does come back from the `KV.list` function.
+
+The keys is a timestamp. This allows us to get time-ordered list of programmes with just the `TVKV.list()` function. The value is left blank because we're able to fit a summary in the `metadata` object which has to be < 1kB, but does come back from the `KV.list` function.
+
+The main `value` is everything we know about the programme:
+
+```js
+{
+  "title": "Line of Duty",
+  "description": "The sixth series of Line of Duty, consisting of seven episodes, began broadcasting on BBC One on 21 March 2021. The story follows the actions of AC-12, led by Superintendent Ted Hastings and DI Steve Arnott, as they investigate DCI Joanne Davidson and her team, including former AC-12 officer DI Kate Fleming.",
+  "stars": ["Vicky McClure", "Martin Compston", "Kelly McDonald"],
+  "on": "BBC",
+  "date": "2023-05-01",
+  "season": "6",
+  "pic": "https://ichef.bbci.co.uk/images/ic/784x441/p09b2v32.jpg",
+  "watching": false
+}
+```
+
+We also add some additional fields for indexing purposes:
+
+```
+_ts : "2023-05-01T19:52:24.000Z",
+_freetext: [] // list of words to be indexed for freetext search
+_freetextIndex: [] // list of stemmed and processed words that are actually indexed
+_index: {} // a map of key/value pairs to be indexed for this document
+
 
 ## API
 
@@ -60,7 +83,7 @@ Parameters
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' "https://$URL/api/list_todos"
+curl -X POST -H'Content-type:application/json' -H'apikey: abc123' "https://$URL/api/list"
 {"ok":true,"list":[{"id":"1681480376706:water","title":"water","ts":"2023-04-14T13:52:56.706Z"},{"id":"1681480420026:jam","title":"jam","ts":"2023-04-14T13:53:40.026Z"},{"id":"1681482390981:Milk","title":"Milk","ts":"2023-04-14T14:26:30.981Z"}]}
 ```
 

@@ -72,16 +72,17 @@ export const del = async function (id, kv) {
   console.log('deleting doc', id)
   const r = await kv.get(`doc:${id}`)
   const json = JSON.parse(r)
+  console.log('json', json)
 
   // delete free-text index
-  if (json['_freetextIndex']) {
+  if (json && json['_freetextIndex']) {
     for (const word of json['_freetextIndex']) {
       await kv.delete(`freetext:${word}:${id}`)
     }
   }
 
   // write secondary index docs for indexed items
-  if (json['_index']) {
+  if (json && json['_index']) {
     const keys = Object.keys(json['_index'])
     for (const key of keys) {
       const v = json._index[key]

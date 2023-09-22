@@ -2,7 +2,7 @@ import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
 export const list = async function(kv) {
-  const l = await context.env.TVKV.list({ prefix: 'doc:' })
+  const l = await kv.list({ prefix: 'doc:' })
   const output = l.keys.map((k) => {
     // k.name = '1681480420026'
     return {

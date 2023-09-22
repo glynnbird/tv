@@ -4,7 +4,17 @@ import { process } from './process.js'
 export const list = async function(kv) {
   const l = await kv.list({ prefix: 'doc:' })
   const output = l.keys.map((k) => {
-    // k.name = '1681480420026'
+    return {
+      id: k.name,
+      ...k.metadata
+    }
+  })
+  return output
+}
+
+export const queryIndex = async function(kv, key, value) {
+  const l = await kv.list({ prefix: `index:${key}:${value}` })
+  const output = l.keys.map((k) => {
     return {
       id: k.name,
       ...k.metadata

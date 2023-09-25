@@ -11,8 +11,8 @@
   if (todos.value.length === 0) {
     try {
       //  fetch the list from the API
-      console.log('API', '/list', `${apiHome}/api/list_todos`)
-      const r = await useFetch(`${apiHome}/api/list_todos`, {
+      console.log('API', '/list', `${apiHome}/api/list`)
+      const r = await useFetch(`${apiHome}/api/list`, {
         method: 'post',
         headers: {
           'content-type': 'application/json',
@@ -25,11 +25,11 @@
     }
   }
     
-  // delete an individual todo
-  const deleteTodo = async  (id) => {
-    console.log('API', '/delete', id)
+  // delete an individual item
+  const deleteItem = async  (id) => {
+    console.log('API', '/del', id)
     try {
-      const ret = await useFetch(`${apiHome}/api/delete_todo`, {
+      const ret = await useFetch(`${apiHome}/api/del`, {
         method: 'post',
         body: {
           id
@@ -51,6 +51,6 @@
   }
 </script>
 <template>
-  <PageTitle title="ToDo List"></PageTitle>
-  <TodoList :todos="todos" @deleteTodo="deleteTodo"></TodoList>
+  <PageTitle title="TV List"></PageTitle>
+  <TodoList :todos="todos" @deleteTodo="deleteItem"></TodoList>
 </template>

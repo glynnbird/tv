@@ -1,10 +1,10 @@
 import { okResponse, notOkResponse, notOk } from './lib/constants.js'
-import { mustBePOST, mustBeJSON, apiKey } from './lib/checks.js'
+import { mustBePOST, mustBeJSON, apiKey, handleCORS } from './lib/checks.js'
 import { del } from './lib/db.js'
 
 export async function onRequest(context) {
   // handle POST/JSON/apikey checks
-  const r = apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
+  const r =  handleCORS(context.request) || apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
   if (r) return r
 
   // parse the json

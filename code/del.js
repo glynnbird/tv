@@ -13,7 +13,6 @@ export async function onRequest(context) {
   // if there's a id
   if (json.id) {
     // delete the id from the KV store
-    console.log('request to delete', json.id)
     const response = await del(context.env.TVKV, json.id)
 
     // send response

@@ -2,14 +2,13 @@ import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
 export const get = async function(kv, id) {
-  console.log('db.get fetching id', id)
-  const r = await kv.get(id)
-  console.log('got', r)
+  const r = await kv.get(`doc:${id}`)
   if (r === null) {
     return { ok: false }
   } else {
     const j = JSON.parse(r)
-    return { ok: true, doc: j }
+    j.doc.id = id
+    return { ok: true, doc: j.doc }
   }
 }
 

@@ -1,6 +1,16 @@
 import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
+export const get = async function(kv, id) {
+  const r = await kv.get(id)
+  if (r === null) {
+    return { ok: false }
+  } else {
+    const j = JSON.parse(r)
+    return { ok: true, doc: j }
+  }
+}
+
 export const list = async function(kv) {
   const l = await kv.list({ prefix: 'doc:' })
   const output = l.keys.map((k) => {
@@ -23,7 +33,7 @@ export const queryIndex = async function(kv, key, value) {
   return output
 }
 
-export const add = async function (json, kv) {
+export const add = async function (kv, json) {
   console.log('adding', json)
   if (!json.id) {
     json.id = new Date().getTime().toString()
@@ -78,8 +88,7 @@ export const add = async function (json, kv) {
   return { ok: false }
 }
 
-export const del = async function (id, kv) {
-  console.log('deleting doc', id)
+export const del = async function (kv, id) {
   const r = await kv.get(`doc:${id}`)
   const json = JSON.parse(r)
   if (!json) {

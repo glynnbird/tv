@@ -1,5 +1,6 @@
 import { okResponse, notOkResponse, missingResponse, notOk } from './lib/constants.js'
 import { mustBePOST, mustBeJSON, apiKey } from './lib/checks.js'
+import { get } from './lib/db.js'
 
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
@@ -11,15 +12,10 @@ export async function onRequest(context) {
 
   // if there's a id
   if (json.id) {
-    // delete the id from the KV store
-    const r = await context.env.TVKV.get(json.id)
-    const v = JSON.parse(r)
-    if (v === null) {
-      return new Response(JSON.stringify({ ok: false, msg: 'Missing' }), missingResponse);
-    }
+    const response = await get(context.env.TVKV, json.id)
 
     // send response
-    return new Response(JSON.stringify({ ok: true, todo: { id: json.id, ...v } }), okResponse)
+    return new Response(JSON.stringify(response), okResponse)
   }
 
   // everyone else gets a 400 response

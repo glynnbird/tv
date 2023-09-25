@@ -54,13 +54,15 @@ Parameters:
 
 - `title` - the title of the todo (required)
 - `description` - additional description
+- more!!
 
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"title":"Milk","description":"semi-skimmed"}' "https://$URL/api/add_todo" 
+curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"title":"Milk","description":"semi-skimmed"}' "https://$URL/api/add" 
 {"ok":true,"id":"1681482390981:Milk"}
 ```
+
 ## Get a single todo - POST /api/get
 
 Parameters:
@@ -70,7 +72,7 @@ Parameters:
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1681482390981:Milk"}' "https://$URL/api/get_todo"
+curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1681482390981:Milk"}' "https://$URL/api/get"
 {"ok":true,"todo":{"id":"1681482390981:Milk","time":"2023-04-14T14:26:30.981Z","description":"semi-skimmed"}}
 ```
 
@@ -84,7 +86,7 @@ e.g.
 
 ```sh
 curl -X POST -H'Content-type:application/json' -H'apikey: abc123' "https://$URL/api/list"
-{"ok":true,"list":[{"id":"1681480376706:water","title":"water","ts":"2023-04-14T13:52:56.706Z"},{"id":"1681480420026:jam","title":"jam","ts":"2023-04-14T13:53:40.026Z"},{"id":"1681482390981:Milk","title":"Milk","ts":"2023-04-14T14:26:30.981Z"}]}
+{"ok":true,"list":[{"id":"doc:1695397113199","date":"2023-09-22","title":"Wilderness","watching":false},{"id":"doc:1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":"doc:1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
 ```
 
 ## Delete a todo - POST /api/delete
@@ -94,8 +96,20 @@ Parameters:
 - `id` - the id of the todo to delete (required)
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1681482390981:Milk"}' "https://$URL/api/delete_todo"
-{"ok":true,"id":"1681482390981:Milk"}
+curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1681482390981"}' "https://$URL/api/delete"
+{"ok":true}
+```
+
+## Query - POST /api/query
+
+Parameters:
+
+- `key` - the name of the key to query on (required)
+- `value` - the value needed (required)
+
+```sh
+curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"key":"on","value":"Netflix"}' "https://$URL/api/query"
+{"ok":true,"list":[{"id":"index:on:Netflix:1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":"index:on:Netflix:1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
 ```
 
 ## Build

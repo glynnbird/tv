@@ -12,7 +12,7 @@
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </template>
-      <v-app-bar-title @click="navigateTo('/')">Todos</v-app-bar-title>
+      <v-app-bar-title @click="navigateTo('/')">TV</v-app-bar-title>
       <template v-slot:append>
         <v-btn icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
       </template>

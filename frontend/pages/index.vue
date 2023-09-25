@@ -1,6 +1,6 @@
 <script setup>
   // composables
-  const todos = useTodos()
+  const progs = useProgs()
   const auth = useAuth()
 
   // config
@@ -8,7 +8,7 @@
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // if this is the first time,
-  if (todos.value.length === 0) {
+  if (progs.value.length === 0) {
     try {
       //  fetch the list from the API
       console.log('API', '/list', `${apiHome}/api/list`)
@@ -19,9 +19,9 @@
           apikey: auth.value.apiKey
         }
       })
-      todos.value = r.data.value.list
+      progs.value = r.data.value.list
     } catch (e) {
-      console.error('failed to fetch list of todos', e)
+      console.error('failed to fetch list of progs', e)
     }
   }
     
@@ -39,9 +39,9 @@
           apikey: auth.value.apiKey
         }
       })
-      for (let i = 0; i < todos.value.length; i++) {
-        if (todos.value[i].id === id) {
-          todos.value.splice(i,1)
+      for (let i = 0; i < progs.value.length; i++) {
+        if (progs.value[i].id === id) {
+          progs.value.splice(i,1)
           break
         }
       }
@@ -52,5 +52,5 @@
 </script>
 <template>
   <PageTitle title="TV List"></PageTitle>
-  <TodoList :todos="todos" @deleteTodo="deleteItem"></TodoList>
+  <ProgList :progs="progs" @deleteItem="deleteItem"></ProgList>
 </template>

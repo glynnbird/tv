@@ -1,6 +1,6 @@
 <template>
-  <PageTitle title="Add ToDo"></PageTitle>
+  <PageTitle title="About TV"></PageTitle>
   <div>
-    A simple Todo list built using the Cloudflare cloud.
+    A simple TV programme list built using the Cloudflare cloud.
   </div>
 </template>

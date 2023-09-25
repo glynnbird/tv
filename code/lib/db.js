@@ -2,7 +2,9 @@ import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
 export const get = async function(kv, id) {
+  console.log('db.get fetching id', id)
   const r = await kv.get(id)
+  console.log('got', r)
   if (r === null) {
     return { ok: false }
   } else {

@@ -11,6 +11,7 @@ export async function onRequest(context) {
   const json = await context.request.json()
 
   // if there's a id
+  console.log('json', json)
   if (json.id) {
     const response = await get(context.env.TVKV, json.id)
 

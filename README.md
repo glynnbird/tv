@@ -72,8 +72,8 @@ Parameters:
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1681482390981:Milk"}' "https://$URL/api/get"
-{"ok":true,"todo":{"id":"1681482390981:Milk","time":"2023-04-14T14:26:30.981Z","description":"semi-skimmed"}}
+curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1695397182714"}' "https://$URL/api/get"
+{"ok":true,"doc":{"title":"Wednesday","description":"Goth caper","stars":[],"on":"Netflix","date":"2023-09-22","season":"","pic":"","watching":false,"id":"1695397182714"}}
 ```
 
 ## List multiple todos - POST /api/list
@@ -86,7 +86,7 @@ e.g.
 
 ```sh
 curl -X POST -H'Content-type:application/json' -H'apikey: abc123' "https://$URL/api/list"
-{"ok":true,"list":[{"id":"doc:1695397113199","date":"2023-09-22","title":"Wilderness","watching":false},{"id":"doc:1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":"doc:1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
+{"ok":true,"list":[{"id":"1695397113199","date":"2023-09-22","title":"Wilderness","watching":false},{"id":"doc:1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":"1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
 ```
 
 ## Delete a todo - POST /api/delete
@@ -109,7 +109,7 @@ Parameters:
 
 ```sh
 curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"key":"on","value":"Netflix"}' "https://$URL/api/query"
-{"ok":true,"list":[{"id":"index:on:Netflix:1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":"index:on:Netflix:1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
+{"ok":true,"list":[{"id":"1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":":1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
 ```
 
 ## Build

@@ -16,7 +16,7 @@ export const list = async function(kv) {
   const l = await kv.list({ prefix: 'doc:' })
   const output = l.keys.map((k) => {
     return {
-      id: k.name,
+      id: k.name.replace(/^doc:/,''),
       ...k.metadata
     }
   })
@@ -27,7 +27,7 @@ export const queryIndex = async function(kv, key, value) {
   const l = await kv.list({ prefix: `index:${key}:${value}` })
   const output = l.keys.map((k) => {
     return {
-      id: k.name,
+      id: k.name.replace(/^.+:/,''),
       ...k.metadata
     }
   })

@@ -57,6 +57,32 @@
       console.error('Could not delete', id, e)
     }
   }
+
+  // delete an individual item
+  const toggle = async  (id) => {
+    console.log('API', '/toggle', id)
+    try {
+      const ret = await useFetch(`${apiHome}/api/toggle`, {
+        method: 'post',
+        body: {
+          id
+        },
+        headers: {
+          'content-type': 'application/json',
+          apikey: auth.value.apiKey
+        }
+      })
+      for (let i = 0; i < progs.value.length; i++) {
+        if (progs.value[i].id === id) {
+          progs.value[i].watching = !progs.value[i].watching
+          break
+        }
+      }
+      await navigateTo(`/?delete=${id}`)
+    } catch (e) {
+      console.error('Could not delete', id, e)
+    }
+  }
 </script>
 <template>
   <v-card v-if="prog">
@@ -65,7 +91,7 @@
     <v-card-subtitle v-if="prog.season">Season {{ prog.season }}</v-card-subtitle>
     <v-card-text>
       <p>{{  prog.description }}</p>
-      <v-chip-group v-if="prog.stars">
+      <v-chip-group v-if="prog.stars.length > 0">
         <v-chip v-for="star in prog.stars" :key="star">
           {{ star }}
         </v-chip>
@@ -74,11 +100,13 @@
         <tbody>
           <tr><th>Date</th><td>{{ prog.date }}</td></tr>
           <tr><th>On</th><td>{{ prog.on }}</td></tr>
+          <tr><th>Watching</th><td>{{ prog.watching }}</td></tr>
         </tbody>
       </v-table>
     </v-card-text>
     <v-card-actions>
       <v-btn variant="text" @click="deleteItem(prog.id)">Delete</v-btn>
+      <v-btn variant="text" @click="toggle(prog.id)">Watch</v-btn>
     </v-card-actions>
   </v-card>
 </template>

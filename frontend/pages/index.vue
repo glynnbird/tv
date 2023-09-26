@@ -25,6 +25,21 @@
       console.error('failed to fetch list of progs', e)
     }
   }
+
+  function compareFn(a, b) {
+    if (a.date < b.date) {
+      return -1;
+    } else if (a.date > b.date) {
+      return 1;
+    }
+    return 0;
+  }
+
+  // sort into date order
+  if (progs.value.length > 0) {
+    progs.value.sort(compareFn)
+  }
+
 </script>
 <template>
   <PageTitle title="TV List"></PageTitle>

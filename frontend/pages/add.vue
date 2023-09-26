@@ -3,7 +3,7 @@
   const progs = useProgs()
   const alert = useAlert()
   const auth = useAuth()
-  const channels = ['BBC','ITV','Channel4','Netflix','AppleTV','Netflix','Disney']
+  const channels = ['BBC','ITV','Channel4','Netflix','AppleTV','Disney','Amazon']
 
   // config
   const config = useRuntimeConfig()
@@ -14,19 +14,21 @@
   title.value = ''
   const description = ref(1)
   description.value = ''
-  const on = ref(2)
+  const stars = ref(2)
+  stars.value = ''
+  const on = ref(3)
   on.value = ''
-  const date = ref(3)
+  const date = ref(4)
   date.value = new Date().toISOString().substring(0, 10)
-  const season = ref(4)
+  const season = ref(5)
   season.value = ''
-  const pic = ref(5)
+  const pic = ref(6)
   pic.value = ''
-  const watching = ref(6)
+  const watching = ref(7)
   watching.value = false
 
   // add busy flag
-  const busy = ref(7)
+  const busy = ref(8)
   busy.value = false
   
   // method - add new todo 
@@ -42,7 +44,8 @@
       date: date.value,
       season: season.value,
       pic: pic.value,
-      watching: watching.value
+      watching: watching.value,
+      stars: stars.value.split(',').map(function(s) { return s.trim() })
     }
     console.log('API', '/add', t)
     const ret = await useFetch(`${apiHome}/api/add`, {
@@ -76,9 +79,14 @@
       @keydown.enter="add()"
     ></v-text-field>
 
-    <v-text-field
+    <v-textarea
       v-model="description"
       label="Description"
+    ></v-textarea>
+
+    <v-text-field
+      v-model="stars"
+      label="Stars"
       @keydown.enter="add()"
     ></v-text-field>
 

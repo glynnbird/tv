@@ -52,7 +52,7 @@
           break
         }
       }
-      await navigateTo('/')
+      await navigateTo(`/?delete=${id}`)
     } catch (e) {
       console.error('Could not delete', id, e)
     }

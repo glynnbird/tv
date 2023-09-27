@@ -4,7 +4,7 @@ import { process } from './process.js'
 export const toggle = async function(kv, id) {
   console.log('toggle', id)
   const { value, metadata } = await kv.getWithMetadata(`doc:${id}`)
-  console.log('value/meta', r, metadata)
+  console.log('value/meta', value, metadata)
   if (value === null) {
     return { ok: false }
   } else {

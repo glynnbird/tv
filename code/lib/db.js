@@ -2,12 +2,16 @@ import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
 export const toggle = async function(kv, id) {
+  console.log('toggle', id)
   const { r, metadata } = await kv.getWithMetadata(`doc:${id}`)
+  console.log('r/meta', r, metadata)
   if (r === null) {
     return { ok: false }
   } else {
     const j = JSON.parse(r)
+    console.log(j)
     j.doc.watching = !j.doc.watching
+    console.log('put', j, metadata)
     await kv.put(`doc:${id}`, JSON.stringify(j), metadata)
     return { ok: true }
   }

@@ -24,7 +24,10 @@ export default defineNuxtConfig({
           type: 'image/png',
           purpose: 'any maskable',
         }
-      ]
+      ],
+      workbox: {
+        enabled: true
+      }
     }
   },
   ssr: false,

@@ -7,11 +7,11 @@ export const toggle = async function(kv, id) {
     return { ok: false }
   }
   console.log('got for id', id, value, metadata)
-  const doc = JSON.parse(value)
+  const j = JSON.parse(value)
   await del(kv, id)
-  doc.watching = !doc.watching
-  doc.metadata = metadata
-  doc.metadata.watching = doc.watching
+  j.doc.watching = !j.doc.watching
+  j.metadata = metadata
+  j.metadata.watching = j.doc.watching
   console.log('writing', doc)
   await add(kv, doc)
   return { ok: true}

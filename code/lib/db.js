@@ -4,7 +4,7 @@ import { process } from './process.js'
 export const toggle = async function(kv, id) {
   const { value, metadata } = await kv.getWithMetadata(kv, id)
   if (value === null) {
-    return response
+    return { ok: false }
   }
   console.log('got for id', id, value, metadata)
   const doc = JSON.parse(value)
@@ -14,6 +14,7 @@ export const toggle = async function(kv, id) {
   doc.metadata.watching = doc.watching
   console.log('writing', doc)
   await add(kv, doc)
+  return { ok: true}
 }
 
 export const get = async function(kv, id) {

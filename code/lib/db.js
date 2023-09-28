@@ -6,13 +6,11 @@ export const toggle = async function(kv, id) {
   if (value === null) {
     return { ok: false }
   }
-  console.log('got for id', id, value, metadata)
   const j = JSON.parse(value)
   await del(kv, id)
   j.doc.watching = !j.doc.watching
   j.metadata = metadata
   j.metadata.watching = j.doc.watching
-  console.log('writing', j)
   await add(kv, j)
   return { ok: true}
 }
@@ -51,7 +49,6 @@ export const queryIndex = async function(kv, key, value) {
 }
 
 export const add = async function (kv, json) {
-  console.log('adding', json)
   if (!json.id) {
     json.id = new Date().getTime().toString()
   }
@@ -64,9 +61,7 @@ export const add = async function (kv, json) {
 
   // if there's all the parts we need
   if (json.id && json.doc && json.metadata) {
-    console.log('freetext', json.freetext)
     const words = process(json.freetext).map((w) => { return porterStemmer(w) })
-    console.log(words)
 
     // write core doc
     const coreDoc = {

@@ -52,7 +52,7 @@
           break
         }
       }
-      await navigateTo(`/?delete=${id}`)
+      await navigateTo(`/?stick=${id}`)
     } catch (e) {
       console.error('Could not delete', id, e)
     }
@@ -78,9 +78,9 @@
           break
         }
       }
-      await navigateTo(`/?delete=${id}`)
+      await navigateTo(`/?stick=${id}`)
     } catch (e) {
-      console.error('Could not delete', id, e)
+      console.error('Could not toggle', id, e)
     }
   }
 </script>
@@ -105,8 +105,19 @@
       </v-table>
     </v-card-text>
     <v-card-actions>
-      <v-btn variant="text" @click="deleteItem(prog.id)">Delete</v-btn>
-      <v-btn variant="text" @click="toggle(prog.id)">Watch</v-btn>
+      <v-btn color="primary" variant="text" @click="toggle(prog.id)">
+        <span v-if="!prog.watching">Watch</span>
+        <span v-if="prog.watching">Unwatch</span>
+      </v-btn>
     </v-card-actions>
+    
+    <v-expansion-panels>
+      <v-expansion-panel title="Delete" text="Careful: once deleted, data cannot be recovered">
+        <v-expansion-panel-text>
+          <v-btn color="warning" variant="text" @click="deleteItem(prog.id)">Delete</v-btn>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
+    
   </v-card>
 </template>

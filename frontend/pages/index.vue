@@ -9,7 +9,7 @@
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // if this is the first time,
-  if (!query.deleted && progs.value.length === 0) {
+  if (!query.stick && progs.value.length === 0) {
     try {
       //  fetch the list from the API
       console.log('API', '/list', `${apiHome}/api/list`)

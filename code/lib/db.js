@@ -2,7 +2,7 @@ import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
 export const toggle = async function(kv, id) {
-  const { value, metadata } = await kv.getWithMetadata(kv, `doc:${id}`)
+  const { value, metadata } = await kv.getWithMetadata(`doc:${id}`)
   if (value === null) {
     return { ok: false }
   }

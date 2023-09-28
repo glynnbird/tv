@@ -49,7 +49,6 @@
 
 </script>
 <template>
-  <PageTitle title="TV List"></PageTitle>
   <ProgList :progs="progs"></ProgList>
 </template>
 

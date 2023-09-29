@@ -100,21 +100,20 @@
         <tbody>
           <tr><th>Date</th><td>{{ prog.date }}</td></tr>
           <tr><th>On</th><td>{{ prog.on }}</td></tr>
-          <tr><th>Watching</th><td>{{ prog.watching }}</td></tr>
         </tbody>
       </v-table>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" variant="text" @click="toggle(prog.id)">
+      <v-btn color="primary" variant="flat" @click="toggle(prog.id)">
         <span v-if="!prog.watching">Watch</span>
         <span v-if="prog.watching">Unwatch</span>
       </v-btn>
     </v-card-actions>
     
-    <v-expansion-panels>
+    <v-expansion-panels color="red-lighten-5">
       <v-expansion-panel title="Delete" text="Careful: once deleted, data cannot be recovered">
         <v-expansion-panel-text>
-          <v-btn color="warning" variant="text" @click="deleteItem(prog.id)">Delete</v-btn>
+          <v-btn color="error" variant="flat" @click="deleteItem(prog.id)">Delete</v-btn>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>

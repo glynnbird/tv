@@ -8,8 +8,8 @@
 <template>
   <v-list>
     <v-list-item v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
-      <v-list-item-title>{{  prog.title }} <v-chip color="primary" v-if="prog.watching">Watching</v-chip></v-list-item-title>
-      <v-list-item-subtitle v-if="prog.date">{{ prog.date }}</v-list-item-subtitle>
+      <v-list-item-title>{{  prog.title }}</v-list-item-title>
+      <v-list-item-subtitle>{{ prog.date }} <v-chip label size="x-small" color="primary" v-if="prog.watching">Watching</v-chip></v-list-item-subtitle>
       <template v-slot:append>
         <v-btn
           color="grey-lighten-1"

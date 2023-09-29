@@ -4,6 +4,7 @@
   const route = useRoute()
   const id = route.params.id
   const auth = useAuth()
+  const stick = useStick()
 
   // config
   const config = useRuntimeConfig()
@@ -52,7 +53,8 @@
           break
         }
       }
-      await navigateTo(`/?stick=${id}`)
+      stick.value = true
+      await navigateTo(`/`)
     } catch (e) {
       console.error('Could not delete', id, e)
     }
@@ -78,7 +80,8 @@
           break
         }
       }
-      await navigateTo(`/?stick=${id}`)
+      stick.value = true
+      await navigateTo(`/`)
     } catch (e) {
       console.error('Could not toggle', id, e)
     }

@@ -3,7 +3,8 @@
   const progs = useProgs()
   const alert = useAlert()
   const auth = useAuth()
-  const channels = ['BBC','ITV','Channel4','Netflix','AppleTV','Disney','Amazon']
+  const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba']
+  const stick = useStick()
 
   // config
   const config = useRuntimeConfig()
@@ -65,6 +66,7 @@
     busy.value = false 
 
     // bounce to home page
+    stick.value = true
     await navigateTo('/')
   }
 </script>

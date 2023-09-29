@@ -3,6 +3,7 @@
   const query = useRoute().query
   const progs = useProgs()
   const auth = useAuth()
+  const stick = useStick()
 
   // set manifest header
   useHead({
@@ -16,7 +17,7 @@
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // if this is the first time,
-  if (!query.stick && progs.value.length === 0) {
+  if (stick.value === false && progs.value.length === 0) {
     try {
       //  fetch the list from the API
       console.log('API', '/list', `${apiHome}/api/list`)
@@ -32,6 +33,10 @@
       console.error('failed to fetch list of progs', e)
     }
   }
+
+  // reset the stick flag - it's set by add/delete/toggle
+  // so we don't reload an eventually consistent copy
+  stick.value = false
 
   function compareFn(a, b) {
     if (a.date < b.date) {

@@ -78,19 +78,19 @@ export const add = async function (kv, json) {
     }
     await kv.put(`doc:${json.id}`, JSON.stringify(coreDoc), m)
 
-    // write secondary index docs for freetext search
-    for (const word of words) {
-      await kv.put(`freetext:${word}:${json.id}`, null, { metadata: json.metadata })
-    }
+    // // write secondary index docs for freetext search
+    // for (const word of words) {
+    //   await kv.put(`freetext:${word}:${json.id}`, null, { metadata: json.metadata })
+    // }
 
-    // write secondary index docs for indexed items
-    if (json.index) {
-      const keys = Object.keys(json.index)
-      for (const key of keys) {
-        const v = json.index[key]
-        await kv.put(`index:${key}:${v}:${json.id}`, null, { metadata: json.metadata })
-      }
-    }
+    // // write secondary index docs for indexed items
+    // if (json.index) {
+    //   const keys = Object.keys(json.index)
+    //   for (const key of keys) {
+    //     const v = json.index[key]
+    //     await kv.put(`index:${key}:${v}:${json.id}`, null, { metadata: json.metadata })
+    //   }
+    // }
 
     // send response
     return { ok: true, id: json.id }
@@ -101,27 +101,27 @@ export const add = async function (kv, json) {
 }
 
 export const del = async function (kv, id) {
-  const r = await kv.get(`doc:${id}`)
-  const json = JSON.parse(r)
-  if (!json) {
-    return { ok: false }
-  }
+  // const r = await kv.get(`doc:${id}`)
+  // const json = JSON.parse(r)
+  // if (!json) {
+  //   return { ok: false }
+  // }
 
-  // delete free-text index
-  if (json['_freetextIndex']) {
-    for (const word of json['_freetextIndex']) {
-      await kv.delete(`freetext:${word}:${id}`)
-    }
-  }
+  // // delete free-text index
+  // if (json['_freetextIndex']) {
+  //   for (const word of json['_freetextIndex']) {
+  //     await kv.delete(`freetext:${word}:${id}`)
+  //   }
+  // }
 
-  // write secondary index docs for indexed items
-  if (json['_index']) {
-    const keys = Object.keys(json['_index'])
-    for (const key of keys) {
-      const v = json._index[key]
-      await kv.delete(`index:${key}:${v}:${id}`)
-    }
-  }
+  // // write secondary index docs for indexed items
+  // if (json['_index']) {
+  //   const keys = Object.keys(json['_index'])
+  //   for (const key of keys) {
+  //     const v = json._index[key]
+  //     await kv.delete(`index:${key}:${v}:${id}`)
+  //   }
+  // }
 
   // delete original doc
   await kv.delete(`doc:${json.id}`)

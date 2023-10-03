@@ -7,6 +7,7 @@ export const toggle = async function(kv, id) {
     return { ok: false }
   }
   const j = JSON.parse(value)
+  console.log('current value', j)
   await del(kv, id)
   j.doc.watching = !j.doc.watching
   j.metadata = metadata

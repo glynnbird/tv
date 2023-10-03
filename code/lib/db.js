@@ -7,12 +7,10 @@ export const toggle = async function(kv, id) {
     return { ok: false }
   }
   const j = JSON.parse(value)
-  console.log('current value', j)
   await del(kv, id)
   j.doc.watching = !j.doc.watching
   j.metadata = metadata
   j.metadata.watching = j.doc.watching
-  console.log('after toggling', j)
   await add(kv, j)
   return { ok: true}
 }
@@ -51,8 +49,6 @@ export const queryIndex = async function(kv, key, value) {
 }
 
 export const add = async function (kv, json) {
-  console.log('add', json)
-
   if (!json.id) {
     json.id = new Date().getTime().toString()
   }
@@ -80,7 +76,6 @@ export const add = async function (kv, json) {
     const m = {
       metadata: json.metadata
     }
-    console.log('putting',`doc:${json.id}`, JSON.stringify(coreDoc), m)
     await kv.put(`doc:${json.id}`, JSON.stringify(coreDoc), m)
 
     // // write secondary index docs for freetext search
@@ -129,7 +124,7 @@ export const del = async function (kv, id) {
   // }
 
   // delete original doc
-  await kv.delete(`doc:${json.id}`)
+  await kv.delete(`doc:${id}`)
 
   return { ok: true }
 }

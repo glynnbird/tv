@@ -50,6 +50,8 @@ export const queryIndex = async function(kv, key, value) {
 }
 
 export const add = async function (kv, json) {
+  console.log('adding', json)
+
   if (!json.id) {
     json.id = new Date().getTime().toString()
   }

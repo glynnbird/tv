@@ -50,7 +50,7 @@ resource "cloudflare_pages_domain" "frontend_domain" {
 resource "cloudflare_record" "frontend_dns" {
   zone_id = var.cloudflare_zone_id
   name    = "tv"
-  value   = cloudflare_pages_project.frontend_project.subdomain
+  content   = cloudflare_pages_project.frontend_project.subdomain
   type    = "CNAME"
   ttl     = 3600
 }

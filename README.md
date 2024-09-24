@@ -9,6 +9,10 @@ This app requires some Cloudflare infrastructure, all of which is created using 
 3. A custom domain whose traffic is sent the static website from (2).
 4. The static website also contains a number of functions which are served out by Cloudflare Workers on the /api/* route.
 
+This project gets deployed on pushes to the main branch on GitHub. Cloudflare detects the push and runs the `./build.sh` script which creates the front end using Nuxt and the API endpoints using "rollup". The API and static frontend is served out by Cloudflare pages.
+
+The Cloudflare pages config, KV store and DNS records are created using Terraform.
+
 ## Data model
 
 As we only have simple KeyValue store and the Cloudflare KV.list() operation only returns the keys (not the values), the data model packs some data into the key.

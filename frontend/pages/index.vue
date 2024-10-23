@@ -78,10 +78,10 @@
 </script>
 <template>
   <v-tabs v-model="tab" align-tabs="center">
-    <v-tab value="1">All</v-tab>
-    <v-tab value="2">Watching</v-tab>
-    <v-tab value="3">Available</v-tab>
-    <v-tab value="4">Future</v-tab>
+    <v-tab value="1"><v-icon>mdi-all-inclusive</v-icon></v-tab>
+    <v-tab value="2"><v-icon>mdi-television-play</v-icon></v-tab>
+    <v-tab value="3"><v-icon>mdi-calendar-check</v-icon></v-tab>
+    <v-tab value="4"><v-icon>mdi-calendar-clock</v-icon></v-tab>
   </v-tabs>
   <v-tabs-window v-model="tab">
     <v-tabs-window-item value="1">

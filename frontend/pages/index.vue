@@ -18,7 +18,7 @@
   const currentProgs = computed(() => {
     const now = new Date().toISOString()
     return progs.value.filter((p) => {
-      return p.date < now
+      return p.date < now && !p.watching
     })
   })
   const futureProgs = computed(() => {

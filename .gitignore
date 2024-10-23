@@ -3,5 +3,6 @@ terraform.tfstate.d
 .terraform
 todo.txt
 code/dist
+dist
 code/node_modules
 functions/api/*.js

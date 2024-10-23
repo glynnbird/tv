@@ -5,6 +5,29 @@
   const auth = useAuth()
   const stick = useStick()
 
+  // local page values
+  const tab = ref(0)
+  tab.value = '1'
+
+  // computed values
+  const watchedProgs = computed(() => {
+    return progs.value.filter((p) => {
+      return p.watching
+    })
+  })
+  const currentProgs = computed(() => {
+    const now = new Date().toISOString()
+    return progs.value.filter((p) => {
+      return p.date < now
+    })
+  })
+  const futureProgs = computed(() => {
+    const now = new Date().toISOString()
+    return progs.value.filter((p) => {
+      return p.date >= now
+    })
+  })
+
   // set manifest header
   useHead({
     link: [
@@ -54,6 +77,27 @@
 
 </script>
 <template>
-  <ProgList :progs="progs"></ProgList>
+  <v-tabs v-model="tab" align-tabs="center">
+    <v-tab value="1">All</v-tab>
+    <v-tab value="2">Watching</v-tab>
+    <v-tab value="3">Available</v-tab>
+    <v-tab value="4">Future</v-tab>
+  </v-tabs>
+  <v-tabs-window v-model="tab">
+    <v-tabs-window-item value="1">
+      <ProgList :progs="progs"></ProgList>
+    </v-tabs-window-item>
+    <v-tabs-window-item value="2">
+      <ProgList :progs="watchedProgs"></ProgList>
+    </v-tabs-window-item>
+    <v-tabs-window-item value="3">
+      <ProgList :progs="currentProgs"></ProgList>
+    </v-tabs-window-item>
+    <v-tabs-window-item value="4">
+      <ProgList :progs="futureProgs"></ProgList>
+    </v-tabs-window-item>
+  </v-tabs-window>
+    
+  
 </template>
 

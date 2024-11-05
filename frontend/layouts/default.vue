@@ -13,7 +13,7 @@
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </template>
-      <v-app-bar-title @click="navigateTo('/')">TV</v-app-bar-title>
+      <v-app-bar-title @click="navigateTo('/')" style="user-select:none;">TV</v-app-bar-title>
       <template v-slot:append>
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
         <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="navigateTo('/')"></v-btn>

@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const auth = useState('auth')
 
   // see if we have an apikey stashed in local storage
-  const v = localStorage.getItem('apikey')
+  const v = localStorage.getItem('tvapikey')
   if (v) {
     if (!auth.value) {
       auth.value = {}

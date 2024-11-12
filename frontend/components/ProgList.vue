@@ -6,6 +6,10 @@
   const now = ref(0)
   now.value = new Date().toISOString()
 
+  const nextWeek = ref(1)
+  const ts = new Date().getTime() + 1000 * 60 * 60 * 24 * 7
+  nextWeek.value = new Date(ts).toISOString().substring(0,10)
+
 </script>
 <template>
   <v-list>
@@ -14,6 +18,7 @@
       <v-list-item-subtitle>{{ prog.date }}
         <v-chip label size="x-small" color="primary" v-if="prog.watching">Watching</v-chip>
         <v-chip label size="x-small" color="secondary" v-if="prog.date>now">Future</v-chip>
+        <v-chip label size="x-small" color="warning" v-if="prog.date > now && prog.date < nextWeek">This Week</v-chip>
       </v-list-item-subtitle>
       <template v-slot:append>
         <v-btn

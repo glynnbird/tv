@@ -10,7 +10,7 @@
   const saveKey = async () => {
     auth.value.authenticated = true
     auth.value.apiKey = apiKey.value
-    localStorage.setItem('apikey', apiKey.value)
+    localStorage.setItem('tvapikey', apiKey.value)
     await navigateTo('/')
   }
 </script>

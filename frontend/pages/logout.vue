@@ -2,7 +2,6 @@
   // composables
   const auth = useAuth()
   auth.value.authenticated = false
-  localStorage.clear()
+  localStorage.removeItem('tvapikey')
   await navigateTo('/login')
-
 </script>

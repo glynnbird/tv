@@ -28,6 +28,10 @@
         body: { id }
       })
       prog.value = r.data.value.doc
+      prog.value.stars = prog.value.stars.filter((x) => {
+        // only keep strings with something in
+        return x.trim().length > 0
+      })
     } catch (e) {
       console.error('failed to fetch prog', e)
     }

@@ -20,7 +20,7 @@
   const on = ref(3)
   on.value = ''
   const date = ref(4)
-  date.value = new Date().toISOString().substring(0, 10)
+  date.value = new Date()
   const season = ref(5)
   season.value = ''
   const pic = ref(6)
@@ -50,7 +50,7 @@
       title: title.value,
       description: description.value,
       on: on.value,
-      date: date.value,
+      date: date.value.toISOString().substring(0, 10),
       season: season.value,
       pic: pic.value,
       watching: watching.value,
@@ -103,12 +103,6 @@
     <v-select v-model="on" label="On (Channel)" :items="channels">
     </v-select>
 
-    <v-text-field
-      v-model="date"
-      label="Date"
-      @keydown.enter="add()"
-    ></v-text-field>
-
     <v-row>
       <v-col>
         <v-text-field
@@ -121,13 +115,14 @@
         <v-btn @click="showpicker">Change</v-btn>
       </v-col>
     </v-row>
-
-    <v-date-picker
-      v-model="date"
-      v-if="isPicking"
-      elevation="24"
-      @update:modelValue="isPicking = false"
-    ></v-date-picker>
+    <v-row justify="space-around">
+      <v-date-picker
+        v-model="date"
+        v-if="isPicking"
+        elevation="24"
+        @update:modelValue="isPicking = false"
+      ></v-date-picker>
+    </v-row>
 
     <v-text-field
       v-model="season"

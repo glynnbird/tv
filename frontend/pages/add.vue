@@ -31,6 +31,14 @@
   // add busy flag
   const busy = ref(8)
   busy.value = false
+
+  // whether to show the date picker
+  const isPicking = ref(9)
+  isPicking.value = false
+
+  function showpicker() {
+    isPicking.value = true;
+  }
   
   // method - add new todo 
   async function add() {
@@ -100,6 +108,26 @@
       label="Date"
       @keydown.enter="add()"
     ></v-text-field>
+
+    <v-row>
+      <v-col>
+        <v-text-field
+          v-model="date"
+          label="Date"
+          readonly
+        ></v-text-field>
+      </v-col>
+      <v-col>
+        <v-btn @click="showpicker">Change</v-btn>
+      </v-col>
+    </v-row>
+
+    <v-date-picker
+      v-model="date"
+      v-if="isPicking"
+      elevation="24"
+      @update:modelValue="isPicking = false"
+    ></v-date-picker>
 
     <v-text-field
       v-model="season"

@@ -15,12 +15,6 @@
       return p.watching
     })
   })
-  const currentProgs = computed(() => {
-    const now = new Date().toISOString()
-    return progs.value.filter((p) => {
-      return p.date < now && !p.watching
-    })
-  })
   const futureProgs = computed(() => {
     const now = new Date().toISOString()
     return progs.value.filter((p) => {
@@ -79,9 +73,8 @@
 <template>
   <v-tabs v-model="tab" align-tabs="center">
     <v-tab value="1"><v-icon>mdi-all-inclusive</v-icon></v-tab>
-    <v-tab value="2"><v-icon>mdi-television-play</v-icon></v-tab>
-    <v-tab value="3"><v-icon>mdi-calendar-check</v-icon></v-tab>
-    <v-tab value="4"><v-icon>mdi-calendar-clock</v-icon></v-tab>
+    <v-tab value="2"><v-icon color="primary">mdi-television-play</v-icon></v-tab>
+    <v-tab value="3"><v-icon color="secondary">mdi-calendar-clock</v-icon></v-tab>
   </v-tabs>
   <v-tabs-window v-model="tab">
     <v-tabs-window-item value="1">
@@ -91,13 +84,8 @@
       <ProgList :progs="watchedProgs"></ProgList>
     </v-tabs-window-item>
     <v-tabs-window-item value="3">
-      <ProgList :progs="currentProgs"></ProgList>
-    </v-tabs-window-item>
-    <v-tabs-window-item value="4">
       <ProgList :progs="futureProgs"></ProgList>
     </v-tabs-window-item>
   </v-tabs-window>
-    
-  
 </template>
 

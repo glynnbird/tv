@@ -14,7 +14,7 @@
 <template>
   <v-list>
     <v-list-item v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
-      <v-list-item-title>{{  prog.title }}</v-list-item-title>
+      <v-list-item-title>{{  prog.title }} <v-chip v-if="prog.on" label size="x-small">{{ prog.on }}</v-chip></v-list-item-title>
       <v-list-item-subtitle>{{ prog.date }}
         <v-chip label size="x-small" color="primary" v-if="prog.watching">Watching</v-chip>
         <v-chip label size="x-small" color="secondary" v-if="prog.date>now">Future</v-chip>

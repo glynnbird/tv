@@ -10,15 +10,18 @@
   const ts = new Date().getTime() + 1000 * 60 * 60 * 24 * 7
   nextWeek.value = new Date(ts).toISOString().substring(0,10)
 
+  const channels = ref(2)
+  channels.value = ['BBC','ITV','Channel4','Channel5','SkyAtlantic','Alba']
 </script>
 <template>
   <v-list>
     <v-list-item v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
       <v-list-item-title>{{  prog.title }} <v-chip v-if="prog.on" label size="x-small">{{ prog.on }}</v-chip></v-list-item-title>
       <v-list-item-subtitle>{{ prog.date }}
-        <v-chip label size="x-small" color="primary" v-if="prog.watching">Watching</v-chip>
-        <v-chip label size="x-small" color="secondary" v-if="prog.date>now">Future</v-chip>
-        <v-chip label size="x-small" color="warning" v-if="prog.date > now && prog.date < nextWeek">This Week</v-chip>
+        <v-icon size="x-small" color="primary" v-if="prog.watching">mdi-television-play</v-icon>
+        <v-icon size="x-small" color="secondary" v-if="prog.date>now">mdi-calendar-clock</v-icon>
+        <v-icon size="x-small" color="warning" v-if="prog.date > now && prog.date < nextWeek">mdi-calendar-week</v-icon>
+        <v-icon size="x-small" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">record</v-icon>
       </v-list-item-subtitle>
       <template v-slot:append>
         <v-btn

@@ -28,7 +28,8 @@ export async function onRequest(context) {
     const metadata = {
       date: doc.date,
       title: doc.title,
-      watching: doc.watching
+      watching: doc.watching,
+      on: doc.on
     }
     const index = {
       watching: doc.watching.toString(),

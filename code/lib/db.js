@@ -11,6 +11,7 @@ export const toggle = async function(kv, id) {
   j.doc.watching = !j.doc.watching
   j.metadata = metadata
   j.metadata.watching = j.doc.watching
+  j.metadata.on = j.doc.on
   await add(kv, j)
   return { ok: true}
 }

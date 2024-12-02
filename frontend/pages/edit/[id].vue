@@ -28,6 +28,33 @@
     isPicking.value = true;
   }
 
+  // delete an individual item
+  const deleteItem = async  () => {
+    console.log('API', '/del', id)
+    try {
+      const ret = await useFetch(`${apiHome}/api/del`, {
+        method: 'post',
+        body: {
+          id
+        },
+        headers: {
+          'content-type': 'application/json',
+          apikey: auth.value.apiKey
+        }
+      })
+      for (let i = 0; i < progs.value.length; i++) {
+        if (progs.value[i].id === id) {
+          progs.value.splice(i,1)
+          break
+        }
+      }
+      stick.value = true
+      await navigateTo(`/`)
+    } catch (e) {
+      console.error('Could not delete', id, e)
+    }
+  }
+
   // method - add new todo 
   async function edit() {
     if (!prog.value.title) {
@@ -99,6 +126,12 @@
     }
   }
 </script>
+<style>
+.divider {
+  margin-top:25px;
+  margin-bottom: 25px;
+}
+</style>
 <template>
   <PageTitle title="Edit"></PageTitle>
   <v-form>
@@ -134,4 +167,6 @@
       edit
     </v-btn>
   </v-form>
+  <hr class="divider" />
+  <v-btn color="error" variant="flat" @click="deleteItem()">Delete</v-btn>
 </template>

@@ -4,6 +4,7 @@
   const alert = useAlert()
   const auth = useAuth()
   const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount']
+  const types = ['Series', 'Film', 'Single']
   const stick = useStick()
 
   // config
@@ -27,13 +28,19 @@
   pic.value = ''
   const watching = ref(7)
   watching.value = false
+  const type = ref(8)
+  type.value = ''
+  const uptoep = ref(11)
+  uptoep.value = ''
+  const uptomax = ref(12)
+  uptomax.value = ''
 
   // add busy flag
-  const busy = ref(8)
+  const busy = ref(9)
   busy.value = false
 
   // whether to show the date picker
-  const isPicking = ref(9)
+  const isPicking = ref(10)
   isPicking.value = false
 
   function showpicker() {
@@ -54,7 +61,10 @@
       season: season.value,
       pic: pic.value,
       watching: watching.value,
-      stars: stars.value.split(',').map(function(s) { return s.trim() })
+      stars: stars.value.split(',').map(function(s) { return s.trim() }),
+      type: type.value,
+      uptoep: uptoep.value,
+      uptomax: uptomax.value
     }
     console.log('API', '/add', t)
     const ret = await useFetch(`${apiHome}/api/add`, {
@@ -97,11 +107,25 @@
     <v-text-field
       v-model="stars"
       label="Stars"
-      @keydown.enter="add()"
     ></v-text-field>
 
     <v-select v-model="on" label="On (Channel)" :items="channels">
     </v-select>
+
+    <v-select v-model="type" label="Type" :items="types">
+    </v-select>
+
+    <v-text-field
+      v-if="type === 'Series'"
+      v-model="uptoep"
+      label="Episodes Watched"
+      ></v-text-field>
+
+    <v-text-field
+      v-if="type === 'Series'"
+      v-model="uptomax"
+      label="Episodes Total"
+      ></v-text-field>
 
     <v-row>
       <v-col>
@@ -127,16 +151,16 @@
     <v-text-field
       v-model="season"
       label="Season"
-      @keydown.enter="add()"
     ></v-text-field>
 
     <v-text-field
       v-model="pic"
       label="Pic"
-      @keydown.enter="add()"
     ></v-text-field>
 
     <v-checkbox label="Watching" v-model="watching"></v-checkbox>
+
+
 
     <v-btn
       :disabled="title.length === 0 || busy"

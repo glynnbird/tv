@@ -4,6 +4,7 @@
   const alert = useAlert()
   const auth = useAuth()
   const channels = ['BBC', 'ITV', 'Channel4', 'Channel5', 'Netflix', 'AppleTV', 'Disney', 'Amazon', 'SkyAtlantic', 'Alba', 'Paramount']
+  const types = ['Series', 'Film', 'Single']
   const stick = useStick()
   const route = useRoute()
   const id = route.params.id
@@ -70,7 +71,10 @@
       season: prog.value.season,
       pic: prog.value.pic,
       watching: prog.value.watching,
-      stars: prog.value.stars.split(',').map(function (s) { return s.trim() })
+      stars: prog.value.stars.split(',').map(function (s) { return s.trim() }),
+      type: prog.value.type,
+      uptoep: prog.value.uptoep,
+      uptomax: prog.value.uptomax
     }
     console.log('API', '/add', t)
     const ret = await useFetch(`${apiHome}/api/add`, {
@@ -143,6 +147,21 @@
 
     <v-select v-model="prog.on" label="On (Channel)" :items="channels">
     </v-select>
+
+    <v-select v-model="prog.type" label="Type" :items="types">
+    </v-select>
+
+    <v-text-field
+      v-if="prog.type === 'Series'"
+      v-model="prog.uptoep"
+      label="Episodes Watched"
+      ></v-text-field>
+
+    <v-text-field
+      v-if="prog.type === 'Series'"
+      v-model="prog.uptomax"
+      label="Episodes Total"
+      ></v-text-field>
 
     <v-row>
       <v-col>

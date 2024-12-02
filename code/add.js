@@ -23,13 +23,18 @@ export async function onRequest(context) {
       date: json.date || new Date().toISOString().substring(0,10),
       season: json.season || '',
       pic: json.pic || '',
-      watching: json.watching || false
+      watching: json.watching || false,
+      type: json.type || '',
+      uptoep: json.uptoep || '',
+      uptomax: json.uptomax || ''
     }
     const metadata = {
       date: doc.date,
       title: doc.title,
       watching: doc.watching,
-      on: doc.on
+      on: doc.on,
+      uptoep: doc.uptoep,
+      uptomax: doc.uptomax
     }
     const index = {
       watching: doc.watching.toString(),

@@ -37,6 +37,11 @@
     }
   }
 
+  // edit programme
+  const editItem = async (id) => {
+    await navigateTo(`/edit/${id}`)
+  }
+
   // delete an individual item
   const deleteItem = async  (id) => {
     console.log('API', '/del', id)
@@ -115,15 +120,9 @@
         <span v-if="!prog.watching">Watch</span>
         <span v-if="prog.watching">Unwatch</span>
       </v-btn>
+      <v-btn color="error" variant="flat" @click="deleteItem(prog.id)">Delete</v-btn>
+      <v-btn color="warning" variant="flat" @click="editItem(prog.id)">Edit</v-btn>
     </v-card-actions>
-    
-    <v-expansion-panels color="red-lighten-5">
-      <v-expansion-panel title="Delete" text="Careful: once deleted, data cannot be recovered">
-        <v-expansion-panel-text>
-          <v-btn color="error" variant="flat" @click="deleteItem(prog.id)">Delete</v-btn>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-    </v-expansion-panels>
-    
+
   </v-card>
 </template>

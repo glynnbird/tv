@@ -13,7 +13,7 @@ export async function onRequest(context) {
   // if there's a title
   if (json.title) {
     // create a time-based key
-    const id = (new Date().getTime()).toString()
+    const id = json.id || (new Date().getTime()).toString()
 
     const doc = {
       title: json.title,

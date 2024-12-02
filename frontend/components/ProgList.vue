@@ -26,6 +26,7 @@
       <v-list-item-subtitle>{{ prog.date }}
         <v-icon size="x-small" color="primary" v-if="prog.watching">mdi-television-play</v-icon>
         <v-chip class="sep" color="primary" label size="x-small" v-if="prog.uptoep && prog.uptomax">{{ prog.uptoep }} / {{ prog.uptomax }}</v-chip>
+        <v-chip class="sep" color="primary" label size="x-small" v-if="prog.type==='Film' || prog.type=='Single'">{{ prog.type }}</v-chip>
         <v-icon size="x-small" color="secondary" v-if="prog.date>now">mdi-calendar-clock</v-icon>
         <v-icon size="x-small" color="warning" v-if="prog.date > now && prog.date < nextWeek">mdi-calendar-week</v-icon>
         <v-icon size="x-small" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>

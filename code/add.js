@@ -34,7 +34,8 @@ export async function onRequest(context) {
       watching: doc.watching,
       on: doc.on,
       uptoep: doc.uptoep,
-      uptomax: doc.uptomax
+      uptomax: doc.uptomax,
+      type: doc.type
     }
     const index = {
       watching: doc.watching.toString(),

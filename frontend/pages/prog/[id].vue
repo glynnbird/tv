@@ -98,7 +98,7 @@
 </script>
 <template>
   <v-card v-if="prog">
-    <v-img v-if="prog.pic" :src="prog.pic" cover></v-img>
+    <v-img v-if="prog.pic" :src="prog.pic" cover max-height="500"></v-img>
     <v-card-title>{{ prog.title }}</v-card-title>
     <v-card-subtitle v-if="prog.season">Season {{ prog.season }}</v-card-subtitle>
     <v-card-text>

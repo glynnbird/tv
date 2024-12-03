@@ -87,7 +87,7 @@
     })
 
     // edit the in-memory copy "progs"
-    for(let i = 0; i < progs.value; i++) {
+    for(let i = 0; i < progs.value.length; i++) {
       const p = progs.value[i]
       if (p.id === id) {
         progs.value[i] = t

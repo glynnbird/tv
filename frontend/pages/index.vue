@@ -10,6 +10,12 @@
   tab.value = '1'
 
   // computed values
+  const availableProgs = computed(() => {
+    const now = new Date().toISOString()
+    return progs.value.filter((p) => {
+      return p.date <= now && !p.watching
+    })
+  })
   const watchedProgs = computed(() => {
     return progs.value.filter((p) => {
       return p.watching
@@ -72,13 +78,13 @@
 </script>
 <template>
   <v-tabs v-model="tab" align-tabs="center">
-    <v-tab value="1"><v-icon>mdi-all-inclusive</v-icon></v-tab>
+    <v-tab value="1"><v-icon color="green">mdi-clock-check</v-icon></v-tab>
     <v-tab value="2"><v-icon color="primary">mdi-television-play</v-icon></v-tab>
-    <v-tab value="3"><v-icon color="secondary">mdi-calendar-clock</v-icon></v-tab>
+    <v-tab value="3"><v-icon color="red">mdi-calendar-clock</v-icon></v-tab>
   </v-tabs>
   <v-tabs-window v-model="tab">
     <v-tabs-window-item value="1">
-      <ProgList :progs="progs"></ProgList>
+      <ProgList :progs="availableProgs"></ProgList>
     </v-tabs-window-item>
     <v-tabs-window-item value="2">
       <ProgList :progs="watchedProgs"></ProgList>

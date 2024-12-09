@@ -84,13 +84,13 @@
   </v-tabs>
   <v-tabs-window v-model="tab">
     <v-tabs-window-item value="1">
-      <ProgList :progs="availableProgs"></ProgList>
+      <ProgList :progs="availableProgs" heading="Available to watch"></ProgList>
     </v-tabs-window-item>
     <v-tabs-window-item value="2">
-      <ProgList :progs="watchedProgs"></ProgList>
+      <ProgList :progs="watchedProgs" heading="Watching"></ProgList>
     </v-tabs-window-item>
     <v-tabs-window-item value="3">
-      <ProgList :progs="futureProgs"></ProgList>
+      <ProgList :progs="futureProgs" heading="Future"></ProgList>
     </v-tabs-window-item>
   </v-tabs-window>
 </template>

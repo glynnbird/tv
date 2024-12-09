@@ -1,6 +1,6 @@
 <script setup>
   // input attributes
-  const { progs } = defineProps(['progs'])
+  const { progs, heading } = defineProps(['progs', 'heading'])
 
   // local page items
   const now = ref(0)
@@ -20,8 +20,9 @@
 }
 </style>
 <template>
-  <v-list>
-    <v-list-item v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
+  <v-list density="comfortable">
+    <v-list-subheader>{{ heading }}</v-list-subheader>
+    <v-list-item v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`" density="comfortable">
       <v-list-item-title>{{  prog.title }} <v-chip v-if="prog.on" label size="x-small">{{ prog.on }}</v-chip></v-list-item-title>
       <v-list-item-subtitle>{{ prog.date }}
         <v-icon size="x-small" color="primary" v-if="prog.watching">mdi-television-play</v-icon>

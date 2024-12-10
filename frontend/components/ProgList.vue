@@ -20,7 +20,7 @@
 </style>
 <template>
   <v-list>
-    <v-list-subheader>{{ heading }}</v-list-subheader>
+    <v-list-subheader style="user-select:none;">{{ heading }}</v-list-subheader>
     <v-list-item v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
       <v-list-item-title>{{  prog.title }}</v-list-item-title>
       <v-list-item-subtitle>

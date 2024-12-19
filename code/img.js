@@ -4,7 +4,7 @@ import { get } from './lib/db.js'
 export async function onRequest(context) {
 
   // parse the json
-  const { searchParams } = new URL(request.url)
+  const { searchParams } = new URL(context.request.url)
   const id = searchParams.get('id')
   if (!id) {
     return new Response(notOk, notOkResponse)

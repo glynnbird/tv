@@ -21,11 +21,7 @@
   margin-bottom:20px; 
 }
 .shadow {
-  text-shadow:
-        0.07em 0 #666,
-        0 0.07em #666,
-        -0.07em 0 #666,
-        0 -0.07em #666;
+  text-shadow: 1px 1px 1px rgba(0,0,0, 1);
 }
 </style>
 <template>

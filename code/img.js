@@ -13,20 +13,19 @@ export async function onRequest(context) {
   // if there's a id
   if (id) {
     const response = await get(context.env.TVKV, id)
-    console.log(id, response)
-    if (response.pic) {
+    if (response.doc.pic) {
       // send 302 response
 
       const redirectResponse = {
         status: 302,
         headers: {
-          location: response.pic
+          location: response.doc.pic
         }
       }
       return new Response('', redirectResponse)
     } else {
       // send 404 response
-      return new Response({ ok: false }, missingResponse)
+      return new Response(notOk, missingResponse)
     }
   }
 

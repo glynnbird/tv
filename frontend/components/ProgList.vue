@@ -12,6 +12,23 @@
 
   const channels = ref(2)
   channels.value = ['BBC','ITV','Channel4','Channel5','SkyAtlantic','Alba']
+
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const th = function(v) {
+    if (v % 10 === 1) {
+      return `${v}st`
+    } else if (v % 10 === 2) {
+      return `${v}nd`
+    } else if (v % 10 === 3) {
+      return `${v}rd`
+    } else {
+      return `${v}th`
+    }
+  }
+  const formatDate = function(d) {
+    d = new Date(d)
+    return th(d.getDate()) + ' ' + months[d.getMonth()]
+  }
 </script>
 <style>
 .sep {
@@ -24,6 +41,9 @@
 .shadow {
   text-shadow: 1px 1px 1px rgba(0,0,0, 1);
 }
+.offbot {
+  margin-bottom: 10px;
+}
 </style>
 <template>
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
@@ -34,10 +54,10 @@
         <v-chip class="sep" variant="flat" label size="x-small" color="grey-lighten-2" v-if="prog.uptoep && prog.uptomax">{{ prog.uptoep }} / {{ prog.uptomax }}</v-chip>
         <v-chip class="sep" variant="flat" label size="x-small" color="grey-lighten-2" v-if="prog.type==='Film' || prog.type=='Single'">{{ prog.type }}</v-chip>
       </v-card-title>
-      <v-card-subtitle>
-        <v-chip class="sep" variant="flat" label size="x-small" color="primary" v-if="prog.date > now">
-          {{ prog.date }}
-          <v-icon class="sep" size="x-small" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
+      <v-card-subtitle class="position-absolute bottom-0 left-0 offbot">
+        <v-chip class="sep" variant="flat" label size="small" color="white" v-if="prog.date > now">
+          {{ formatDate(prog.date) }}
+          <v-icon class="sep" size="small" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
         </v-chip>
       </v-card-subtitle>
     </v-img>

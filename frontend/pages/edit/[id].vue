@@ -178,7 +178,7 @@
 
     <v-text-field v-model="prog.season" label="Season" @keydown.enter="add()"></v-text-field>
 
-    <v-text-field v-model="prog.pic" label="Pic" @keydown.enter="add()"></v-text-field>
+    <v-text-field v-model="prog.pic" label="Pic" @keydown.enter="add()" clearable></v-text-field>
 
     <v-checkbox label="Watching" v-model="prog.watching"></v-checkbox>
 

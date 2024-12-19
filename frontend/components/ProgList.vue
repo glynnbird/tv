@@ -20,20 +20,29 @@
 .cardsep {
   margin-bottom:20px; 
 }
+.shadow {
+  text-shadow:
+        0.07em 0 #666,
+        0 0.07em #666,
+        -0.07em 0 #666,
+        0 -0.07em #666;
+}
 </style>
 <template>
   <h4 style="user-select:none;">{{ heading }}</h4>
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
-    <v-img height="300" cover :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
-      <v-card-title class="text-white">
-        {{  prog.title }}
-        <v-chip class="sep" v-if="prog.on" label size="x-small">{{ prog.on }}</v-chip>
-        <v-chip class="sep" label size="x-small" v-if="prog.uptoep && prog.uptomax">{{ prog.uptoep }} / {{ prog.uptomax }}</v-chip>
-        <v-chip class="sep" label size="x-small" v-if="prog.type==='Film' || prog.type=='Single'">{{ prog.type }}</v-chip>
+    <v-img height="300" cover :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`">
+      <v-card-title class="text-white" style="">
+        <span class="shadow sep">{{  prog.title }}</span>
+        <v-chip class="sep" v-if="prog.on" variant="flat" color="grey-lighten-2" label size="x-small">{{ prog.on }}</v-chip>
+        <v-chip class="sep" variant="flat" label size="x-small" color="grey-lighten-2" v-if="prog.uptoep && prog.uptomax">{{ prog.uptoep }} / {{ prog.uptomax }}</v-chip>
+        <v-chip class="sep" variant="flat" label size="x-small" color="grey-lighten-2" v-if="prog.type==='Film' || prog.type=='Single'">{{ prog.type }}</v-chip>
       </v-card-title>
       <v-card-subtitle>
-        <v-chip class="sep" variant="flat" size="x-small" color="secondary" v-if="prog.date > now">{{ prog.date }}</v-chip>
-        <v-icon class="sep" size="x-small" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
+        <v-chip class="sep" variant="flat" label size="x-small" color="primary" v-if="prog.date > now">
+          {{ prog.date }}
+          <v-icon class="sep" size="x-small" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
+        </v-chip>
       </v-card-subtitle>
     </v-img>
   </v-card>

@@ -18,14 +18,14 @@
   margin-right:5px;
 }
 .cardsep {
-  margin-bottom:20px; 
+  margin-top: 10px;
+  margin-bottom:10px; 
 }
 .shadow {
   text-shadow: 1px 1px 1px rgba(0,0,0, 1);
 }
 </style>
 <template>
-  <h4 style="user-select:none;">{{ heading }}</h4>
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
     <v-img height="300" cover :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`">
       <v-card-title class="text-white" style="">

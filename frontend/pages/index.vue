@@ -9,6 +9,10 @@
   const tab = ref(0)
   tab.value = '1'
 
+  if (window.location.hash) {
+    tab.value = decodeURIComponent(window.location.hash.replace('#', ''))
+  }
+
   // computed values
   const availableProgs = computed(() => {
     const now = new Date().toISOString()
@@ -70,6 +74,11 @@
     return 0;
   }
 
+  function tabSelected() {
+    console.log(tab.value)
+    window.location.hash = tab.value
+  }
+
   // sort into date order
   if (progs.value.length > 0) {
     progs.value.sort(compareFn)
@@ -77,14 +86,14 @@
 
 </script>
 <template>
-  <v-tabs v-model="tab" align-tabs="center">
-    <v-tab value="1"><v-icon color="green">mdi-clock-check</v-icon></v-tab>
-    <v-tab value="2"><v-icon color="primary">mdi-television-play</v-icon></v-tab>
-    <v-tab value="3"><v-icon color="red">mdi-calendar-clock</v-icon></v-tab>
+  <v-tabs v-model="tab" align-tabs="center" @update:model-value="tabSelected()">
+    <v-tab value="1">Ready</v-tab>
+    <v-tab value="2">Watching</v-tab>
+    <v-tab value="3">Future</v-tab>
   </v-tabs>
   <v-tabs-window v-model="tab">
     <v-tabs-window-item value="1">
-      <ProgList :progs="availableProgs" heading="Available to watch"></ProgList>
+      <ProgList :progs="availableProgs" heading="Ready"></ProgList>
     </v-tabs-window-item>
     <v-tabs-window-item value="2">
       <ProgList :progs="watchedProgs" heading="Watching"></ProgList>

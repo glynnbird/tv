@@ -16,7 +16,7 @@
       <v-app-bar-title @click="navigateTo('/')" style="user-select:none;">TV</v-app-bar-title>
       <template v-slot:append>
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
-        <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="navigateTo('/')"></v-btn>
+        <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="$router.back()"></v-btn>
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" location="left">

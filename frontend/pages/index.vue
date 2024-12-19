@@ -75,7 +75,6 @@
   }
 
   function tabSelected() {
-    console.log(tab.value)
     window.location.hash = tab.value
   }
 

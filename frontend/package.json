@@ -9,7 +9,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.14.1592",
     "vite-plugin-vuetify": "^2.0.4"
   },
   "dependencies": {

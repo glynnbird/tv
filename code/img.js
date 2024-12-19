@@ -13,7 +13,7 @@ export async function onRequest(context) {
   // if there's a id
   if (id) {
     const response = await get(context.env.TVKV, id)
-
+    console.log(id, response)
     if (response.pic) {
       // send 302 response
 

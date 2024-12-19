@@ -22,7 +22,7 @@
 }
 </style>
 <template>
-  <h4>{{ heading }}</h4>
+  <h4 style="user-select:none;">{{ heading }}</h4>
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
     <v-img height="300" cover :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
       <v-card-title class="text-white">

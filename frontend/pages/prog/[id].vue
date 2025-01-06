@@ -11,8 +11,7 @@
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // the tv prog
-  const prog = ref(0)
-  prog.value = {}
+  const prog = ref({})
 
   // if this is the first time,
   if (id) {

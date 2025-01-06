@@ -14,16 +14,13 @@
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // local page items
-  const prog = ref(0)
-  prog.value = {}
+  const prog = ref({})
 
   // add busy flag
-  const busy = ref(8)
-  busy.value = false
+  const busy = ref(false)
 
   // whether to show the date picker
-  const isPicking = ref(9)
-  isPicking.value = false
+  const isPicking = ref(false)
 
   function showpicker() {
     isPicking.value = true;

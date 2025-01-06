@@ -12,36 +12,22 @@
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // local page items
-  const title = ref(0)
-  title.value = ''
-  const description = ref(1)
-  description.value = ''
-  const stars = ref(2)
-  stars.value = ''
-  const on = ref(3)
-  on.value = ''
-  const date = ref(4)
-  date.value = new Date()
-  const season = ref(5)
-  season.value = ''
-  const pic = ref(6)
-  pic.value = ''
-  const watching = ref(7)
-  watching.value = false
-  const type = ref(8)
-  type.value = ''
-  const uptoep = ref(11)
-  uptoep.value = ''
-  const uptomax = ref(12)
-  uptomax.value = ''
+  const title = ref('')
+  const description = ref('')
+  const stars = ref('')
+  const on = ref('')
+  const date = ref(new Date())
+  const pic = ref('')
+  const watching = ref(false)
+  const type = ref('')
+  const uptoep = ref('')
+  const uptomax = ref('')
 
   // add busy flag
-  const busy = ref(9)
-  busy.value = false
+  const busy = ref(false)
 
   // whether to show the date picker
-  const isPicking = ref(10)
-  isPicking.value = false
+  const isPicking = ref(false)
 
   function showpicker() {
     isPicking.value = true;

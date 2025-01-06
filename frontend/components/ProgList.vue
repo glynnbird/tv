@@ -3,16 +3,10 @@
   const { progs, heading } = defineProps(['progs', 'heading'])
 
   // local page items
-  const now = ref(0)
-  now.value = new Date().toISOString()
-
-  const nextWeek = ref(1)
+  const now = ref(new Date().toISOString())
   const ts = new Date().getTime() + 1000 * 60 * 60 * 24 * 7
-  nextWeek.value = new Date(ts).toISOString().substring(0,10)
-
-  const channels = ref(2)
-  channels.value = ['BBC','ITV','Channel4','Channel5','SkyAtlantic','Alba']
-
+  const nextWeek = ref(new Date(ts).toISOString().substring(0,10))
+  const channels = ref(['BBC','ITV','Channel4','Channel5','SkyAtlantic','Alba'])
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   const th = function(v) {
     if (v % 10 === 1) {

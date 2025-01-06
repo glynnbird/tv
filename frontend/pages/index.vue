@@ -6,9 +6,7 @@
   const stick = useStick()
 
   // local page values
-  const tab = ref(0)
-  tab.value = '1'
-
+  const tab = ref('1')
   if (window.location.hash) {
     tab.value = decodeURIComponent(window.location.hash.replace('#', ''))
   }

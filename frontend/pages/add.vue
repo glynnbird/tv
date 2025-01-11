@@ -22,6 +22,7 @@
   const type = ref('')
   const uptoep = ref('')
   const uptomax = ref('')
+  const season = ref('')
 
   // add busy flag
   const busy = ref(false)

@@ -30,7 +30,7 @@ resource "cloudflare_pages_project" "frontend_project" {
       }
       production {
         environment_variables = {
-          NODE_VERSION = "18"
+          NODE_VERSION = "20"
           API_KEY = random_string.apiKey.id
         }
 

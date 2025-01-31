@@ -82,7 +82,7 @@
       </v-chip-group>
       <v-table density="comfortable">
         <tbody>
-          <tr><th>Date</th><td><HumanDate :date="prog.date" /></td></tr>
+          <tr><th>Date</th><td><HumanDate :date="prog.date" showYear="true" /></td></tr>
           <tr><th>On</th><td>{{ prog.on }}</td></tr>
           <tr v-if="prog.type"><th>Type</th><td>{{ prog.type }}</td></tr>
           <tr v-if="prog.uptoep && prog.uptomax"><th>Episodes</th><td>{{ prog.uptoep }} / {{ prog.uptomax }}</td></tr>

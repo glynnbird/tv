@@ -1,6 +1,6 @@
 <script setup>
   // input attributes
-  const { date } = defineProps(['date'])
+  const { date, showYear } = defineProps(['date', 'showYear'])
 
   // local page items
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -15,11 +15,15 @@
       return `${v}th`
     }
   }
-  const formatDate = function(d) {
+  const formatDate = function(d, showYear) {
     d = new Date(d)
-    return th(d.getDate()) + ' ' + months[d.getMonth()]
+    let retval = th(d.getDate()) + ' ' + months[d.getMonth()]
+    if (showYear) {
+      retval += ' ' + d.getFullYear()
+    }
+    return retval
   }
 </script>
 <template>
-  {{ formatDate(date) }}
+  {{ formatDate(date, showYear) }}
 </template>

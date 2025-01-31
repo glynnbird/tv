@@ -53,7 +53,7 @@
     }
   }
 
-  // method - add new todo 
+  // method - add new 
   async function edit() {
     if (!prog.value.title) {
       return
@@ -152,12 +152,14 @@
       v-if="prog.type === 'Series'"
       v-model="prog.uptoep"
       label="Episodes Watched"
+      clearable
       ></v-text-field>
 
     <v-text-field
       v-if="prog.type === 'Series'"
       v-model="prog.uptomax"
       label="Episodes Total"
+      clearable
       ></v-text-field>
 
     <v-row>

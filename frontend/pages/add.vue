@@ -20,8 +20,8 @@
   const pic = ref('')
   const watching = ref(false)
   const type = ref('')
-  const uptoep = ref('')
-  const uptomax = ref('')
+  const uptoep = ref('0')
+  const uptomax = ref('6')
   const season = ref('')
 
   // add busy flag
@@ -112,6 +112,7 @@
       v-if="type === 'Series'"
       v-model="uptomax"
       label="Episodes Total"
+      clearable
       ></v-text-field>
 
     <v-row>

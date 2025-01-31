@@ -7,22 +7,6 @@
   const ts = new Date().getTime() + 1000 * 60 * 60 * 24 * 7
   const nextWeek = ref(new Date(ts).toISOString().substring(0,10))
   const channels = ref(['BBC','ITV','Channel4','Channel5','SkyAtlantic','Alba'])
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  const th = function(v) {
-    if (v % 10 === 1) {
-      return `${v}st`
-    } else if (v % 10 === 2) {
-      return `${v}nd`
-    } else if (v % 10 === 3) {
-      return `${v}rd`
-    } else {
-      return `${v}th`
-    }
-  }
-  const formatDate = function(d) {
-    d = new Date(d)
-    return th(d.getDate()) + ' ' + months[d.getMonth()]
-  }
 </script>
 <style>
 .sep {
@@ -48,7 +32,7 @@
         <v-chip class="sep" variant="flat" label size="default" color="grey-lighten-2" v-if="prog.uptoep && prog.uptomax">{{ prog.uptoep }} / {{ prog.uptomax }}</v-chip>
         <v-chip class="sep" variant="flat" label size="default" color="grey-lighten-2" v-if="prog.type==='Film' || prog.type=='Single'">{{ prog.type }}</v-chip>
         <v-chip class="sep" variant="flat" label size="default" color="white" v-if="prog.date > now">
-          {{ formatDate(prog.date) }}
+          <HumanDate :date="prog.date" />
           <v-icon class="sep" size="default" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
         </v-chip>
       </v-card-subtitle>

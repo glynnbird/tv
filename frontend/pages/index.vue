@@ -4,6 +4,7 @@
   const progs = useProgs()
   const auth = useAuth()
   const stick = useStick()
+  const PROGS_KEY = 'progscache'
 
   // local page values
   const tab = ref('1')
@@ -43,6 +44,13 @@
 
   // if this is the first time,
   if (stick.value === false && progs.value.length === 0) {
+    // see if we have any cached progs
+    const cache = localStorage.getItem(PROGS_KEY)
+    if (cache) {
+      console.log('restoring pages from cache for faster startup')
+      progs.value = JSON.parse(cache)
+    }
+
     try {
       //  fetch the list from the API
       console.log('API', '/list', `${apiHome}/api/list`)
@@ -54,6 +62,7 @@
         }
       })
       progs.value = r.data.value.list
+      localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
     } catch (e) {
       console.error('failed to fetch list of progs', e)
     }

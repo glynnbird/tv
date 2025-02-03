@@ -2,8 +2,6 @@ import { notOkResponse, missingResponse, notOk } from './lib/constants.js'
 import { get } from './lib/db.js'
 
 export async function onRequest(context) {
-  const r =  handleCORS(context.request)
-  if (r) return r
 
   // parse the json
   const { searchParams } = new URL(context.request.url)

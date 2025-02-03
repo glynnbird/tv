@@ -14,10 +14,10 @@ export async function onRequest(context) {
   if (id) {
     const response = await get(context.env.TVKV, id)
     if (response.doc.pic) {
-      // send 302 response
+      // send 301 response
 
       const redirectResponse = {
-        status: 302,
+        status: 301,
         headers: {
           location: response.doc.pic
         }

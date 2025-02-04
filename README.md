@@ -17,11 +17,13 @@ The Cloudflare pages config, KV store and DNS records are created using Terrafor
 
 The web interface display three "tabs": Available to watch, Watching and Future - three separate views of the list of programmes in the database but split up by attributes and sorted in date order in the front end.
 
-Screenshots of the full height of the three tabs:
+Screenshots of the three tabs:
 
 | Available to watch | Watching | Future |
 | ------------------ | ---------| ------ |
 | ![available](screenshots/tab1.png) | ![watching](screenshots/tab2.png) | ![future](screenshots/tab3.png) |
+
+Notice on the third tab, if the programme is within a week of transmission and on a non-streaming service, it has a red "record" button on, indicating it could be available to set to record.
 
 Viewing a single programme and editing it:
 

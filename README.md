@@ -13,13 +13,29 @@ This project gets deployed on pushes to the main branch on GitHub. Cloudflare de
 
 The Cloudflare pages config, KV store and DNS records are created using Terraform.
 
+## User interface
+
+The web interface display three "tabs": Available to watch, Watching and Future - three separate views of the list of programmes in the database but split up by attributes and sorted in date order in the front end.
+
+Screenshots of the full height of the three tabs:
+
+| Available to watch | Watching | Future |
+| ------------------ | ---------| ------ |
+| ![available](screenshots/tab1.png) | ![watching](screenshots/tab2.png) | ![future](screenshots/tab3.png) |
+
+Viewing a single programme and editing it:
+
+| Adding a programme | Viewing a programme | Editing it |
+| ------------------ | ------------------- | ---------- |
+| ![add](screenshots/add.png) | ![prog](screenshots/prog.png) | ![edit](screenshots/edit.png) |
+
 ## Data model
 
 As we only have simple KeyValue store and the Cloudflare KV.list() operation only returns the keys (not the values), the data model packs some data into the key.
 
 | key           | value |  metadata                                                                        |
 |---------------|-------|----------------------------------------------------------------------------------|
-| 1681893518478 | null  | {"date":"2023-01-05","title":"Line Of Duty","watching":true}                     |
+| 1681893518478 | null  | {"date":"2025-07-05","on":"Netflix","title":"Death By Lightning","type":"Series","uptoep":"0","uptomax":"6","watching":false}                     |
 
 
 The keys is a timestamp. This allows us to get time-ordered list of programmes with just the `TVKV.list()` function. The value is left blank because we're able to fit a summary in the `metadata` object which has to be < 1kB, but does come back from the `KV.list` function.
@@ -28,29 +44,58 @@ The main `value` is everything we know about the programme:
 
 ```js
 {
-  "title": "Line of Duty",
-  "description": "The sixth series of Line of Duty, consisting of seven episodes, began broadcasting on BBC One on 21 March 2021. The story follows the actions of AC-12, led by Superintendent Ted Hastings and DI Steve Arnott, as they investigate DCI Joanne Davidson and her team, including former AC-12 officer DI Kate Fleming.",
-  "stars": ["Vicky McClure", "Martin Compston", "Kelly McDonald"],
-  "on": "BBC",
-  "date": "2023-05-01",
-  "season": "6",
-  "pic": "https://ichef.bbci.co.uk/images/ic/784x441/p09b2v32.jpg",
-  "watching": false
+  "id": "1738420123614",
+  "doc": {
+    "title": "Death By Lightning",
+    "description": " a limited drama series that’s based on the epic and stranger-than-fiction true story of James Garfield, reluctant 20th president of the United States, and Charles Guiteau — a man who was not only Garfield’s greatest admirer, but also his assassin.",
+    "stars": [
+      "Matthew Macfadyen",
+      "Tuppence Middleton"
+    ],
+    "on": "Netflix",
+    "date": "2025-07-05",
+    "season": "",
+    "pic": "https://dnm.nflximg.net/api/v6/2DuQlx0fM4wd1nzqm5BFBi6ILa8/AAAAQeZ8XKJL1nBddDmKYm9abZQ9Jao4DKe_ZKqb-WfqGT_VVYMGtK0IFpa5BatLFoknLeUKN0tDOkhkptcdhFwlFyYxMp8WpvV9Ns-ImZ2P-emHIsWQDq3_uDYTltKqGF2LTdypZVLIChTsUeW1cYPuIgh5.jpg?r=1f1",
+    "watching": false,
+    "type": "Series",
+    "uptoep": "0",
+    "uptomax": "6"
+  },
+  "_ts": "2025-02-01T14:28:43.614Z",
+  "_freetext": "",
+  "_freetextIndex": [],
+  "_index": {
+    "watching": "false",
+    "on": "Netflix"
+  }
 }
 ```
 
-We also add some additional fields for indexing purposes:
+The doc has some extra fields for indexing purposes as it was assumed that the kv store would be queried and have secondary indexes:
 
 ```
 _ts : "2023-05-01T19:52:24.000Z",
 _freetext: [] // list of words to be indexed for freetext search
 _freetextIndex: [] // list of stemmed and processed words that are actually indexed
 _index: {} // a map of key/value pairs to be indexed for this document
+```
 
+but in fact, the front end app just uses the "list" to get all the programme's top-level data and when a user needs to see details of a single program, the whole value is fetched from KV instead.
+
+## Performance
+
+The front end app has been highly optimised for performance:
+
+1. It uses [Vite PWA](https://vite-pwa-org.netlify.app/) to make the web app a Progressive Web App (PWA), meaning that the assets of the application are cached locally making for a faster load time (after the first load). 
+2. The programme list is cached in local storage so that the app can load and show it's last state quickly - it then fetches the programme list in the background to pick up any changes.
+3. The images are loaded in "eager" mode, meaning they're fetched ahead of time making the UI snappier.
+4. The KV store's eventual consistency is hidden by writing edits & deletes to the local copy of the data, as well as to the cloud via API calls.
 
 ## API
 
 All methods that change data or pass parameters use the `POST` method and expect an `application/json` content type. All API endpoints require a valid `apikey` header or you will get a 401 response.
+
+The API lives at the same URL as the deployed application, but for local development that is not the case so the API plays nicely with CORS to allow that to happen.
 
 ## Add a todo - POST /api/add
 

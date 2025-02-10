@@ -8,7 +8,7 @@
 </script>
 <template>   
   <v-app theme="light">
-    <v-app-bar density="compact">
+    <v-app-bar density="compact" color="#3367D6">
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </template>

@@ -13,23 +13,43 @@
     tab.value = decodeURIComponent(window.location.hash.replace('#', ''))
   }
 
+  // sort programmes newest first
+  const newestFirst = function(a, b) {
+    if (a.date < b.date) {
+      return 1;
+    } else if (a.date > b.date) {
+      return -1;
+    }
+    return 0;
+  }
+
+  // sort programmes oldest first
+  function oldestFirst(a, b) {
+    if (a.date < b.date) {
+      return -1;
+    } else if (a.date > b.date) {
+      return 1;
+    }
+    return 0;
+  }
+
   // computed values
   const availableProgs = computed(() => {
     const now = new Date().toISOString()
     return progs.value.filter((p) => {
       return p.date <= now && !p.watching
-    })
+    }).sort(newestFirst)
   })
   const watchedProgs = computed(() => {
     return progs.value.filter((p) => {
       return p.watching
-    })
+    }).sort(newestFirst)
   })
   const futureProgs = computed(() => {
     const now = new Date().toISOString()
     return progs.value.filter((p) => {
       return p.date >= now
-    })
+    }).sort(oldestFirst)
   })
 
   // set manifest header
@@ -73,22 +93,8 @@
   // so we don't reload an eventually consistent copy
   stick.value = false
 
-  function compareFn(a, b) {
-    if (a.date < b.date) {
-      return -1;
-    } else if (a.date > b.date) {
-      return 1;
-    }
-    return 0;
-  }
-
   function tabSelected() {
     window.location.hash = tab.value
-  }
-
-  // sort into date order
-  if (progs.value.length > 0) {
-    progs.value.sort(compareFn)
   }
 
 </script>

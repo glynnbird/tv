@@ -3,7 +3,7 @@
   const progs = useProgs()
   const alert = useAlert()
   const auth = useAuth()
-  const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount']
+  const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U']
   const types = ['Series', 'Film', 'Single']
   const stick = useStick()
 

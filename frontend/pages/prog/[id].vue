@@ -1,7 +1,9 @@
 <script setup>
+
   // composables
   const progs = useProgs()
   const route = useRoute()
+  const router = useRouter()
   const id = route.params.id
   const auth = useAuth()
   const stick = useStick()
@@ -36,6 +38,35 @@
     }
   }
 
+  // add one to the progress count
+  const plusOne = async (id) => {
+    if (prog.value.type === 'Series') {
+      console.log('incrementing')
+      let upto = parseInt(prog.value.uptoep)
+      prog.value.uptoep = (upto + 1).toString()
+    } else {
+      return
+    }
+    console.log('API', '/add', JSON.stringify(prog.value))
+    const ret = await useFetch(`${apiHome}/api/add`, {
+      method: 'post',
+      body: prog.value,
+      headers: {
+        'content-type': 'application/json',
+        apikey: auth.value.apiKey
+      }
+    })
+
+    // edit the in-memory copy "progs"
+    for(let i = 0; i < progs.value.length; i++) {
+      const p = progs.value[i]
+      if (p.id === id) {
+        progs.value[i] = prog.value
+        break
+      }
+    }
+  }
+
   // edit programme
   const editItem = async (id) => {
     await navigateTo(`/edit/${id}`)
@@ -62,11 +93,12 @@
         }
       }
       stick.value = true
-      await navigateTo(`/`)
+      await navigateTo(router.back())
     } catch (e) {
       console.error('Could not toggle', id, e)
     }
   }
+
 </script>
 <template>
   <v-card v-if="prog">
@@ -94,6 +126,7 @@
         <span v-if="!prog.watching">Watch</span>
         <span v-if="prog.watching">Unwatch</span>
       </v-btn>
+      <v-btn v-if="prog.watching && prog.type=='Series'" color="secondary" variant="flat" @click="plusOne(prog.id)">+1</v-btn>
       <v-btn color="warning" variant="flat" @click="editItem(prog.id)">Edit</v-btn>
     </v-card-actions>
 

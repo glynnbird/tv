@@ -52,13 +52,6 @@
     }).sort(oldestFirst)
   })
 
-  // set manifest header
-  // useHead({
-  //   link: [
-  //     { rel: 'manifest', href: '/manifest.json' }
-  //   ]
-  // })
-
   // config
   const config = useRuntimeConfig()
   const apiHome = config.public['apiBase'] || window.location.origin

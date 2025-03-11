@@ -27,7 +27,7 @@
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
     <v-img height="250" cover eager :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`">
       <v-card-title class="text-white shadow">{{  prog.title }}</v-card-title>
-      <v-card-subtitle class="position-absolute bottom-0 left-0 offbot">
+      <v-card-subtitle class="position-absolute bottom-0 left-0 offbot" style="width: 100%">
         <v-chip class="sep" v-if="prog.on" variant="flat" color="grey-lighten-2" label size="default">
           {{ prog.on }}
         </v-chip>
@@ -41,7 +41,7 @@
           <HumanDate :date="prog.date" />
           <v-icon class="sep" size="default" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
         </v-chip>
-        <v-progress-linear color="red-lighten-2" v-if="prog.watching && prog.type==='Series'" :model-value="prog.uptoep" :max="prog.uptomax"></v-progress-linear>
+        <v-progress-linear class="cardsep" color="red-lighten-2" v-if="prog.watching && prog.type==='Series'" :model-value="prog.uptoep" :max="prog.uptomax"></v-progress-linear>
       </v-card-subtitle>
           </v-img>
   </v-card>

@@ -22,6 +22,11 @@
 .offbot {
   margin-bottom: 10px;
 }
+.percent {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
 </style>
 <template>
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
@@ -41,9 +46,11 @@
           <HumanDate :date="prog.date" />
           <v-icon class="sep" size="default" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
         </v-chip>
-        <v-progress-linear class="cardsep" color="red-lighten-2" v-if="prog.watching && prog.type==='Series'" :model-value="prog.uptoep" :max="prog.uptomax"></v-progress-linear>
+        <v-progress-linear class="cardsep" height="15" color="red-lighten-2" v-if="prog.watching && prog.type==='Series'" :model-value="prog.uptoep" :max="prog.uptomax">
+          <span class="percent">{{ Math.ceil(100 * prog.uptoep/prog.uptomax) }}%</span>
+        </v-progress-linear>
       </v-card-subtitle>
-          </v-img>
+    </v-img>
   </v-card>
 
   <!-- if empty, show instructions -->

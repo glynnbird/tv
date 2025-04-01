@@ -31,7 +31,10 @@
 <template>
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
     <v-img height="250" cover eager :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`">
-      <v-card-title class="text-white shadow">{{  prog.title }}</v-card-title>
+      <v-card-title class="text-white shadow">
+        {{  prog.title }} 
+        <v-chip v-if="prog.season" label color="white">{{ prog.season }}</v-chip>
+      </v-card-title>
       <v-card-subtitle class="position-absolute bottom-0 left-0 offbot" style="width: 100%">
         <v-chip class="sep" v-if="prog.on" variant="flat" color="grey-lighten-2" label size="default">
           {{ prog.on }}

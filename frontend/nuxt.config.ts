@@ -1,7 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import vuetify from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
+  build: {
+    transpile: ['vuetify'],
+  },
   modules: [
-    '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    }
   ],
   ssr: false,
   pwa: {
@@ -52,10 +62,6 @@ export default defineNuxtConfig({
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],
-
-  build: {
-    transpile: ['vuetify'],
-  },
 
   vite: {
     define: {

@@ -5,7 +5,9 @@
   // local page items
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   const th = function(v) {
-    if (v % 10 === 1) {
+    if (v >=10 && v <= 19) {
+      return `${v}th`
+    } else if (v % 10 === 1) {
       return `${v}st`
     } else if (v % 10 === 2) {
       return `${v}nd`

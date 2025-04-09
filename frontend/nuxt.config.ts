@@ -57,17 +57,11 @@ export default defineNuxtConfig({
       apiBase: 'https://tv.glynnbird.com'
     }
   },
-
-  css: [
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css'
-  ],
-
+  compatibilityDate: '2024-09-24',
+  devtools: { enabled: true},
   vite: {
     define: {
       'process.env.DEBUG': false,
     }
-  },
-
-  compatibilityDate: '2024-09-24'
+  }
 })

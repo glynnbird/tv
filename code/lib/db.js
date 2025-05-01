@@ -1,7 +1,7 @@
 import { porterStemmer } from './stemmer.js'
 import { process } from './process.js'
 
-export const toggle = async function(kv, id) {
+export const toggle = async function(kv, id, ts) {
   const { value, metadata } = await kv.getWithMetadata(`doc:${id}`)
   if (value === null) {
     return { ok: false }
@@ -9,9 +9,11 @@ export const toggle = async function(kv, id) {
   const j = JSON.parse(value)
   await del(kv, id)
   j.doc.watching = !j.doc.watching
+  j.doc.ts =  ts
   j.metadata = metadata
   j.metadata.watching = j.doc.watching
   j.metadata.on = j.doc.on
+  j.metadata.ts = ts
   await add(kv, j)
   return { ok: true}
 }

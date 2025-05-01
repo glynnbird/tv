@@ -13,7 +13,7 @@ export async function onRequest(context) {
   // if there's a id
   if (json.id) {
     console.log('attempting toggle of', json.id)
-    const response = await toggle(context.env.TVKV, json.id)
+    const response = await toggle(context.env.TVKV, json.id, json.ts || 0)
 
     // send response
     return new Response(JSON.stringify(response), okResponse)

@@ -71,7 +71,8 @@
       stars: prog.value.stars.split(',').map(function (s) { return s.trim() }),
       type: prog.value.type,
       uptoep: prog.value.uptoep,
-      uptomax: prog.value.uptomax
+      uptomax: prog.value.uptomax,
+      ts: Math.floor(new Date().getTime() / 1000)
     }
     console.log('API', '/add', t)
     const ret = await useFetch(`${apiHome}/api/add`, {

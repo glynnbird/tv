@@ -33,6 +33,16 @@
     return 0;
   }
 
+  // sort programmes most recently updated first
+  function mostRecentlyUpdatedFirst(a, b) {
+    if (a.ts < b.ts) {
+      return 1;
+    } else if (a.ts > b.ts) {
+      return -1;
+    }
+    return 0;
+  }
+
   // computed values
   const availableProgs = computed(() => {
     const now = new Date().toISOString()
@@ -43,7 +53,7 @@
   const watchedProgs = computed(() => {
     return progs.value.filter((p) => {
       return p.watching
-    }).sort(newestFirst)
+    }).sort(mostRecentlyUpdatedFirst)
   })
   const futureProgs = computed(() => {
     const now = new Date().toISOString()

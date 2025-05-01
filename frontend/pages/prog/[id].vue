@@ -47,6 +47,7 @@
     } else {
       return
     }
+    prog.value.ts =  Math.floor(new Date().getTime() / 1000)
     console.log('API', '/add', JSON.stringify(prog.value))
     const ret = await useFetch(`${apiHome}/api/add`, {
       method: 'post',
@@ -79,7 +80,8 @@
       const ret = await useFetch(`${apiHome}/api/toggle`, {
         method: 'post',
         body: {
-          id
+          id,
+          ts:  Math.floor(new Date().getTime() / 1000)
         },
         headers: {
           'content-type': 'application/json',

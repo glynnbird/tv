@@ -26,7 +26,8 @@ export async function onRequest(context) {
       watching: json.watching || false,
       type: json.type || '',
       uptoep: json.uptoep || '',
-      uptomax: json.uptomax || ''
+      uptomax: json.uptomax || '',
+      ts: json.ts || 0
     }
     const metadata = {
       date: doc.date,
@@ -36,7 +37,8 @@ export async function onRequest(context) {
       uptoep: doc.uptoep,
       uptomax: doc.uptomax,
       type: doc.type,
-      season: doc.season
+      season: doc.season,
+      ts: doc.ts
     }
     const index = {
       watching: doc.watching.toString(),

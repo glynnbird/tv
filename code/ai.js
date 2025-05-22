@@ -1,14 +1,21 @@
 
 
-import { okResponse, notOkResponse, missingResponse, notOk } from './lib/constants.js'
+import { okResponse } from './lib/constants.js'
 import { mustBePOST, mustBeJSON, apiKey, handleCORS } from './lib/checks.js'
 
-const prompt = `Please summarise the following text as JSON 
-  and return the title of the TV programme, five cast members, 
-  the number of episodes, the channel it is broadcast on in the UK, 
-  the first date of broadcast in the UK and a synopsis of what 
-  it's about, as a JSON object please. Please return a JSON object 
-  and nothing else.`
+const MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct'
+const MAX_TOKENS = 512
+const PROMPT = `
+Please summarise the following text as a JSON object with the following attributes:
+- title: the title of the TV programme.
+- description: a brief synopsis.
+- stars: an array of strings containing up to five cast members, with no duplicates.
+- on: the channel it is broadcast on in the UK - one of 'BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U'
+- date: an ISO-8601 string representing the date of first broadcast in the UK.
+- type: either "film" for a movie, "series" for a series and "oneoff" for everything else.
+- uptomax: the number of episodes, if the type is a "series".
+Please return a JSON object and nothing else.
+`
 
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
@@ -57,18 +64,17 @@ Check out more of our Drama coverage or visit our TV Guide and Streaming Guide t
   `
 
 
-  const response = await context.env.AI.run("@cf/meta/llama-4-scout-17b-16e-instruct", {
+  const response = await context.env.AI.run(MODEL, {
     stream: false,
-    max_tokens: 512,
+    max_tokens: MAX_TOKENS,
     messages: [
-      { role: "user", content: `${prompt} ---- ${txt}` }
+      { role: "user", content: `${PROMPT} ---- ${txt}` }
     ]
   })
   const obj = {
     ok: true,
     response
   }
-
 
   // send response
   return new Response(JSON.stringify(obj), okResponse)

@@ -29,9 +29,15 @@ resource "cloudflare_pages_project" "frontend_project" {
         
       }
       production = {
-        environment_variables = {
-          NODE_VERSION = "20"
-          API_KEY = random_string.apiKey.id
+        env_vars = {
+          NODE_VERSION = {
+            type = "plain_text"
+            value = "20"
+          }
+          API_KEY = {
+            type = "plain_text"
+            value = random_string.apiKey.id
+          }
         }
 
         kv_namespaces = {

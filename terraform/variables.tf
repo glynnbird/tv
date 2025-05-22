@@ -10,6 +10,9 @@ variable "cloudflare_zone_id" {
   type = string
   sensitive = true
 }
-variable "cloudflare_domain" {
+variable "cloudflare_hostname" {
+  type = string
+}
+variable "cloudflare_subdomain" {
   type = string
 }

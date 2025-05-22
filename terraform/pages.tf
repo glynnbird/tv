@@ -32,12 +32,16 @@ resource "cloudflare_pages_project" "frontend_project" {
         env_vars = {
           NODE_VERSION = {
             type = "plain_text"
-            value = "20"
+            value = "22"
           }
           API_KEY = {
             type = "plain_text"
             value = random_string.apiKey.id
           }
+        }
+
+        ai_bindings = {
+          AI = {}
         }
 
         kv_namespaces = {

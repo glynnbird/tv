@@ -3,6 +3,13 @@
 import { okResponse, notOkResponse, missingResponse, notOk } from './lib/constants.js'
 import { mustBePOST, mustBeJSON, apiKey, handleCORS } from './lib/checks.js'
 
+const prompt = `Please summarise the following text as JSON 
+  and return the title of the TV programme, five cast members, 
+  the number of episodes, the channel it is broadcast on in the UK, 
+  the first date of broadcast in the UK and a synopsis of what 
+  it's about, as a JSON object please. Please return a JSON object 
+  and nothing else.`
+
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
   const r = handleCORS(context.request) || apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
@@ -54,7 +61,7 @@ Check out more of our Drama coverage or visit our TV Guide and Streaming Guide t
     stream: false,
     max_tokens: 512,
     messages: [
-      { role: "user", content: `Please summarise the following text as JSON and return the title of the TV programme, five cast members, the number of episodes, the channel it is broadcast on in the UK, the first date of broadcast in the UK and a synopsis of what it's about, as a JSON object please. ---- ${txt}` }
+      { role: "user", content: `${prompt} ---- ${txt}` }
     ]
   })
   const obj = {

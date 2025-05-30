@@ -47,6 +47,18 @@ function strip(html) {
   return html;
 }
 
+function extractOgImage(html) {
+  // Match meta tag with property="og:image"
+  const match = html.match(/<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["'][^>]*>/i);
+  
+  // If no match, try reversed order of attributes
+  if (!match) {
+    const altMatch = html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["'][^>]*>/i);
+    return altMatch ? altMatch[1] : null;
+  }
+
+  return match[1];
+}
 
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
@@ -64,8 +76,13 @@ export async function onRequest(context) {
     const urlResponse = await fetch(json.url)
     console.log('status code', urlResponse.status)
     if (urlResponse.status === 200) {
-      // strip the tags
+      // get response text
       let html = await urlResponse.text()
+
+      // find the og image
+      const imageURL = extractOgImage(html)   
+
+      // strip the tags
       html = strip(html)
       console.log('stripped HTML', html)
 
@@ -83,10 +100,13 @@ export async function onRequest(context) {
       const r = response.response.replace(/```/g,'')
 
       try {
+        const r2 = JSON.parse(r)
+        r2.pic = imageURL
+
         // return object
         const obj = {
           ok: true,
-          response: JSON.parse(r)
+          response: r2
         }
 
         // send response

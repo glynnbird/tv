@@ -12,6 +12,7 @@
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // local page items
+  const aiurl = ref('')
   const title = ref('')
   const description = ref('')
   const stars = ref('')
@@ -34,6 +35,34 @@
     isPicking.value = true;
   }
   
+  async function prefill() {
+    busy.value = true
+    console.log('API', '/ai')
+    const ret = await useFetch(`${apiHome}/api/ai`, {
+      method: 'post',
+      body: {
+        url: aiurl.value
+      },
+      headers: {
+        'content-type': 'application/json',
+        apikey: auth.value.apiKey
+      }
+    })
+    console.log('ai response', ret.data.value)
+    const ai = ret.data.value.response
+    console.log('ai', ai)
+    busy.value = false
+    title.value = ai.title
+    description.value = ai.description
+    stars.value = ai.stars
+    on.value = ai.on
+    date.value = ai.date
+    uptomax.value = ai.uptomax
+    type.value = ai.type
+    pic.value = ai.pic
+  }
+
+
   // method - add new todo 
   async function add() {
     if (!title.value) {
@@ -77,8 +106,38 @@
   }
 </script>
 <template>
+  <v-progress-linear
+    v-if="busy"
+    color="green"
+    indeterminate
+  ></v-progress-linear>
   <PageTitle title="Add"></PageTitle>
+
   <v-form>
+    <v-row>
+      <v-col class="v-col-9">
+        <v-text-field
+          v-model="aiurl"
+          label="Prefill URL"
+        ></v-text-field>
+      </v-col>
+      <v-col class="v-col-3">
+        <v-btn
+          :disabled="aiurl.length === 0 || busy"
+          color="success"
+          class="mr-4"
+          @click="prefill()"
+        >
+          Prefill
+        </v-btn>
+      </v-col>
+    </v-row>
+
+
+  </v-form>
+
+  <v-form>
+
     <v-text-field
       v-model="title"
       label="Title"

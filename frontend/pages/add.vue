@@ -59,9 +59,6 @@
       on.value = ai.on
       date.value = new Date(ai.date)
       uptomax.value = ai.uptomax
-      if (ai.type) {
-        ai.type[0] = ai.type[0].toUpperCase()
-      }
       type.value = ai.type
       pic.value = ai.pic
     } else {
@@ -126,32 +123,27 @@
   ></v-progress-linear>
   <PageTitle title="Add"></PageTitle>
 
-  <v-form class="ai">
-    <v-row>
-      <v-col class="v-col-9">
-        <v-text-field
-          v-model="aiurl"
-          label="Prefill URL"
-        ></v-text-field>
-      </v-col>
-      <v-col class="v-col-3">
-        <v-btn
-          :disabled="aiurl.length === 0 || busy"
-          color="#BBDEFB"
-          class="mr-4"
-          @click="prefill()"
-        >
-          <v-icon
-            color="white"
-            icon="mdi-auto-fix"
-          ></v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-form>
+  <v-alert title="AI Assistant" color="blue-lighten-4" class="ai">
+    <v-form class="ai">
+      <v-text-field
+        v-model="aiurl"
+        label="URL of a page about the programme"
+      ></v-text-field>
+      <v-btn
+        :disabled="aiurl.length === 0 || busy"
+        color="success"
+        @click="prefill()"
+      >
+        <v-icon
+          color="white"
+          icon="mdi-auto-fix"
+        ></v-icon>
+      </v-btn>
+
+    </v-form>
+  </v-alert>
 
   <v-form>
-
     <v-text-field
       v-model="title"
       label="Title"

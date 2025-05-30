@@ -1,6 +1,6 @@
 
 
-import { okResponse, missingResponse } from './lib/constants.js'
+import { okResponse, notOk, notOkResponse, missingResponse } from './lib/constants.js'
 import { mustBePOST, mustBeJSON, apiKey, handleCORS } from './lib/checks.js'
 
 const MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct'

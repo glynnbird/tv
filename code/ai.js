@@ -60,6 +60,15 @@ function extractOgImage(html) {
   return match[1];
 }
 
+function extractCodeBlock(str) {
+  const matches = str.match(/```j?s?o?n?([^`]+)```/)
+  if (str) {
+    return matches[1]
+  } else {
+    return ''
+  }
+}
+
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
   const r = handleCORS(context.request) || apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
@@ -97,7 +106,7 @@ export async function onRequest(context) {
       console.log('ai response', response.response)
 
       // strip backticks from the response
-      const r = response.response.replace(/```/g,'')
+      const r = extractCodeBlock(response.response)
 
       try {
         const r2 = JSON.parse(r)

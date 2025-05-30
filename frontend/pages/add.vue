@@ -49,7 +49,7 @@
       }
     })
     console.log('ai response', ret.data.value)
-    if (ret.data.value.ok === true) {
+    if (ret.data && ret.data.value && ret.data.value.ok === true) {
       const ai = ret.data.value.response
       console.log('ai', ai)
       busy.value = false
@@ -110,15 +110,20 @@
     await navigateTo('/')
   }
 </script>
+<style>
+.ai {
+  margin-bottom: 20px;  
+}
+</style>
 <template>
   <v-progress-linear
     v-if="busy"
-    color="green"
+    color="#BBDEFB"
     indeterminate
   ></v-progress-linear>
   <PageTitle title="Add"></PageTitle>
 
-  <v-form>
+  <v-form class="ai">
     <v-row>
       <v-col class="v-col-9">
         <v-text-field
@@ -129,16 +134,17 @@
       <v-col class="v-col-3">
         <v-btn
           :disabled="aiurl.length === 0 || busy"
-          color="success"
+          color="#BBDEFB"
           class="mr-4"
           @click="prefill()"
         >
-          Prefill
+          <v-icon
+            color="white"
+            icon="mdi-auto-fix"
+          ></v-icon>
         </v-btn>
       </v-col>
     </v-row>
-
-
   </v-form>
 
   <v-form>

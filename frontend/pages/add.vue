@@ -49,17 +49,22 @@
       }
     })
     console.log('ai response', ret.data.value)
-    const ai = ret.data.value.response
-    console.log('ai', ai)
-    busy.value = false
-    title.value = ai.title
-    description.value = ai.description
-    stars.value = ai.stars
-    on.value = ai.on
-    date.value = ai.date
-    uptomax.value = ai.uptomax
-    type.value = ai.type
-    pic.value = ai.pic
+    if (ret.data.value.ok === true) {
+      const ai = ret.data.value.response
+      console.log('ai', ai)
+      busy.value = false
+      title.value = ai.title
+      description.value = ai.description
+      stars.value = ai.stars.join(',')
+      on.value = ai.on
+      date.value = new Date(ai.date)
+      uptomax.value = ai.uptomax
+      type.value = ai.type
+      pic.value = ai.pic
+    } else {
+      alert.value.ts = new Date().getTime()
+      alert.value.message = 'No useful prefill data found'
+    }
   }
 
 

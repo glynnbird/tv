@@ -11,7 +11,7 @@ Please summarise the following text as a JSON object with the following attribut
 - description: a brief synopsis.
 - stars: an array of strings containing up to five cast members, with no duplicates.
 - on: the channel it is broadcast on in the UK - one of 'BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U'
-- date: an ISO-8601 string representing the date of first broadcast in the UK.
+- date: an ISO-8601 string representing the date of first broadcast in the UK. If no year is mentioned in the text, assume the current year.
 - type: either "film" for a movie, "series" for a series and "oneoff" for everything else.
 - uptomax: the number of episodes, if the type is a "series".
 Please return a JSON object and nothing else.

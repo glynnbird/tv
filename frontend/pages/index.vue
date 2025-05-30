@@ -1,7 +1,6 @@
 <script setup>
   // composables
   const { $pwa } = useNuxtApp()
-  const query = useRoute().query
   const progs = useProgs()
   const auth = useAuth()
   const stick = useStick()

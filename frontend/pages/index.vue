@@ -124,4 +124,3 @@
     </v-tabs-window-item>
   </v-tabs-window>
 </template>
-

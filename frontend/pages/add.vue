@@ -59,6 +59,9 @@
       on.value = ai.on
       date.value = new Date(ai.date)
       uptomax.value = ai.uptomax
+      if (ai.type) {
+        ai.type[0] = ai.type[0].toUpperCase()
+      }
       type.value = ai.type
       pic.value = ai.pic
     } else {

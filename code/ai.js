@@ -82,20 +82,22 @@ export async function onRequest(context) {
       // strip backticks from the response
       const r = response.response.replace(/```/g,'')
 
-      // return object
-      const obj = {
-        ok: true,
-        response: JSON.parse(r)
-      }
+      try {
+        // return object
+        const obj = {
+          ok: true,
+          response: JSON.parse(r)
+        }
 
-      // send response
-      return new Response(JSON.stringify(obj), okResponse)
+        // send response
+        return new Response(JSON.stringify(obj), okResponse)
+      } catch {
+        console.log('JSON parse failed')
+      }
 
     } else {
       return new Response(notOk, missingResponse)
     }
-
-
   }
 
   // everyone else gets a 400 response

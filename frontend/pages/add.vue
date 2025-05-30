@@ -64,6 +64,7 @@
     } else {
       alert.value.ts = new Date().getTime()
       alert.value.message = 'No useful prefill data found'
+      busy.value = false
     }
   }
 

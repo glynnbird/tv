@@ -14,7 +14,8 @@ Please summarise the following text as a JSON object with the following attribut
 - date: an ISO-8601 string representing the date of first broadcast in the UK.
 - type: either "film" for a movie, "series" for a series and "oneoff" for everything else.
 - uptomax: the number of episodes, if the type is a "series".
-Please return a JSON object and nothing else.
+Please return a JSON object and nothing else. The response should not contain backtick 
+characters that are used to indicate code blocks.
 `
 
 function strip(html) {
@@ -77,10 +78,10 @@ export async function onRequest(context) {
           { role: "user", content: `${PROMPT} ---- ${html}` }
         ]
       })
-      console.log('ai response', response)
+      console.log('ai response', response.response)
       const obj = {
         ok: true,
-        response
+        response: response.response
       }
 
       // send response

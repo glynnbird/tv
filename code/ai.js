@@ -82,7 +82,11 @@ export async function onRequest(context) {
     console.log('url', json.url)
 
     // fetch the URL
-    const urlResponse = await fetch(json.url)
+    const headers = {
+      'User-Agent': 'curl/8.7.1',
+      'Accept': '*/*'
+    }
+    const urlResponse = await fetch(json.url, { headers })
     console.log('status code', urlResponse.status)
     if (urlResponse.status === 200) {
       // get response text

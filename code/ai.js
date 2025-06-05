@@ -14,6 +14,7 @@ Please summarise the following text as a JSON object with the following attribut
 - date: an ISO-8601 string representing the date of first broadcast in the UK. If no year is mentioned in the text, assume the current year.
 - type: either "Film" for a movie, "Series" for a series and "Single" for everything else.
 - uptomax: the number of episodes, if the type is a "Series".
+- season: the forthcoming season number, as an integer greater than 0, or "" if unavailable.
 Please return a JSON object and nothing else.
 `
 

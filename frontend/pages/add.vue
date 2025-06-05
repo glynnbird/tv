@@ -61,6 +61,7 @@
       uptomax.value = ai.uptomax
       type.value = ai.type
       pic.value = ai.pic
+      season.value = ai.season
     } else {
       alert.value.ts = new Date().getTime()
       alert.value.message = 'No useful prefill data found'

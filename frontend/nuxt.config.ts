@@ -63,12 +63,5 @@ export default defineNuxtConfig({
     define: {
       'process.env.DEBUG': false,
     }
-  },
-  $development: {
-    runtimeConfig: {
-      public: {
-        apiBase: 'https://tv.glynnbird.com' // when running locally, use this API
-      }
-    }
-  },
+  }
 })

@@ -202,3 +202,24 @@ We can also "minify" the rolled up files to make them smaller, but this does cha
 npx rollup -p @rollup/plugin-terser --format=es --file=../functions/api/add.js -- add.js
 ```
 
+## Runtime config
+
+In production, that is running in the Cloudflare Pages environment, the API calls that this static website expects will be found under its own domain name `/api/*` - this is neat because it bypasses any CORS problems.
+
+When running locally however, e.g. `npm run dev` runs on `http://localhost:3000`, there isn't any APIs on `http://localhost:3000/api` so nothing works. If you want your local dev environment to use the production APIs, then simply create a `.env` file in the `frontend` folder containing the following:
+
+```
+NUXT_PUBLIC_API_BASE=https://sub.mydomain.com
+```
+
+replacing the value with your own production instance. That way, your local dev website can be debugged using your production API, if that's your thing.
+
+This works because at runtime, the front end does:
+
+```js
+const apiHome = config.public['apiBase'] || window.location.origin
+```
+
+so if there isn't an `apiBase` set in `nuxt.config.ts` or set as a `NUXT_PUBLIC_API_BASE` environment variable (which there isn't in production), then it assumes the API is located at the same origin as the website.
+
+

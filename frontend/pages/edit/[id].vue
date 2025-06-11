@@ -53,27 +53,16 @@
     }
   }
 
-  // method - add new 
+  // method - edit programme
   async function edit() {
     if (!prog.value.title) {
       return
     }
     busy.value = true
-    const t = {
-      id: id,
-      title: prog.value.title,
-      description: prog.value.description,
-      on: prog.value.on,
-      date: prog.value.date.toISOString().substring(0, 10),
-      season: prog.value.season,
-      pic: prog.value.pic,
-      watching: prog.value.watching,
-      stars: prog.value.stars.split(',').map(function (s) { return s.trim() }),
-      type: prog.value.type,
-      uptoep: prog.value.uptoep,
-      uptomax: prog.value.uptomax,
-      ts: Math.floor(new Date().getTime() / 1000)
-    }
+    const t = JSON.parse(JSON.stringify(prog.value))
+    t.date = prog.value.date.toISOString().substring(0, 10)
+    t.stars = prog.value.stars.split(',').map(function(s) { return s.trim() })
+    t.ts = Math.floor(new Date().getTime() / 1000)
     console.log('API', '/add', t)
     const ret = await useFetch(`${apiHome}/api/add`, {
       method: 'post',

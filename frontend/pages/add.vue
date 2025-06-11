@@ -13,17 +13,30 @@
 
   // local page items
   const aiurl = ref('')
-  const title = ref('')
-  const description = ref('')
-  const stars = ref('')
-  const on = ref('')
-  const date = ref(new Date())
-  const pic = ref('')
-  const watching = ref(false)
-  const type = ref('')
-  const uptoep = ref('0')
-  const uptomax = ref('6')
-  const season = ref('')
+  const doc = ref({
+    title: '',
+    description: '',
+    stars: '',
+    on: '',
+    date: new Date(),
+    pic: '', 
+    watching: false,
+    type: '',
+    uptoep: '0',
+    uptomax: '6',
+    season: ''
+  })
+  // const title = ref('')
+  // const description = ref('')
+  // const stars = ref('')
+  // const on = ref('')
+  // const date = ref(new Date())
+  // const pic = ref('')
+  // const watching = ref(false)
+  // const type = ref('')
+  // const uptoep = ref('0')
+  // const uptomax = ref('6')
+  // const season = ref('')
 
   // add busy flag
   const busy = ref(false)
@@ -52,16 +65,10 @@
     if (ret.data && ret.data.value && ret.data.value.ok === true) {
       const ai = ret.data.value.response
       console.log('ai', ai)
+      Object.assign(doc.value, ai)
+      doc.value.stars = ai.stars.join(',')
+      doc.value.date = new Date(ai.date)
       busy.value = false
-      title.value = ai.title
-      description.value = ai.description
-      stars.value = ai.stars.join(',')
-      on.value = ai.on
-      date.value = new Date(ai.date)
-      uptomax.value = ai.uptomax
-      type.value = ai.type
-      pic.value = ai.pic
-      season.value = ai.season
     } else {
       alert.value.ts = new Date().getTime()
       alert.value.message = 'No useful prefill data found'
@@ -69,27 +76,16 @@
     }
   }
 
-
   // method - add new todo 
   async function add() {
-    if (!title.value) {
+    if (!doc.value.title) {
       return
     }
     busy.value = true
-    const t = {
-      title: title.value,
-      description: description.value,
-      on: on.value,
-      date: date.value.toISOString().substring(0, 10),
-      season: season.value,
-      pic: pic.value,
-      watching: watching.value,
-      stars: stars.value.split(',').map(function(s) { return s.trim() }),
-      type: type.value,
-      uptoep: uptoep.value,
-      uptomax: uptomax.value,
-      ts:  Math.floor(new Date().getTime() / 1000)
-    }
+    const t = JSON.parse(JSON.stringify(doc.value))
+    t.date = doc.value.date.toISOString().substring(0, 10)
+    t.stars = doc.value.stars.split(',').map(function(s) { return s.trim() })
+    t.ts = Math.floor(new Date().getTime() / 1000)
     console.log('API', '/add', t)
     const ret = await useFetch(`${apiHome}/api/add`, {
       method: 'post',
@@ -147,7 +143,7 @@
 
   <v-form>
     <v-text-field
-      v-model="title"
+      v-model="doc.title"
       label="Title"
       required
       autofocus
@@ -155,30 +151,30 @@
     ></v-text-field>
 
     <v-textarea
-      v-model="description"
+      v-model="doc.description"
       label="Description"
     ></v-textarea>
 
     <v-text-field
-      v-model="stars"
+      v-model="doc.stars"
       label="Stars"
     ></v-text-field>
 
-    <v-select v-model="on" label="On (Channel)" :items="channels">
+    <v-select v-model="doc.on" label="On (Channel)" :items="channels">
     </v-select>
 
-    <v-select v-model="type" label="Type" :items="types">
+    <v-select v-model="doc.type" label="Type" :items="types">
     </v-select>
 
     <v-text-field
-      v-if="type === 'Series'"
-      v-model="uptoep"
+      v-if="doc.type === 'Series'"
+      v-model="doc.uptoep"
       label="Episodes Watched"
       ></v-text-field>
 
     <v-text-field
-      v-if="type === 'Series'"
-      v-model="uptomax"
+      v-if="doc.type === 'Series'"
+      v-model="doc.uptomax"
       label="Episodes Total"
       clearable
       ></v-text-field>
@@ -186,7 +182,7 @@
     <v-row>
       <v-col>
         <v-text-field
-          v-model="date"
+          v-model="doc.date"
           label="Date"
           readonly
         ></v-text-field>
@@ -197,7 +193,7 @@
     </v-row>
     <v-row justify="space-around">
       <v-date-picker
-        v-model="date"
+        v-model="doc.date"
         v-if="isPicking"
         elevation="24"
         @update:modelValue="isPicking = false"
@@ -205,21 +201,21 @@
     </v-row>
 
     <v-text-field
-      v-model="season"
+      v-model="doc.season"
       label="Season"
     ></v-text-field>
 
     <v-text-field
-      v-model="pic"
+      v-model="doc.pic"
       label="Pic"
     ></v-text-field>
 
-    <v-checkbox label="Watching" v-model="watching"></v-checkbox>
+    <v-img v-if="doc.pic" :src="doc.pic"></v-img>
 
-
+    <v-checkbox label="Watching" v-model="doc.watching"></v-checkbox>
 
     <v-btn
-      :disabled="title.length === 0 || busy"
+      :disabled="doc.title.length === 0 || busy"
       color="success"
       class="mr-4"
       @click="add()"

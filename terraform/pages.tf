@@ -14,7 +14,7 @@ resource "cloudflare_pages_project" "frontend_project" {
   source = {
     type = "github"
     config = {
-      owner                         = "glynnbird"
+      owner                         = var.github_username
       repo_name                     = "tv"
       production_branch             = "main"
       # pr_comments_enabled           = true

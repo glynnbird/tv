@@ -16,3 +16,6 @@ variable "cloudflare_hostname" {
 variable "cloudflare_subdomain" {
   type = string
 }
+variable "github_username" {
+  type = string
+}

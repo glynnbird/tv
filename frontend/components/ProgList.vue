@@ -30,7 +30,7 @@
 </style>
 <template>
   <v-card class="cardsep" v-for="prog in progs" :key="prog.id" :to="`/prog/${prog.id}`">
-    <v-img height="250" cover eager :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`">
+    <v-img cover eager :src="`https://tv.glynnbird.com/api/img?id=${prog.id}`">
       <v-card-title class="text-white shadow">
         {{  prog.title }} 
         <v-chip v-if="prog.season" label color="white">{{ prog.season }}</v-chip>

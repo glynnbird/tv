@@ -54,7 +54,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: 'https://tv.glynnbird.com'
+      apiBase: ''
     }
   },
   compatibilityDate: '2024-09-24',
@@ -63,5 +63,12 @@ export default defineNuxtConfig({
     define: {
       'process.env.DEBUG': false,
     }
-  }
+  },
+  $development: {
+    runtimeConfig: {
+      public: {
+        apiBase: 'https://tv.glynnbird.com' // when running locally, use this API
+      }
+    }
+  },
 })

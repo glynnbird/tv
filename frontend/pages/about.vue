@@ -1,3 +1,10 @@
+<script setup>
+  const env = ref(process.env.NODE_ENV)
+
+  // config
+  const config = useRuntimeConfig()
+  const apiHome = config.public['apiBase'] || window.location.origin
+</script>
 <template>
   <PageTitle title="About TV"></PageTitle>
   <div>
@@ -9,4 +16,9 @@
     <v-list-item>Optional AI helper assists with filling the "add" form by reading web pages about the programme for you.</v-list-item>
     <v-list-item>Deployed by Terraform and uses Cloudflare Pages to distribute the static website on Cloudflare's CDN.</v-list-item>
   </v-list>
+
+  <pre>
+    Environment: {{ env }}
+    Api Home: {{ apiHome }}
+  </pre>
 </template>

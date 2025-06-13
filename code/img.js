@@ -13,7 +13,7 @@ export async function onRequest(context) {
   // if there's a id
   if (id) {
     const response = await get(context.env.TVKV, id)
-    if (response.doc.pic) {
+    if (response && response.doc && response.doc.pic) {
       // send 301 response
 
       const redirectResponse = {

@@ -33,56 +33,30 @@ Viewing a single programme and editing it:
 
 ## Data model
 
-As we only have simple KeyValue store and the Cloudflare KV.list() operation only returns the keys (not the values), the data model packs some data into the key.
+Cloudflare KV items have three components:
 
-| key           | value |  metadata                                                                        |
-|---------------|-------|----------------------------------------------------------------------------------|
-| 1681893518478 | null  | {"date":"2025-07-05","on":"Netflix","title":"Death By Lightning","type":"Series","uptoep":"0","uptomax":"6","watching":false}                     |
-
-
-The keys is a timestamp. This allows us to get time-ordered list of programmes with just the `TVKV.list()` function. The value is left blank because we're able to fit a summary in the `metadata` object which has to be < 1kB, but does come back from the `KV.list` function.
-
-The main `value` is everything we know about the programme:
+- `key` - a short string that defines the key of the item, and the sort order of the returned items. In our case the key looks like this: `doc:1740677332455` - a timestamp following a `doc:` prefix.
+- `metadata` - a 1KB JSON object that is returned when listing keys. We pack most programme data into here so that we can get nearly everything we need from just the programme list: e.g. `{"date":"2025-03-05","title":"A Cruel Love","watching":true,"on":"ITV","uptoep":"0","uptomax":"6","type":"Series","season":"","ts":1749823312}` - that is everything except the programme `description`, `stars` and `pic` fields which may take us over the 1KB limit.
+- `value` - some text. This contains the a JSON.stringified object that contains the `id`, a `doc` - the whole document and `_ts`, a timestamp.
 
 ```js
 {
-  "id": "1738420123614",
-  "doc": {
-    "title": "Death By Lightning",
-    "description": " a limited drama series that’s based on the epic and stranger-than-fiction true story of James Garfield, reluctant 20th president of the United States, and Charles Guiteau — a man who was not only Garfield’s greatest admirer, but also his assassin.",
-    "stars": [
-      "Matthew Macfadyen",
-      "Tuppence Middleton"
-    ],
-    "on": "Netflix",
-    "date": "2025-07-05",
-    "season": "",
-    "pic": "https://dnm.nflximg.net/api/v6/2DuQlx0fM4wd1nzqm5BFBi6ILa8/AAAAQeZ8XKJL1nBddDmKYm9abZQ9Jao4DKe_ZKqb-WfqGT_VVYMGtK0IFpa5BatLFoknLeUKN0tDOkhkptcdhFwlFyYxMp8WpvV9Ns-ImZ2P-emHIsWQDq3_uDYTltKqGF2LTdypZVLIChTsUeW1cYPuIgh5.jpg?r=1f1",
-    "watching": false,
-    "type": "Series",
+  "key": "doc:1740677332455",
+  "metadata": {
+    "date": "2025-03-05",
+    "title": "A Cruel Love",
+    "watching": true,
+    "on": "ITV",
     "uptoep": "0",
-    "uptomax": "6"
+    "uptomax": "6",
+    "type": "Series",
+    "season": "",
+    "ts": 1749823312
   },
-  "_ts": "2025-02-01T14:28:43.614Z",
-  "_freetext": "",
-  "_freetextIndex": [],
-  "_index": {
-    "watching": "false",
-    "on": "Netflix"
-  }
+  "value": "{\"id\":\"1740677332455\",\"doc\":{\"title\":\"A Cruel Love\",\"description\":\"Ruth Ellis's hidden story exposes British obsessions with class, sex, and death; in 1955 London's club-land, Ruth, 28, becomes the capital's youngest club manager; her success unravels due to an abusive relationship with racing driver David Blakely\",\"stars\":[\"Lucy Boynton\",\"Toby Jones\"],\"on\":\"ITV\",\"date\":\"2025-03-05\",\"season\":\"\",\"pic\":\"https://hips.hearstapps.com/hmg-prod/images/a-cruel-love-the-ruth-ellis-story-release-date-cast-plot-news-67af2e57d4f4a.jpg?crop=0.667xw:1.00xh;0.264xw,0&resize=1120:*\",\"watching\":true,\"type\":\"Series\",\"uptoep\":\"0\",\"uptomax\":\"6\",\"ts\":1749823312},\"_ts\":\"2025-06-13T14:01:51.910Z\"}"
 }
 ```
 
-The doc has some extra fields for indexing purposes as it was assumed that the kv store would be queried and have secondary indexes:
-
-```
-_ts : "2023-05-01T19:52:24.000Z",
-_freetext: [] // list of words to be indexed for freetext search
-_freetextIndex: [] // list of stemmed and processed words that are actually indexed
-_index: {} // a map of key/value pairs to be indexed for this document
-```
-
-but in fact, the front end app just uses the "list" to get all the programme's top-level data and when a user needs to see details of a single program, the whole value is fetched from KV instead.
 
 ## Performance
 
@@ -90,7 +64,7 @@ The front end app has been highly optimised for performance:
 
 1. It uses [Vite PWA](https://vite-pwa-org.netlify.app/) to make the web app a Progressive Web App (PWA), meaning that the assets of the application are cached locally making for a faster load time (after the first load). 
 2. The programme list is cached in local storage so that the app can load and show it's last state quickly - it then fetches the programme list in the background to pick up any changes.
-3. The images are loaded in "eager" mode, meaning they're fetched ahead of time making the UI snappier.
+3. The images are loaded in "eager" mode, meaning they're fetched ahead of time making the UI snappier. Because we don't have the image url in the `metadata` field, the front end renders its images using the `/api/img` endpoint, which 301s the browser to the URL of each programme's image.
 4. The KV store's eventual consistency is hidden by writing edits & deletes to the local copy of the data, as well as to the cloud via API calls.
 
 ## API
@@ -99,7 +73,7 @@ All methods that change data or pass parameters use the `POST` method and expect
 
 The API lives at the same URL as the deployed application, but for local development that is not the case so the API plays nicely with CORS to allow that to happen.
 
-## Add a todo - POST /api/add
+## Add a programme - POST /api/add
 
 Parameters:
 
@@ -110,24 +84,24 @@ Parameters:
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"title":"Milk","description":"semi-skimmed"}' "https://$URL/api/add" 
-{"ok":true,"id":"1681482390981:Milk"}
+curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d'{"title":"A programmme","description":"A thriller!"}' "https://$URL/api/add" 
+{"ok":true,"id":"1681482390981"}
 ```
 
-## Get a single todo - POST /api/get
+## Get a single programme - POST /api/get
 
 Parameters:
 
-- `id` - the id of the todo (required)
+- `id` - the id of the programme (required)
 
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1695397182714"}' "https://$URL/api/get"
-{"ok":true,"doc":{"title":"Wednesday","description":"Goth caper","stars":[],"on":"Netflix","date":"2023-09-22","season":"","pic":"","watching":false,"id":"1695397182714"}}
+curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d'{"id":"1740677332455"}' "https://$URL/api/get"
+{"ok":true,"doc":{"title":"A Cruel Love","description":"Ruth Ellis's hidden story exposes British obsessions with class, sex, and death; in 1955 London's club-land, Ruth, 28, becomes the capital's youngest club manager; her success unravels due to an abusive relationship with racing driver David Blakely","stars":["Lucy Boynton","Toby Jones"],"on":"ITV","date":"2025-03-05","season":"","pic":"https://hips.hearstapps.com/hmg-prod/images/a-cruel-love-the-ruth-ellis-story-release-date-cast-plot-news-67af2e57d4f4a.jpg?crop=0.667xw:1.00xh;0.264xw,0&resize=1120:*","watching":true,"type":"Series","uptoep":"0","uptomax":"6","ts":1749823312,"id":"1740677332455"}}
 ```
 
-## List multiple todos - POST /api/list
+## List multiple programmes - POST /api/list
 
 Parameters
 
@@ -136,31 +110,46 @@ Parameters
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' "https://$URL/api/list"
-{"ok":true,"list":[{"id":"1695397113199","date":"2023-09-22","title":"Wilderness","watching":false},{"id":"doc:1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":"1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
+curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" "https://$URL/api/list"
+{"ok":true,"list":[{"id":"1728761277699","date":"2024-10-12","title":"My mind and me","watching":false,"on":"AppleTV","uptoep":"","uptomax":"","type":"Single"},...]}
 ```
 
-## Delete a todo - POST /api/delete
+## Delete a programme - POST /api/delete
 
 Parameters:
 
-- `id` - the id of the todo to delete (required)
+- `id` - the id of the programme to delete (required)
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"id":"1681482390981"}' "https://$URL/api/delete"
+curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d'{"id":"1681482390981"}' "https://$URL/api/delete"
 {"ok":true}
 ```
 
-## Query - POST /api/query
+
+## AI-powered prefill of a form - POST /api/ai
 
 Parameters:
 
-- `key` - the name of the key to query on (required)
-- `value` - the value needed (required)
+- `url` - the url where the programme details can be found (required)
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H'apikey: abc123' -d'{"key":"on","value":"Netflix"}' "https://$URL/api/query"
-{"ok":true,"list":[{"id":"1695397182714","date":"2023-09-22","title":"Wednesday","watching":false},{"id":":1695397233088","date":"2023-09-22","title":"Stranger Things","watching":true}]}
+curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d'{"url":"https://www.radiotimes.com/tv/drama/bombing-pan-am-103-stories-newsupdate/"}' "https://$URL/api/ai"
+{"ok":true,"response":{"title":"The Bombing of Pan Am 103","description":"A drama telling the true story surrounding the aftermath of the 1988 Lockerbie bombing.","stars":["Connor Swindells","Patrick J Adams"],"on":"BBC","date":"2025-05-18","type":"Series","uptomax":6,"season":"","pic":"https://images.immediate.co.uk/production/volatile/sites/3/2025/05/511741-90c8d33.jpg?resize=1200%2C630"}}
+```
+
+## Bounce to the URL of the programme's picture - GET /api/img?id=X
+
+Query-string parameters:
+
+- `id` - the id of the programme (required)
+
+```sh
+curl -v "https://$URL/api/img?id=1681482390981"
+< HTTP/2 301
+< date: Fri, 13 Jun 2025 14:36:46 GMT
+< content-type: text/plain;charset=UTF-8
+< content-length: 0
+< location: https://images.immediate.co.uk/production/volatile/sites/3/2025/02/Towards-Zero-5c42687.jpg?quality=90&webp=true&fit=1100,733
 ```
 
 ## Build
@@ -208,7 +197,7 @@ In production, that is running in the Cloudflare Pages environment, the API call
 
 When running locally however, e.g. `npm run dev` runs on `http://localhost:3000`, there isn't any APIs on `http://localhost:3000/api` so nothing works. If you want your local dev environment to use the production APIs, then simply create a `.env` file in the `frontend` folder containing the following:
 
-```
+```sh
 NUXT_PUBLIC_API_BASE=https://sub.mydomain.com
 ```
 

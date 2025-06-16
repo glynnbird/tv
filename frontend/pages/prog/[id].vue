@@ -119,7 +119,7 @@
           <tr><th>Date</th><td><HumanDate :date="prog.date" showYear="true" /></td></tr>
           <tr><th>On</th><td>{{ prog.on }}</td></tr>
           <tr v-if="prog.type"><th>Type</th><td>{{ prog.type }}</td></tr>
-          <tr v-if="prog.uptoep && prog.uptomax"><th>Episodes</th><td>{{ prog.uptoep }} / {{ prog.uptomax }}</td></tr>
+          <tr v-if="prog.type === 'Series' && prog.uptoep && prog.uptomax"><th>Episodes</th><td>{{ prog.uptoep }} / {{ prog.uptomax }}</td></tr>
         </tbody>
       </v-table>
     </v-card-text>

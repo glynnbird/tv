@@ -74,6 +74,33 @@
   }
 
   // delete an individual item
+  const deleteItem = async  (id) => {
+    console.log('API', '/del', id)
+    try {
+      const ret = await useFetch(`${apiHome}/api/del`, {
+        method: 'post',
+        body: {
+          id
+        },
+        headers: {
+          'content-type': 'application/json',
+          apikey: auth.value.apiKey
+        }
+      })
+      for (let i = 0; i < progs.value.length; i++) {
+        if (progs.value[i].id === id) {
+          progs.value.splice(i,1)
+          break
+        }
+      }
+      stick.value = true
+      await navigateTo(`/`)
+    } catch (e) {
+      console.error('Could not delete', id, e)
+    }
+  }
+
+  // delete an individual item
   const toggle = async  (id) => {
     console.log('API', '/toggle', id)
     try {
@@ -102,6 +129,11 @@
   }
 
 </script>
+<style>
+.pod {
+  margin-top:20px;
+}
+</style>
 <template>
   <v-card v-if="prog">
     <v-img v-if="prog.pic" :src="prog.pic" cover max-height="500"></v-img>
@@ -131,6 +163,9 @@
       <v-btn v-if="prog.watching && prog.type=='Series'" color="secondary" variant="flat" @click="plusOne(prog.id)">+1</v-btn>
       <v-btn color="warning" variant="flat" @click="editItem(prog.id)">Edit</v-btn>
     </v-card-actions>
-
   </v-card>
+    
+  <div class="pod" v-if="prog.watching">
+    <v-btn color="error" variant="flat" @click="deleteItem(prog.id)">Delete</v-btn>
+  </div>
 </template>

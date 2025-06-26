@@ -30,7 +30,7 @@
   const deleteItem = async  () => {
     console.log('API', '/del', id)
     try {
-      const ret = await useFetch(`${apiHome}/api/del`, {
+      const ret = await $fetch(`${apiHome}/api/del`, {
         method: 'post',
         body: {
           id
@@ -64,7 +64,7 @@
     t.stars = prog.value.stars.split(',').map(function(s) { return s.trim() })
     t.ts = Math.floor(new Date().getTime() / 1000)
     console.log('API', '/add', t)
-    const ret = await useFetch(`${apiHome}/api/add`, {
+    const ret = await $fetch(`${apiHome}/api/add`, {
       method: 'post',
       body: t,
       headers: {
@@ -97,7 +97,7 @@
     try {
       //  fetch the list from the API
       console.log('API', '/get', `${apiHome}/api/get`)
-      const r = await useFetch(`${apiHome}/api/get`, {
+      const r = await $fetch(`${apiHome}/api/get`, {
         method: 'post',
         headers: {
           'content-type': 'application/json',
@@ -105,7 +105,7 @@
         },
         body: { id }
       })
-      prog.value = r.data.value.doc
+      prog.value = r.doc
       prog.value.stars = prog.value.stars.filter((x) => {
         // only keep strings with something in
         return x.trim().length > 0

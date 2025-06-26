@@ -20,7 +20,7 @@
     try {
       //  fetch the list from the API
       console.log('API', '/get', `${apiHome}/api/get`)
-      const r = await useFetch(`${apiHome}/api/get`, {
+      const r = await $fetch(`${apiHome}/api/get`, {
         method: 'post',
         headers: {
           'content-type': 'application/json',
@@ -28,7 +28,7 @@
         },
         body: { id }
       })
-      prog.value = r.data.value.doc
+      prog.value = r.doc
       prog.value.stars = prog.value.stars.filter((x) => {
         // only keep strings with something in
         return x.trim().length > 0
@@ -49,7 +49,7 @@
     }
     prog.value.ts =  Math.floor(new Date().getTime() / 1000)
     console.log('API', '/add', JSON.stringify(prog.value))
-    const ret = await useFetch(`${apiHome}/api/add`, {
+    const ret = await $fetch(`${apiHome}/api/add`, {
       method: 'post',
       body: prog.value,
       headers: {
@@ -77,7 +77,7 @@
   const deleteItem = async  (id) => {
     console.log('API', '/del', id)
     try {
-      const ret = await useFetch(`${apiHome}/api/del`, {
+      const ret = await $fetch(`${apiHome}/api/del`, {
         method: 'post',
         body: {
           id
@@ -104,7 +104,7 @@
   const toggle = async  (id) => {
     console.log('API', '/toggle', id)
     try {
-      const ret = await useFetch(`${apiHome}/api/toggle`, {
+      const ret = await $fetch(`${apiHome}/api/toggle`, {
         method: 'post',
         body: {
           id,

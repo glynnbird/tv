@@ -51,7 +51,7 @@
   async function prefill() {
     busy.value = true
     console.log('API', '/ai')
-    const ret = await useFetch(`${apiHome}/api/ai`, {
+    const ret = await $fetch(`${apiHome}/api/ai`, {
       method: 'post',
       body: {
         url: aiurl.value
@@ -61,9 +61,9 @@
         apikey: auth.value.apiKey
       }
     })
-    console.log('ai response', ret.data.value)
-    if (ret.data && ret.data.value && ret.data.value.ok === true) {
-      const ai = ret.data.value.response
+    console.log('ai response', ret)
+    if (ret && ret.ok === true) {
+      const ai = ret.response
       console.log('ai', ai)
       Object.assign(doc.value, ai)
       doc.value.stars = ai.stars.join(',')
@@ -87,7 +87,7 @@
     t.stars = doc.value.stars.split(',').map(function(s) { return s.trim() })
     t.ts = Math.floor(new Date().getTime() / 1000)
     console.log('API', '/add', t)
-    const ret = await useFetch(`${apiHome}/api/add`, {
+    const ret = await $fetch(`${apiHome}/api/add`, {
       method: 'post',
       body: t,
       headers: {
@@ -95,7 +95,7 @@
         apikey: auth.value.apiKey
       }
     })
-    t.id = ret.data.value.id
+    t.id = ret.id
     progs.value.push(t)
 
     // create alert

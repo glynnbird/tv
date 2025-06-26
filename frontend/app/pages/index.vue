@@ -79,14 +79,14 @@
     try {
       //  fetch the list from the API
       console.log('API', '/list', `${apiHome}/api/list`)
-      const r = await useFetch(`${apiHome}/api/list`, {
+      const r = await $fetch(`${apiHome}/api/list`, {
         method: 'post',
         headers: {
           'content-type': 'application/json',
           apikey: auth.value.apiKey
         }
       })
-      progs.value = r.data.value.list
+      progs.value = r.list
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
     } catch (e) {
       console.error('failed to fetch list of progs', e)

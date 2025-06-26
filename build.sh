@@ -1,5 +1,4 @@
 #!/bin/bash
-export NODE_VERSION=22.16.0
 
 # build frontend
 echo "Building frontend 🏢"

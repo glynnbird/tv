@@ -63,5 +63,8 @@ export default defineNuxtConfig({
     define: {
       'process.env.DEBUG': false,
     }
+  },
+  future: {
+    compatibilityVersion: 4
   }
 })

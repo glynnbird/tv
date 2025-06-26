@@ -27,7 +27,26 @@ resource "cloudflare_pages_project" "frontend_project" {
   }
     deployment_configs = {
       preview = {
-        
+        env_vars = {
+          NODE_VERSION = {
+            type = "plain_text"
+            value = "22"
+          }
+          API_KEY = {
+            type = "plain_text"
+            value = random_string.apiKey.id
+          }
+        }
+
+        ai_bindings = {
+          AI = {}
+        }
+
+        kv_namespaces = {
+          TVKV = { 
+            namespace_id = cloudflare_workers_kv_namespace.tvkv.id
+          }
+        }
       }
       production = {
         env_vars = {

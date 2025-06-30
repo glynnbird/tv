@@ -98,7 +98,7 @@ export default function () {
   }
 
   // add a new programme
-  async function addProg(prog) {
+  async function addProg(prog, push=true) {
     console.log('API', '/add', prog)
     try {
       const doc = {}
@@ -114,12 +114,105 @@ export default function () {
       })
       prog.id = ret.id
       prog.date = new Date(prog.date)
-      progs.value.push(prog)
+      if (push) {
+        progs.value.push(prog)
+      }
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
-      console.log(prog)
+      console.log('saved', prog)
     } catch (e) {
       console.error(e)
     }
+  }
+  
+  async function getProgFromAPI(id) {
+    let prog
+    
+    //  fetch the list from the API
+    console.log('API', '/get', `${apiHome}/api/get`)
+    const r = await $fetch(`${apiHome}/api/get`, {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+        apikey: auth.value.apiKey
+      },
+      body: { id }
+    })
+    console.log(r.doc)
+    
+    prog = r.doc
+    console.log('prog', prog)
+    return prog
+  }
+
+  const locateIndex = (id) => {
+    let i
+    console.log('locateIndex', id, progs.value)
+    for (i in progs.value) {
+      if (id === progs.value[i].id) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  // toggle the watched flag for a programme
+  async function toggle(id) {
+    const ind = locateIndex(id)
+    if (ind !== -1) {
+      progs.value[ind].watching = !progs.value[ind].watching
+    }
+
+    console.log('API', '/toggle', id)
+    try {
+      const ret = await $fetch(`${apiHome}/api/toggle`, {
+        method: 'post',
+        body: {
+          id,
+          ts:  Math.floor(new Date().getTime() / 1000)
+        },
+        headers: {
+          'content-type': 'application/json',
+          apikey: auth.value.apiKey
+        }
+      })
+    } catch (e) {
+      console.error('Could not toggle', id, e)
+    }
+  }
+
+  // add one to the progress count
+  async function plusOne(id) {
+    const ind = locateIndex(id)
+    if (ind === -1) {
+      return
+    }
+    const prog = progs.value[i]
+
+    if (prog.value.type === 'Series') {
+      console.log('incrementing')
+      let upto = parseInt(prog.value.uptoep)
+      prog.value.uptoep = (upto + 1).toString()
+    } else {
+      return
+    }
+    await addProg(prog.value)
+  }
+
+  async function deleteProg(id) {
+    const ind = locateIndex(id)
+    if (ind) {
+      progs.value.splice(ind, 1)
+    }
+    await $fetch(`${apiHome}/api/del`, {
+      method: 'post',
+      body: {
+        id
+      },
+      headers: {
+        'content-type': 'application/json',
+        apikey: auth.value.apiKey
+      }
+    })
   }
 
    // computed values
@@ -151,5 +244,5 @@ export default function () {
   }
   
 
-  return { progs, addProg, loadFromAPI, availableProgs,  watchedProgs, futureProgs }
+  return { progs, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs,  watchedProgs, futureProgs }
 }

@@ -53,10 +53,6 @@
     }
     busy.value = true
     const t = JSON.parse(JSON.stringify(doc.value))
-    // // t.date = t.date.toISOString().substring(0, 10)
-    // //t.stars = t.stars.split(',').map(function(s) { return s.trim() })
-    // t.ts = Math.floor(new Date().getTime() / 1000)
-    // console.log('debug', JSON.stringify(t))
     await addProg(t)
 
     // create alert

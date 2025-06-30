@@ -1,131 +1,25 @@
 <script setup>
 
   // composables
-  const progs = useProgs()
+  const { getProgFromAPI, plusOne, toggle, deleteProg } = useProgsList()
   const route = useRoute()
-  const router = useRouter()
   const id = route.params.id
-  const auth = useAuth()
-  const stick = useStick()
-
-  // config
-  const config = useRuntimeConfig()
-  const apiHome = config.public['apiBase'] || window.location.origin
 
   // the tv prog
   const prog = ref({})
 
-  // if this is the first time,
+  // if we have an id
   if (id) {
     try {
-      //  fetch the list from the API
-      console.log('API', '/get', `${apiHome}/api/get`)
-      const r = await $fetch(`${apiHome}/api/get`, {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        },
-        body: { id }
-      })
-      prog.value = r.doc
-      prog.value.stars = prog.value.stars.filter((x) => {
-        // only keep strings with something in
-        return x.trim().length > 0
-      })
+      prog.value = await getProgFromAPI(id)
     } catch (e) {
       console.error('failed to fetch prog', e)
-    }
-  }
-
-  // add one to the progress count
-  const plusOne = async (id) => {
-    if (prog.value.type === 'Series') {
-      console.log('incrementing')
-      let upto = parseInt(prog.value.uptoep)
-      prog.value.uptoep = (upto + 1).toString()
-    } else {
-      return
-    }
-    prog.value.ts =  Math.floor(new Date().getTime() / 1000)
-    console.log('API', '/add', JSON.stringify(prog.value))
-    const ret = await $fetch(`${apiHome}/api/add`, {
-      method: 'post',
-      body: prog.value,
-      headers: {
-        'content-type': 'application/json',
-        apikey: auth.value.apiKey
-      }
-    })
-
-    // edit the in-memory copy "progs"
-    for(let i = 0; i < progs.value.length; i++) {
-      const p = progs.value[i]
-      if (p.id === id) {
-        progs.value[i] = prog.value
-        break
-      }
     }
   }
 
   // edit programme
   const editItem = async (id) => {
     await navigateTo(`/edit/${id}`)
-  }
-
-  // delete an individual item
-  const deleteItem = async  (id) => {
-    console.log('API', '/del', id)
-    try {
-      const ret = await $fetch(`${apiHome}/api/del`, {
-        method: 'post',
-        body: {
-          id
-        },
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        }
-      })
-      for (let i = 0; i < progs.value.length; i++) {
-        if (progs.value[i].id === id) {
-          progs.value.splice(i,1)
-          break
-        }
-      }
-      stick.value = true
-      await navigateTo(`/`)
-    } catch (e) {
-      console.error('Could not delete', id, e)
-    }
-  }
-
-  // delete an individual item
-  const toggle = async  (id) => {
-    console.log('API', '/toggle', id)
-    try {
-      const ret = await $fetch(`${apiHome}/api/toggle`, {
-        method: 'post',
-        body: {
-          id,
-          ts:  Math.floor(new Date().getTime() / 1000)
-        },
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        }
-      })
-      for (let i = 0; i < progs.value.length; i++) {
-        if (progs.value[i].id === id) {
-          progs.value[i].watching = !progs.value[i].watching
-          break
-        }
-      }
-      stick.value = true
-      await navigateTo(router.back())
-    } catch (e) {
-      console.error('Could not toggle', id, e)
-    }
   }
 
 </script>
@@ -156,7 +50,7 @@
       </v-table>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" variant="flat" @click="toggle(prog.id)">
+      <v-btn color="primary" variant="flat" @click="toggle(prog.id); prog.watching = !prog.watching">
         <span v-if="!prog.watching">Watch</span>
         <span v-if="prog.watching">Unwatch</span>
       </v-btn>
@@ -166,6 +60,6 @@
   </v-card>
     
   <div class="pod" v-if="prog.watching">
-    <v-btn color="error" variant="flat" @click="deleteItem(prog.id)">Delete</v-btn>
+    <v-btn color="error" variant="flat" @click="deleteProg(prog.id); navigateTo('/')">Delete</v-btn>
   </div>
 </template>

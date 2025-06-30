@@ -49,7 +49,7 @@
         <v-chip class="sep" variant="flat" label size="default" color="grey-lighten-2" v-if="prog.type==='Film' || prog.type=='Single'">
           {{ prog.type }}
         </v-chip>
-        <v-chip class="sep" variant="flat" label size="default" color="white" v-if="prog.date > now">
+        <v-chip class="sep" variant="flat" label size="default" color="white" v-if="prog.date.toISOString() > now">
           <HumanDate :date="prog.date" />
           <v-icon class="sep" size="default" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
         </v-chip>

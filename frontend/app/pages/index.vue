@@ -19,7 +19,6 @@
     <h4> New content available, click on reload button to update. </h4>
     <v-btn color="primary" @click="$pwa.updateServiceWorker()">Reload</v-btn>
   </v-alert>
-  {{ progs.length }}
   <v-tabs v-model="tab" align-tabs="center" @update:model-value="tabSelected()">
     <v-tab value="1">Ready</v-tab>
     <v-tab value="2">Watching</v-tab>

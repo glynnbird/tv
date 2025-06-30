@@ -2,6 +2,7 @@
   // composables
   const auth = useAuth()
   const route = useRoute()
+  const { progs } = useProgsList()
 
   // local page items
   const drawer = ref(false)
@@ -14,6 +15,7 @@
       </template>
       <v-app-bar-title @click="navigateTo('/')" style="user-select:none;">TV</v-app-bar-title>
       <template v-slot:append>
+        <v-chip size="small" label color="white">{{ progs.length }}</v-chip>
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
         <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="$router.back()"></v-btn>
       </template>

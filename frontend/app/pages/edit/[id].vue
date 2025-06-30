@@ -1,17 +1,11 @@
 <script setup>
   // composables
-  const progs = useProgs()
+  const { getProgFromAPI, addProg, deleteProg } = useProgsList()
   const alert = useAlert()
-  const auth = useAuth()
   const channels = ['BBC', 'ITV', 'Channel4', 'Channel5', 'Netflix', 'AppleTV', 'Disney', 'Amazon', 'SkyAtlantic', 'Alba', 'Paramount']
   const types = ['Series', 'Film', 'Single']
-  const stick = useStick()
   const route = useRoute()
   const id = route.params.id
-
-  // config
-  const config = useRuntimeConfig()
-  const apiHome = config.public['apiBase'] || window.location.origin
 
   // local page items
   const prog = ref({})
@@ -26,33 +20,6 @@
     isPicking.value = true;
   }
 
-  // delete an individual item
-  const deleteItem = async  () => {
-    console.log('API', '/del', id)
-    try {
-      const ret = await $fetch(`${apiHome}/api/del`, {
-        method: 'post',
-        body: {
-          id
-        },
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        }
-      })
-      for (let i = 0; i < progs.value.length; i++) {
-        if (progs.value[i].id === id) {
-          progs.value.splice(i,1)
-          break
-        }
-      }
-      stick.value = true
-      await navigateTo(`/`)
-    } catch (e) {
-      console.error('Could not delete', id, e)
-    }
-  }
-
   // method - edit programme
   async function edit() {
     if (!prog.value.title) {
@@ -60,58 +27,21 @@
     }
     busy.value = true
     const t = JSON.parse(JSON.stringify(prog.value))
-    t.date = prog.value.date.toISOString().substring(0, 10)
-    t.stars = prog.value.stars.split(',').map(function(s) { return s.trim() })
-    t.ts = Math.floor(new Date().getTime() / 1000)
-    console.log('API', '/add', t)
-    const ret = await $fetch(`${apiHome}/api/add`, {
-      method: 'post',
-      body: t,
-      headers: {
-        'content-type': 'application/json',
-        apikey: auth.value.apiKey
-      }
-    })
-
-    // edit the in-memory copy "progs"
-    for(let i = 0; i < progs.value.length; i++) {
-      const p = progs.value[i]
-      if (p.id === id) {
-        progs.value[i] = t
-        break
-      }
-    }
-
+    await addProg(t, false)
+    
     // create alert
     alert.value.ts = new Date().getTime()
     alert.value.message = 'Edited programme'
     busy.value = false
 
     // bounce to home page
-    stick.value = true
     await navigateTo('/')
   }
 
   // if this is the first time,
   if (id) {
     try {
-      //  fetch the list from the API
-      console.log('API', '/get', `${apiHome}/api/get`)
-      const r = await $fetch(`${apiHome}/api/get`, {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        },
-        body: { id }
-      })
-      prog.value = r.doc
-      prog.value.stars = prog.value.stars.filter((x) => {
-        // only keep strings with something in
-        return x.trim().length > 0
-      })
-      prog.value.stars = prog.value.stars.join(',')
-      prog.value.date = new Date(prog.value.date)
+      prog.value = await getProgFromAPI(id)
     } catch (e) {
       console.error('failed to fetch prog', e)
     }
@@ -176,5 +106,5 @@
     </v-btn>
   </v-form>
   <hr class="divider" />
-  <v-btn color="error" variant="flat" @click="deleteItem()">Delete</v-btn>
+  <v-btn color="error" variant="flat" @click="deleteProg(prog.id); navigateTo('/')">Delete</v-btn>
 </template>

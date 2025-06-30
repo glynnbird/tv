@@ -116,6 +116,11 @@ export default function () {
       prog.date = new Date(prog.date)
       if (push) {
         progs.value.push(prog)
+      } else {
+        const ind = locateIndex(prog.id)
+        if (ind !== -1) {
+          progs.value[ind] = prog
+        }
       }
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
       console.log('saved', prog)

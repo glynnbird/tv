@@ -1,15 +1,11 @@
 <script setup>
   // composables
-  const progs = useProgs()
+  const { addProg } = useProgsList()
+  const { prefill } = useAI()
   const alert = useAlert()
-  const auth = useAuth()
   const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U']
   const types = ['Series', 'Film', 'Single']
   const stick = useStick()
-
-  // config
-  const config = useRuntimeConfig()
-  const apiHome = config.public['apiBase'] || window.location.origin
 
   // local page items
   const aiurl = ref('')
@@ -26,17 +22,6 @@
     uptomax: '6',
     season: ''
   })
-  // const title = ref('')
-  // const description = ref('')
-  // const stars = ref('')
-  // const on = ref('')
-  // const date = ref(new Date())
-  // const pic = ref('')
-  // const watching = ref(false)
-  // const type = ref('')
-  // const uptoep = ref('0')
-  // const uptomax = ref('6')
-  // const season = ref('')
 
   // add busy flag
   const busy = ref(false)
@@ -48,31 +33,16 @@
     isPicking.value = true;
   }
   
-  async function prefill() {
+  async function prefillForm() {
+
     busy.value = true
-    console.log('API', '/ai')
-    const ret = await $fetch(`${apiHome}/api/ai`, {
-      method: 'post',
-      body: {
-        url: aiurl.value
-      },
-      headers: {
-        'content-type': 'application/json',
-        apikey: auth.value.apiKey
-      }
-    })
-    console.log('ai response', ret)
-    if (ret && ret.ok === true) {
-      const ai = ret.response
-      console.log('ai', ai)
-      Object.assign(doc.value, ai)
-      doc.value.stars = ai.stars.join(',')
-      doc.value.date = new Date(ai.date)
-      busy.value = false
+    const response = await prefill(aiurl.value)
+    busy.value = false
+    if (response) {
+      Object.assign(doc.value, response)
     } else {
       alert.value.ts = new Date().getTime()
       alert.value.message = 'No useful prefill data found'
-      busy.value = false
     }
   }
 
@@ -83,20 +53,11 @@
     }
     busy.value = true
     const t = JSON.parse(JSON.stringify(doc.value))
-    t.date = doc.value.date.toISOString().substring(0, 10)
-    t.stars = doc.value.stars.split(',').map(function(s) { return s.trim() })
-    t.ts = Math.floor(new Date().getTime() / 1000)
-    console.log('API', '/add', t)
-    const ret = await $fetch(`${apiHome}/api/add`, {
-      method: 'post',
-      body: t,
-      headers: {
-        'content-type': 'application/json',
-        apikey: auth.value.apiKey
-      }
-    })
-    t.id = ret.id
-    progs.value.push(t)
+    // // t.date = t.date.toISOString().substring(0, 10)
+    // //t.stars = t.stars.split(',').map(function(s) { return s.trim() })
+    // t.ts = Math.floor(new Date().getTime() / 1000)
+    // console.log('debug', JSON.stringify(t))
+    await addProg(t)
 
     // create alert
     alert.value.ts = new Date().getTime()
@@ -130,7 +91,7 @@
       <v-btn
         :disabled="aiurl.length === 0 || busy"
         color="success"
-        @click="prefill()"
+        @click="prefillForm()"
       >
         <v-icon
           color="white"

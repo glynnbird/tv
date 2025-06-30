@@ -4,7 +4,7 @@ const PROGS_KEY = 'progscache'
 
 // sort programmes newest first
 const newestFirst = function (a, b) {
-  if (a.date < b.date) {
+  if (a.date.getTime() < b.date.getTime()) {
     return 1;
   } else if (a.date > b.date) {
     return -1;
@@ -14,7 +14,7 @@ const newestFirst = function (a, b) {
 
 // sort programmes oldest first
 function oldestFirst(a, b) {
-  if (a.date < b.date) {
+  if (a.date.getTime() < b.date.getTime()) {
     return -1;
   } else if (a.date > b.date) {
     return 1;
@@ -34,28 +34,53 @@ function mostRecentlyUpdatedFirst(a, b) {
   return 0;
 }
 
+// convert data from the form required to store it as JSON, into a dynamic object again
+// - convert date string to Date object
+// - convert stars array into comma-separated string
+function deserialize(p) {
+  // convert plain object to form required by front end
+  p.date = new Date(p.date)
+  if (Array.isArray(p.stars)) {
+    p.stars = p.stars.join(',')
+  }
+  return p
+}
+
+// convert data from the form required by the front end into the form required to store as JSON
+// - convert Date object to string
+// - convert stars comma-separated string to array
+function serialize(p) {
+  // convert plain object to form required by front end
+  p.date = new Date(p.date)
+  if (typeof p.stars === 'string' && p.stars.length > 0) {
+    p.stars = p.stars.split(',').map((s) => { return s.trim()})
+  }
+  p.ts = Math.floor(new Date().getTime() / 1000)
+  return p
+}
+
 export default function () {
   // state
-  const progs = ref([])
+  const progs = useProgs()
 
   // composables
   const auth = useAuth()
-  
-  // calculate apiHome
   const config = useRuntimeConfig()
+  const stick = useStick()
+  const apiHome = config.public['apiBase'] || window.location.origin
 
   // load existing progs from localStorage
-  const cache = localStorage.getItem(PROGS_KEY)
-  if (cache) {
-    progs.value = JSON.parse(cache)
+  if (stick.value === false && progs.value.length === 0) {
+    console.log('loading from cache')
+    const cache = localStorage.getItem(PROGS_KEY)
+    if (cache) {
+      progs.value = JSON.parse(cache).map(deserialize)
+    }
   }
-  console.log('progs.value', progs.value)
 
   // load progs from the API
   async function loadFromAPI() {
     try {
-      const apiHome = config.public['apiBase'] || window.location.origin
-
       //  fetch the list from the API
       console.log('API', '/list', `${apiHome}/api/list`)
       const r = await $fetch(`${apiHome}/api/list`, {
@@ -65,10 +90,35 @@ export default function () {
           apikey: auth.value.apiKey
         }
       })
-      progs.value = r.list
+      progs.value = r.list.map(deserialize)
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
     } catch (e) {
       console.error('failed to fetch list of progs', e)
+    }
+  }
+
+  // add a new programme
+  async function addProg(prog) {
+    console.log('API', '/add', prog)
+    try {
+      const doc = {}
+      Object.assign(doc, prog)
+      serialize(doc)
+      const ret = await $fetch(`${apiHome}/api/add`, {
+        method: 'post',
+        body: doc,
+        headers: {
+          'content-type': 'application/json',
+          apikey: auth.value.apiKey
+        }
+      })
+      prog.id = ret.id
+      prog.date = new Date(prog.date)
+      progs.value.push(prog)
+      localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
+      console.log(prog)
+    } catch (e) {
+      console.error(e)
     }
   }
 
@@ -76,7 +126,7 @@ export default function () {
   const availableProgs = computed(() => {
     const now = new Date().toISOString()
     return progs.value.filter((p) => {
-      return p.date <= now && !p.watching
+      return p.date.toISOString() <= now && !p.watching
     }).sort(newestFirst)
   })
   const watchedProgs = computed(() => {
@@ -87,16 +137,19 @@ export default function () {
   const futureProgs = computed(() => {
     const now = new Date().toISOString()
     return progs.value.filter((p) => {
-      return p.date >= now
+      return p.date.toISOString() >= now
     }).sort(oldestFirst)
   })
 
   // load the data from the API
-  setTimeout(async () => {
-    console.log('here')
-    await loadFromAPI()
-  }, 1)
- 
+  if (stick.value === false) {
+    setTimeout(async () => {
+      console.log('here')
+      await loadFromAPI()
+      stick.value = true
+    }, 1)
+  }
+  
 
-  return { progs, loadFromAPI, availableProgs,  watchedProgs, futureProgs }
+  return { progs, addProg, loadFromAPI, availableProgs,  watchedProgs, futureProgs }
 }

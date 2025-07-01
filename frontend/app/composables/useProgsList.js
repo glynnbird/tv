@@ -67,7 +67,7 @@ export default function () {
   const auth = useAuth()
   const config = useRuntimeConfig()
   const stick = useStick()
-  const alert = useAlert()
+  const { showAlert } = useShowAlert()
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // load existing progs from localStorage
@@ -127,9 +127,7 @@ export default function () {
       console.log('saved', prog)
 
       // create alert
-      alert.value.ts = new Date().getTime()
-      alert.value.message = 'Added/updated programme'
-      alert.value.colour = 'primary'
+      showAlert('Added/updated programme', 'primary')
     } catch (e) {
       console.error(e)
     }
@@ -152,9 +150,7 @@ export default function () {
       console.error('Could not load prog', id, e)
 
       // create alert
-      alert.value.ts = new Date().getTime()
-      alert.value.message = 'Could not load programme'
-      alert.value.colour = 'warning'
+      showAlert('Could not load programme', 'warning')
     }
     return {}
   }
@@ -230,9 +226,7 @@ export default function () {
     })
 
     // create alert
-    alert.value.ts = new Date().getTime()
-    alert.value.message = 'Deleted programme'
-    alert.value.colour = 'secondary'
+    showAlert('Deleted Programme', 'secondary')
   }
 
    // computed values

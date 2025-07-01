@@ -32,7 +32,6 @@
   }
   
   async function prefillForm() {
-
     busy.value = true
     const response = await prefill(aiurl.value)
     busy.value = false

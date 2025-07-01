@@ -23,6 +23,10 @@ export default function () {
     await navigateTo('/login')
   }
 
-  // return the alert state and the showAlert function
-  return { auth, login, logout }
+  function isLoggedIn() {
+    return auth.value && auth.value.authenticated && auth.value.apiKey
+  }
+
+  // return auth object and functions to log in and out
+  return { auth, login, logout, isLoggedIn }
 }

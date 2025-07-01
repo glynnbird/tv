@@ -5,6 +5,9 @@ export default function () {
   const { showAlert } = useShowAlert()
   const config = useRuntimeConfig()
 
+  // collect data to prefill the "add" form by using AI. An API call is sent a URL 
+  // about a TV programme, which is dispatched to a LLM with a prompt asking it to
+  // extract some structured data.
   async function prefill(url) {
     console.log('API', '/ai')
     const apiHome = config.public['apiBase'] || window.location.origin

@@ -1,3 +1,5 @@
+import ProgList from "~/components/ProgList.vue";
+
 const PROGS_KEY = 'progscache'
 
 // sort functions
@@ -59,25 +61,16 @@ function serialize(p) {
   return p
 }
 
+// the default export
 export default function () {
-  // state
-  const progs = useProgs()
 
   // composables
+  const progs = useState('progs', () => [])
+  const stick = useState('stick', () => { return false })
   const auth = useAuth()
   const config = useRuntimeConfig()
-  const stick = useStick()
   const { showAlert } = useShowAlert()
   const apiHome = config.public['apiBase'] || window.location.origin
-
-  // load existing progs from localStorage
-  if (stick.value === false && progs.value.length === 0) {
-    console.log('loading from cache')
-    const cache = localStorage.getItem(PROGS_KEY)
-    if (cache) {
-      progs.value = JSON.parse(cache).map(deserialize)
-    }
-  }
 
   // load progs from the API
   async function loadFromAPI() {
@@ -209,6 +202,7 @@ export default function () {
     await addProg(prog.value)
   }
 
+  // delete a TV programme
   async function deleteProg(id) {
     const ind = locateIndex(id)
     if (ind) {
@@ -229,7 +223,7 @@ export default function () {
     showAlert('Deleted Programme', 'secondary')
   }
 
-   // computed values
+  // computed values
   const availableProgs = computed(() => {
     const now = new Date().toISOString()
     return progs.value.filter((p) => {
@@ -248,15 +242,23 @@ export default function () {
     }).sort(oldestFirst)
   })
 
-  // load the data from the API
-  if (stick.value === false) {
+  // load the data from the cache & the API, but only the first time this is invoked
+  if (stick.value === false && progs.value.length === 0) {
+
+    // load existing progs from localStorage
+    console.log('loading from cache')
+    const cache = localStorage.getItem(PROGS_KEY)
+    if (cache) {
+      progs.value = JSON.parse(cache).map(deserialize)
+    }
+
+    // then later get fresh data from the API
     setTimeout(async () => {
-      console.log('here')
+      console.log('loading from API')
       await loadFromAPI()
       stick.value = true
     }, 1)
   }
-  
 
   return { progs, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs,  watchedProgs, futureProgs }
 }

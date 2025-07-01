@@ -67,6 +67,7 @@ export default function () {
   const auth = useAuth()
   const config = useRuntimeConfig()
   const stick = useStick()
+  const alert = useAlert()
   const apiHome = config.public['apiBase'] || window.location.origin
 
   // load existing progs from localStorage
@@ -124,29 +125,38 @@ export default function () {
       }
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
       console.log('saved', prog)
+
+      // create alert
+      alert.value.ts = new Date().getTime()
+      alert.value.message = 'Added/updated programme'
+      alert.value.colour = 'primary'
     } catch (e) {
       console.error(e)
     }
   }
   
   async function getProgFromAPI(id) {
-    let prog
-    
     //  fetch the list from the API
-    console.log('API', '/get', `${apiHome}/api/get`)
-    const r = await $fetch(`${apiHome}/api/get`, {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json',
-        apikey: auth.value.apiKey
-      },
-      body: { id }
-    })
-    console.log(r.doc)
-    
-    prog = r.doc
-    console.log('prog', prog)
-    return prog
+    try {
+      console.log('API', '/get', `${apiHome}/api/get`)
+      const r = await $fetch(`${apiHome}/api/get`, {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+          apikey: auth.value.apiKey
+        },
+        body: { id }
+      })
+      return r.doc
+    } catch(e) {
+      console.error('Could not load prog', id, e)
+
+      // create alert
+      alert.value.ts = new Date().getTime()
+      alert.value.message = 'Could not load programme'
+      alert.value.colour = 'warning'
+    }
+    return {}
   }
 
   const locateIndex = (id) => {
@@ -218,6 +228,11 @@ export default function () {
         apikey: auth.value.apiKey
       }
     })
+
+    // create alert
+    alert.value.ts = new Date().getTime()
+    alert.value.message = 'Deleted programme'
+    alert.value.colour = 'secondary'
   }
 
    // computed values

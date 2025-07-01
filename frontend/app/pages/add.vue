@@ -2,10 +2,8 @@
   // composables
   const { addProg } = useProgsList()
   const { prefill } = useAI()
-  const alert = useAlert()
   const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U']
   const types = ['Series', 'Film', 'Single']
-  const stick = useStick()
 
   // local page items
   const aiurl = ref('')
@@ -40,9 +38,6 @@
     busy.value = false
     if (response) {
       Object.assign(doc.value, response)
-    } else {
-      alert.value.ts = new Date().getTime()
-      alert.value.message = 'No useful prefill data found'
     }
   }
 
@@ -54,14 +49,9 @@
     busy.value = true
     const t = JSON.parse(JSON.stringify(doc.value))
     await addProg(t)
-
-    // create alert
-    alert.value.ts = new Date().getTime()
-    alert.value.message = 'Added new programme'
     busy.value = false 
 
     // bounce to home page
-    stick.value = true
     await navigateTo('/')
   }
 </script>

@@ -15,5 +15,5 @@
   })
 </script>
 <template>
-  <v-alert density="compact" color="yellow" v-show="showAlert">{{ alert.message }}</v-alert>
+  <v-alert density="compact" :color="alert.colour || 'primary'" v-show="showAlert">{{ alert.message }}</v-alert>
 </template>

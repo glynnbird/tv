@@ -30,6 +30,7 @@
     </v-navigation-drawer>
     <v-main>
       <v-container fluid>
+        <Alert></Alert>
         <slot />
       </v-container>
     </v-main>

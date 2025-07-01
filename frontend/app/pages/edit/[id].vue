@@ -1,7 +1,6 @@
 <script setup>
   // composables
   const { getProgFromAPI, addProg, deleteProg } = useProgsList()
-  const alert = useAlert()
   const channels = ['BBC', 'ITV', 'Channel4', 'Channel5', 'Netflix', 'AppleTV', 'Disney', 'Amazon', 'SkyAtlantic', 'Alba', 'Paramount']
   const types = ['Series', 'Film', 'Single']
   const route = useRoute()
@@ -28,10 +27,6 @@
     busy.value = true
     const t = JSON.parse(JSON.stringify(prog.value))
     await addProg(t, false)
-    
-    // create alert
-    alert.value.ts = new Date().getTime()
-    alert.value.message = 'Edited programme'
     busy.value = false
 
     // bounce to home page

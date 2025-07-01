@@ -1,7 +1,7 @@
 <script setup>
   // composables
-  const auth = useAuth()
-  auth.value.authenticated = false
-  localStorage.removeItem('tvapikey')
-  await navigateTo('/login')
+  const { logout } = useAuth()
+
+  // log out
+  await logout()
 </script>

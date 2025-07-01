@@ -1,6 +1,6 @@
 <script setup>
   // composables
-  const auth = useAuth()
+  const { auth } = useAuth()
   const route = useRoute()
   const { progs } = useProgsList()
 

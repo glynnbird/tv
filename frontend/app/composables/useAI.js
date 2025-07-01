@@ -1,7 +1,7 @@
 export default function () {
 
   // composables
-  const auth = useAuth()
+  const { auth } = useAuth()
   const { showAlert } = useShowAlert()
   const config = useRuntimeConfig()
 

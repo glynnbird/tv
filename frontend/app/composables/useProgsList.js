@@ -67,7 +67,7 @@ export default function () {
   // composables
   const progs = useState('progs', () => [])
   const stick = useState('stick', () => { return false })
-  const auth = useAuth()
+  const { auth } = useAuth()
   const config = useRuntimeConfig()
   const { showAlert } = useShowAlert()
   const apiHome = config.public['apiBase'] || window.location.origin

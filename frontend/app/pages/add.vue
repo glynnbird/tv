@@ -2,12 +2,10 @@
   // composables
   const { addProg } = useProgsList()
   const { prefill } = useAI()
-  const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U']
-  const types = ['Series', 'Film', 'Single']
 
   // local page items
   const aiurl = ref('')
-  const doc = ref({
+  const prog = ref({
     title: '',
     description: '',
     stars: '',
@@ -24,29 +22,25 @@
   // add busy flag
   const busy = ref(false)
 
-  // whether to show the date picker
-  const isPicking = ref(false)
-
-  function showpicker() {
-    isPicking.value = true;
-  }
-  
+  // use AI to pre-fill the form
   async function prefillForm() {
     busy.value = true
     const response = await prefill(aiurl.value)
     busy.value = false
     if (response) {
-      Object.assign(doc.value, response)
+      Object.assign(prog.value, response)
     }
   }
 
-  // method - add new todo 
+  // method - add new programme 
   async function add() {
-    if (!doc.value.title) {
+    if (!prog.value.title) {
       return
     }
+    
+    // save the new programme
     busy.value = true
-    const t = JSON.parse(JSON.stringify(doc.value))
+    const t = JSON.parse(JSON.stringify(prog.value))
     await addProg(t)
     busy.value = false 
 
@@ -86,87 +80,6 @@
 
     </v-form>
   </v-alert>
-
-  <v-form>
-    <v-text-field
-      v-model="doc.title"
-      label="Title"
-      required
-      autofocus
-      @keydown.enter="add()"
-    ></v-text-field>
-
-    <v-textarea
-      v-model="doc.description"
-      label="Description"
-    ></v-textarea>
-
-    <v-text-field
-      v-model="doc.stars"
-      label="Stars"
-    ></v-text-field>
-
-    <v-select v-model="doc.on" label="On (Channel)" :items="channels">
-    </v-select>
-
-    <v-select v-model="doc.type" label="Type" :items="types">
-    </v-select>
-
-    <v-text-field
-      v-if="doc.type === 'Series'"
-      v-model="doc.uptoep"
-      label="Episodes Watched"
-      ></v-text-field>
-
-    <v-text-field
-      v-if="doc.type === 'Series'"
-      v-model="doc.uptomax"
-      label="Episodes Total"
-      clearable
-      ></v-text-field>
-
-    <v-row>
-      <v-col>
-        <v-text-field
-          v-model="doc.date"
-          label="Date"
-          readonly
-        ></v-text-field>
-      </v-col>
-      <v-col>
-        <v-btn @click="showpicker">Change</v-btn>
-      </v-col>
-    </v-row>
-    <v-row justify="space-around">
-      <v-date-picker
-        v-model="doc.date"
-        v-if="isPicking"
-        elevation="24"
-        @update:modelValue="isPicking = false"
-      ></v-date-picker>
-    </v-row>
-
-    <v-text-field
-      v-model="doc.season"
-      label="Season"
-    ></v-text-field>
-
-    <v-text-field
-      v-model="doc.pic"
-      label="Pic"
-    ></v-text-field>
-
-    <v-img v-if="doc.pic" :src="doc.pic"></v-img>
-
-    <v-checkbox label="Watching" v-model="doc.watching"></v-checkbox>
-
-    <v-btn
-      :disabled="doc.title.length === 0 || busy"
-      color="success"
-      class="mr-4"
-      @click="add()"
-    >
-      Add
-    </v-btn>
-  </v-form>
+  
+  <ProgrammeForm :prog="prog" :busy="busy" buttonTitle="Add" @submit="add()"></ProgrammeForm>
 </template>

@@ -5,12 +5,13 @@
 
   // local page values
   const tab = ref('1')
-  if (window.location.hash) {
-    tab.value = decodeURIComponent(window.location.hash.replace('#', ''))
+  const lookup = {
+    '#ready': '1',
+    '#watching': '2',
+    '#future': '3'
   }
-
-  function tabSelected() {
-    window.location.hash = tab.value
+  if (window.location.hash) {
+    tab.value = lookup[window.location.hash]
   }
 
 </script>
@@ -22,10 +23,10 @@
   </v-alert>
 
   <!-- Tab navigation-->
-  <v-tabs v-model="tab" align-tabs="center" @update:model-value="tabSelected()">
-    <v-tab value="1">Ready</v-tab>
-    <v-tab value="2">Watching</v-tab>
-    <v-tab value="3">Future</v-tab>
+  <v-tabs v-model="tab" align-tabs="center">
+    <v-tab href="#ready" value="1">Ready</v-tab>
+    <v-tab href="#watching" value="2">Watching</v-tab>
+    <v-tab href="#future" value="3">Future</v-tab>
   </v-tabs>
 
   <!-- tab content -->

@@ -7,6 +7,16 @@ export default function () {
   // apiKey - the saved API key for logged in users
   const auth = useState('auth', () => { return { authenticated: false, apiKey: '' } })
 
+  function loadFromLocalStorage() {
+    const v = localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)
+    if (v) {
+      auth.value = {
+        authenticated: true,
+        apiKey: v
+      }
+    }
+  }
+
   async function login(apiKey) {
     // log the user in
     auth.value.authenticated = true
@@ -28,5 +38,5 @@ export default function () {
   }
 
   // return auth object and functions to log in and out
-  return { auth, login, logout, isLoggedIn }
+  return { auth, login, logout, isLoggedIn, loadFromLocalStorage }
 }

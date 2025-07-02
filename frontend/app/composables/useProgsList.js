@@ -1,5 +1,3 @@
-import ProgList from "~/components/ProgList.vue";
-
 const PROGS_KEY = 'progscache'
 
 // sort functions

@@ -31,13 +31,13 @@
   <!-- tab content -->
   <v-tabs-window v-model="tab">
     <v-tabs-window-item value="1">
-      <ProgList :progs="availableProgs" heading="Ready"></ProgList>
+      <ProgList :progs="availableProgs"></ProgList>
     </v-tabs-window-item>
     <v-tabs-window-item value="2">
-      <ProgList :progs="watchedProgs" heading="Watching"></ProgList>
+      <ProgList :progs="watchedProgs"></ProgList>
     </v-tabs-window-item>
     <v-tabs-window-item value="3">
-      <ProgList :progs="futureProgs" heading="Future"></ProgList>
+      <ProgList :progs="futureProgs"></ProgList>
     </v-tabs-window-item>
   </v-tabs-window>
 </template>

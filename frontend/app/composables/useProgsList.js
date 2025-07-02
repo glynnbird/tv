@@ -188,7 +188,7 @@ export default function () {
     if (ind === -1) {
       return
     }
-    const prog = progs.value[i]
+    const prog = progs.value[ind]
 
     if (prog.value.type === 'Series') {
       console.log('incrementing')

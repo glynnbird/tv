@@ -91,7 +91,7 @@ export default function () {
 
   // add a new programme
   async function addProg(prog, push=true) {
-    console.log('API', '/add', prog)
+    console.log('API', '/add')
     try {
       const doc = {}
       Object.assign(doc, prog)
@@ -115,7 +115,6 @@ export default function () {
         }
       }
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
-      console.log('saved', prog)
 
       // create alert
       showAlert('Added/updated programme', 'primary')
@@ -148,7 +147,6 @@ export default function () {
 
   const locateIndex = (id) => {
     let i
-    console.log('locateIndex', id, progs.value)
     for (i in progs.value) {
       if (id === progs.value[i].id) {
         return i

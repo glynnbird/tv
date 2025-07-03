@@ -183,21 +183,23 @@ export default function () {
   }
 
   // add one to the progress count
-  async function plusOne(id) {
-    const ind = locateIndex(id)
-    if (ind === -1) {
-      return
+  async function plusOne(p) {
+    console.log('+1', p.title)
+    if (p.type === 'Series') {
+      // increment the passed in object
+      let upto = parseInt(p.uptoep)
+      p.uptoep = (upto + 1).toString()
+      console.log('incremented to', p.uptoep)
+      
+      // find the prog in the list
+      const ind = locateIndex(p.id)
+      if (ind !== -1) {
+        progs.value[ind].uptoep = p.uptoep
+      }
+      
+      // update the API
+      await addProg(p, false)
     }
-    const prog = progs.value[ind]
-
-    if (prog.value.type === 'Series') {
-      console.log('incrementing')
-      let upto = parseInt(prog.value.uptoep)
-      prog.value.uptoep = (upto + 1).toString()
-    } else {
-      return
-    }
-    await addProg(prog.value)
   }
 
   // delete a TV programme

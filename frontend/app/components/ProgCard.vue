@@ -80,7 +80,7 @@
         <span v-if="!prog.watching">Watch</span>
         <span v-if="prog.watching">Unwatch</span>
       </v-btn>
-      <v-btn v-if="prog.watching && prog.type=='Series'" color="secondary" variant="flat" @click="plusOne(prog.id)">+1</v-btn>
+      <v-btn v-if="prog.watching && prog.type=='Series'" color="secondary" variant="flat" @click="plusOne(prog)">+1</v-btn>
       <v-btn color="warning" variant="flat" :to="`/edit/${prog.id}`">Edit</v-btn>
     </v-card-actions>
   </v-card>

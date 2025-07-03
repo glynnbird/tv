@@ -7,7 +7,7 @@
   const tab = ref('1')
   const lookup = {
     '#ready': '1',
-    '#watching': '2',
+    '#now': '2',
     '#future': '3'
   }
   if (window.location.hash) {

@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (!isLoggedIn()) {
     // see if we have an apikey stashed in local storage
     console.log('loading auth from localStorage')
-    const v = loadFromLocalStorage()
+    loadFromLocalStorage()
   }
 
   // if we're not already on the login page and we're not logged in... go to login page

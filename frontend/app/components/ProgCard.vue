@@ -54,7 +54,7 @@
         </v-chip>
         <v-chip class="sep" variant="flat" label size="default" color="white" v-if="prog.date.toISOString() > now">
           <HumanDate :date="prog.date" />
-          <v-icon class="sep" size="default" color="red" v-if="prog.date > now && prog.date < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
+          <v-icon class="sep" size="default" color="red" v-if="prog.date.toISOString() > now && prog.date.toISOString() < nextWeek && channels.includes(prog.on)">mdi-record</v-icon>
         </v-chip>
         <v-progress-linear class="cardsep" height="15" color="red-lighten-2" v-if="prog.watching && prog.type==='Series'" :model-value="prog.uptoep" :max="prog.uptomax">
           <span class="percent">{{ Math.ceil(100 * prog.uptoep/prog.uptomax) }}%</span>

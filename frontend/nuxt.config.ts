@@ -6,11 +6,13 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   modules: [
+    // from https://github.com/vite-pwa/nuxt?tab=readme-ov-file#-usage
     '@vite-pwa/nuxt',
-     async (options, nuxt) => {
+    // from https://vuetifyjs.com/en/getting-started/installation/#manual-setup
+    async (options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', config => {
         if (config && config.plugins) {
-          config.plugins.push(vuetify({ autoImport: true } ))
+          config.plugins.push(vuetify({ autoImport: true }))
         }
       })
     }
@@ -23,27 +25,27 @@ export default defineNuxtConfig({
       periodicSyncForUpdates: 3600,
     },
     manifest: {
-        "short_name": "TV",
-        "name": "TV Helper",
-        "icons": [
-          {
-            "src": "/tv_192.png",
-            "type": "image/png",
-            "sizes": "192x192"
-          },
-          {
-            "src": "/tv_512.png",
-            "type": "image/png",
-            "sizes": "512x512"
-          }
-        ],
-        "id": "/?source=pwa",
-        "start_url": "/?source=pwa",
-        "background_color": "#FFFFFF",
-        "display": "standalone",
-        "scope": "/",
-        "theme_color": "#3367D6",
-        "description": "TV programme planner"
+      "short_name": "TV",
+      "name": "TV Helper",
+      "icons": [
+        {
+          "src": "/tv_192.png",
+          "type": "image/png",
+          "sizes": "192x192"
+        },
+        {
+          "src": "/tv_512.png",
+          "type": "image/png",
+          "sizes": "512x512"
+        }
+      ],
+      "id": "/?source=pwa",
+      "start_url": "/?source=pwa",
+      "background_color": "#FFFFFF",
+      "display": "standalone",
+      "scope": "/",
+      "theme_color": "#3367D6",
+      "description": "TV programme planner"
     },
     workbox: {
       globPatterns: ['**/*.{js,css,html,ico,png,svg}']
@@ -53,22 +55,18 @@ export default defineNuxtConfig({
       type: "module"
     }
   },
-
   runtimeConfig: {
     public: {
       apiBase: ''
     }
   },
-  compatibilityDate: '2024-09-24',
-  devtools: { enabled: true},
+  compatibilityDate: '2025-08-04',
+  devtools: { enabled: true },
   vite: {
-    define: {
-      'process.env.DEBUG': false,
-    },
     vue: {
       template: {
         transformAssetUrls,
-      },
+      }
     }
   }
 })

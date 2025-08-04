@@ -6,6 +6,11 @@
 
   // local page items
   const drawer = ref(false)
+
+  async function home() {
+    await navigateTo('/')
+    window.scrollTo(0, 0)
+  }
 </script>
 <template>   
   <v-app theme="light">
@@ -13,7 +18,7 @@
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </template>
-      <v-app-bar-title @click="navigateTo('/')" style="user-select:none;">TV</v-app-bar-title>
+      <v-app-bar-title @click="home()" style="user-select:none;">TV</v-app-bar-title>
       <template v-slot:append>
         <v-chip size="small" label color="white">{{ progs.length }}</v-chip>
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>

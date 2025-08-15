@@ -37,7 +37,7 @@
 </style>
 <template>
   <v-card class="cardsep" :key="prog.id" :to="`/prog/${prog.id}`">
-    <v-img cover eager transition="false" min-height="200" :src="`${apiHome}/api/img?id=${prog.id}`" class="progimg">
+    <v-img cover eager transition="false" min-height="200" :src="`${apiHome}/api/img?id=${prog.id}&ts=${prog.ts || '0'}`" class="progimg">
       <v-card-title class="text-white shadow">
         {{  prog.title }} 
         <v-chip v-if="prog.season" label color="white">{{ prog.season }}</v-chip>

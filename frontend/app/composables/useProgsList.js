@@ -129,6 +129,7 @@ export default function () {
       let upto = parseInt(p.uptoep)
       p.uptoep = (upto + 1).toString()
       console.log('incremented to', p.uptoep)
+      p.ts = Math.floor(new Date().getTime() / 1000)
       
       // find the prog in the list
       const ind = locateIndex(p.id)

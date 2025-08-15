@@ -28,6 +28,7 @@
   if (id) {
     try {
       prog.value = await getProgFromAPI(id)
+      prog.value.ts = Math.floor(new Date().getTime() / 1000)
     } catch (e) {
       console.error('failed to fetch prog', e)
     }

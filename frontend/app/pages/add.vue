@@ -16,7 +16,8 @@
     type: '',
     uptoep: '0',
     uptomax: '6',
-    season: ''
+    season: '',
+    ts: Math.floor(new Date().getTime() / 1000)
   })
 
   // add busy flag

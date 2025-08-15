@@ -19,7 +19,7 @@ export async function onRequest(context) {
       const redirectResponse = {
         status: 301,
         headers: {
-          location: response.doc.pic
+          location: response.doc.pic + '?' + response.doc.ts || '0'
         }
       }
       return new Response('', redirectResponse)

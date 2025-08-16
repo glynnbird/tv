@@ -1,7 +1,7 @@
 <script setup>
   // composables
-  const { alert } = useShowAlert()
+  const { queue } = useShowAlert()
 </script>
 <template>
-  <v-alert density="compact" :color="alert.colour" v-show="alert.show">{{ alert.message }}</v-alert>
+  <v-snackbar-queue v-model="queue" timeout="2000" color="error" />
 </template>

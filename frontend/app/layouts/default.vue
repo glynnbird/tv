@@ -3,6 +3,7 @@
   const { auth } = useAuth()
   const route = useRoute()
   const { progs } = useProgsList()
+  const { queue } = useShowAlert()
 
   // local page items
   const drawer = ref(false)
@@ -35,7 +36,7 @@
     </v-navigation-drawer>
     <v-main>
       <v-container fluid>
-        <Alert></Alert>
+        <v-snackbar-queue v-model="queue" timeout="2000" color="error" />
         <slot />
       </v-container>
     </v-main>

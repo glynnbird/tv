@@ -11,6 +11,6 @@ export default function () {
     }
   }
 
-  // return the alert state and the showAlert function
+  // return the alert queue and the showAlert function
   return { queue, showAlert }
 }

@@ -1,18 +1,18 @@
 <script setup>
-  // composables
-  const { $pwa } = useNuxtApp()
-  const { availableProgs,  watchedProgs, futureProgs } = useProgsList()
+// composables
+const { $pwa } = useNuxtApp()
+const { availableProgs, watchedProgs, futureProgs } = useProgsList()
 
-  // local page values
-  const tab = ref('1')
-  const lookup = {
-    '#ready': '1',
-    '#now': '2',
-    '#future': '3'
-  }
-  if (window.location.hash) {
-    tab.value = lookup[window.location.hash]
-  }
+// local page values
+const tab = ref('1')
+const lookup = {
+  '#ready': '1',
+  '#now': '2',
+  '#future': '3'
+}
+if (window.location.hash) {
+  tab.value = lookup[window.location.hash]
+}
 
 </script>
 <template>

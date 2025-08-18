@@ -1,25 +1,20 @@
 <script setup>
-  // composables
-  const { auth } = useAuth()
-  const route = useRoute()
-  const { progs } = useProgsList()
-  const { queue } = useShowAlert()
-  const { busy } = useBusy()
+// composables
+const { auth } = useAuth()
+const route = useRoute()
+const { progs } = useProgsList()
+const { queue } = useShowAlert()
+const { busy } = useBusy()
 
-  // local page items
-  const drawer = ref(false)
+// local page items
+const drawer = ref(false)
 
-  async function home() {
-    await navigateTo('/')
-    window.scrollTo(0, 0)
-  }
-</script>
-<style>
-.progressgap {
-  margin-right: 10px;
+async function home() {
+  await navigateTo('/')
+  window.scrollTo(0, 0)
 }
-</style>
-<template>   
+</script>
+<template>
   <v-app theme="light">
     <v-app-bar density="compact" color="#3367D6">
       <template v-slot:prepend>
@@ -27,7 +22,8 @@
       </template>
       <v-app-bar-title @click="home()" style="user-select:none;">TV</v-app-bar-title>
       <template v-slot:append>
-        <v-progress-circular class="progressgap" size="small" v-if="busy" color="amber" indeterminate ></v-progress-circular>
+        <v-progress-circular style="margin-right: 10px;" size="small" v-if="busy" color="amber"
+          indeterminate></v-progress-circular>
         <v-chip size="small" label color="white">{{ progs.length }}</v-chip>
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
         <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="$router.back()"></v-btn>
@@ -37,8 +33,10 @@
       <v-list>
         <v-list-item prepend-icon="mdi-home" title="Home" @click="navigateTo('/')"></v-list-item>
         <v-list-item prepend-icon="mdi-information" title="About" @click="navigateTo('/about')"></v-list-item>
-        <v-list-item v-if="auth.authenticated" prepend-icon="mdi-logout" title="Logout" @click="navigateTo('/logout')"></v-list-item>
-        <v-list-item v-if="!auth.authenticated" prepend-icon="mdi-login" title="Login" @click="navigateTo('/login')"></v-list-item>
+        <v-list-item v-if="auth.authenticated" prepend-icon="mdi-logout" title="Logout"
+          @click="navigateTo('/logout')"></v-list-item>
+        <v-list-item v-if="!auth.authenticated" prepend-icon="mdi-login" title="Login"
+          @click="navigateTo('/login')"></v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>

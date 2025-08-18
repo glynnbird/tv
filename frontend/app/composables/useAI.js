@@ -2,7 +2,7 @@ export default function () {
 
   // composables
   const { auth } = useAuth()
-  const { busy, setBusy, unsetBusy } = useBusy()
+  const { setBusy, unsetBusy } = useBusy()
   const { showAlert } = useShowAlert()
   const config = useRuntimeConfig()
 
@@ -37,6 +37,7 @@ export default function () {
         return null 
       }
     } catch (e) {
+      unsetBusy()
       console.error('Could not invoke AI', e)
       showAlert('No useful prefill data found', 'error')
       return null

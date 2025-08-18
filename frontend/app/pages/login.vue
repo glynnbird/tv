@@ -1,10 +1,9 @@
 <script setup>
-  // composables
-  const { login } = useAuth()
+// composables
+const { login } = useAuth()
 
-  // local page items
-  const apiKey = ref('')
-
+// local page items
+const apiKey = ref('')
 </script>
 <template>
   <v-form>

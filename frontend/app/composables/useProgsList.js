@@ -12,6 +12,30 @@ export default function () {
   const { showAlert } = useShowAlert()
   const apiHome = config.public['apiBase'] || window.location.origin
 
+
+  // empty prog
+  function emptyProg() {
+    return {
+      title: '',
+      description: '',
+      stars: '',
+      on: '',
+      date: new Date(),
+      pic: '',
+      watching: false,
+      type: '',
+      uptoep: '0',
+      uptomax: '6',
+      season: '',
+      ts: Math.floor(new Date().getTime() / 1000)
+    }
+  }
+  
+  // calculate the image URL for a programme
+  function getImageURL(prog) {
+    return `${apiHome}/api/img?id=${prog.id}&ts=${prog.ts || '0'}`
+  }
+
   // load progs from the API
   async function loadFromAPI() {
     try {
@@ -34,7 +58,7 @@ export default function () {
   }
 
   // add a new programme
-  async function addProg(prog, push=true) {
+  async function addProg(prog, push = true) {
     console.log('API', '/add')
     try {
       setBusy()
@@ -68,7 +92,7 @@ export default function () {
       console.error(e)
     }
   }
-  
+
   async function getProgFromAPI(id) {
     //  fetch the list from the API
     try {
@@ -84,7 +108,7 @@ export default function () {
       })
       unsetBusy()
       return r.doc
-    } catch(e) {
+    } catch (e) {
       console.error('Could not load prog', id, e)
       unsetBusy()
       // create alert
@@ -117,7 +141,7 @@ export default function () {
         method: 'post',
         body: {
           id,
-          ts:  Math.floor(new Date().getTime() / 1000)
+          ts: Math.floor(new Date().getTime() / 1000)
         },
         headers: {
           'content-type': 'application/json',
@@ -140,13 +164,13 @@ export default function () {
       p.uptoep = (upto + 1).toString()
       console.log('incremented to', p.uptoep)
       p.ts = Math.floor(new Date().getTime() / 1000)
-      
+
       // find the prog in the list
       const ind = locateIndex(p.id)
       if (ind !== -1) {
         progs.value[ind].uptoep = p.uptoep
       }
-      
+
       // update the API
       await addProg(p, false)
     }
@@ -212,5 +236,5 @@ export default function () {
     }, 1)
   }
 
-  return { progs, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs,  watchedProgs, futureProgs }
+  return { progs, emptyProg, getImageURL, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs, watchedProgs, futureProgs }
 }

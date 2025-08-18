@@ -1,44 +1,42 @@
 <script setup>
-  // composables
-  const { getProgFromAPI, addProg, deleteProg } = useProgsList()
-  const { busy } = useBusy()
-  const route = useRoute()
-  const id = route.params.id
+// composables
+const { getProgFromAPI, addProg, deleteProg } = useProgsList()
+const { busy } = useBusy()
+const route = useRoute()
+const id = route.params.id
 
-  // local page items
-  const prog = ref({})
+// local page items
+const prog = ref({})
 
-  // method - edit programme
-  async function edit() {
-    if (!prog.value.title) {
-      return
-    }
+// method - edit programme
+async function edit() {
+  if (prog.value.title) {
     const t = JSON.parse(JSON.stringify(prog.value))
     await addProg(t, false)
 
     // bounce to home page
     await navigateTo('/')
   }
+}
 
-  // if we have and id, load the programme from the API
-  if (id) {
-    try {
-      prog.value = await getProgFromAPI(id)
-
-      prog.value.ts = Math.floor(new Date().getTime() / 1000)
-    } catch (e) {
-      console.error('failed to fetch prog', e)
-    }
+// if we have and id, load the programme from the API
+if (id) {
+  try {
+    prog.value = await getProgFromAPI(id)
+    prog.value.ts = Math.floor(new Date().getTime() / 1000)
+  } catch (e) {
+    console.error('failed to fetch prog', e)
   }
+}
 </script>
 <style>
 .divider {
-  margin-top:25px;
+  margin-top: 25px;
   margin-bottom: 25px;
 }
 </style>
 <template>
-  <PageTitle title="Edit!"></PageTitle>
+  <PageTitle title="Edit"></PageTitle>
   <ProgrammeForm :prog="prog" :busy="busy" buttonTitle="Edit" @submit="edit()"></ProgrammeForm>
   <hr class="divider" />
   <v-btn color="error" variant="flat" @click="deleteProg(prog.id); navigateTo('/')">Delete</v-btn>

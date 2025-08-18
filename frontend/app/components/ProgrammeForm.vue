@@ -1,17 +1,17 @@
 <script setup>
-  // incoming programme to add/edit, whether the page is busy ot not and the submit button title
-  const { prog, buttonTitle } = defineProps(['prog', 'buttonTitle'])
-  const { busy } = useBusy()
+// incoming programme to add/edit, whether the page is busy ot not and the submit button title
+const { prog, buttonTitle } = defineProps(['prog', 'buttonTitle'])
+const { busy } = useBusy()
 
-  // outgoing events from this form e.g. @submit="submitForm()"
-  const emitEvent = defineEmits(['submit'])
+// outgoing events from this form e.g. @submit="submitForm()"
+const emitEvent = defineEmits(['submit'])
 
-  // whether to show the date picker
-  const isPicking = ref(false)
+// whether to show the date picker
+const isPicking = ref(false)
 
-  // lists of options for select boxes
-  const channels = ['BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U']
-  const types = ['Series', 'Film', 'Single']
+// lists of options for select boxes
+const channels = ['BBC', 'ITV', 'Channel4', 'Channel5', 'Netflix', 'AppleTV', 'Disney', 'Amazon', 'SkyAtlantic', 'Alba', 'Paramount', 'U']
+const types = ['Series', 'Film', 'Single']
 
 </script>
 <template>
@@ -21,18 +21,8 @@
     <v-text-field v-model="prog.stars" label="Stars"></v-text-field>
     <v-select v-model="prog.on" label="On (Channel)" :items="channels"></v-select>
     <v-select v-model="prog.type" label="Type" :items="types"></v-select>
-    <v-text-field
-      v-if="prog.type === 'Series'"
-      v-model="prog.uptoep"
-      label="Episodes Watched"
-      clearable
-      ></v-text-field>
-    <v-text-field
-      v-if="prog.type === 'Series'"
-      v-model="prog.uptomax"
-      label="Episodes Total"
-      clearable
-      ></v-text-field>
+    <v-text-field v-if="prog.type === 'Series'" v-model="prog.uptoep" label="Episodes Watched" clearable></v-text-field>
+    <v-text-field v-if="prog.type === 'Series'" v-model="prog.uptomax" label="Episodes Total" clearable></v-text-field>
     <v-row>
       <v-col>
         <v-text-field v-model="prog.date" label="Date" readonly></v-text-field>

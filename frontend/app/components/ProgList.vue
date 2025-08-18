@@ -1,6 +1,7 @@
 <script setup>
-  // input attributes
-  const { progs } = defineProps(['progs'])
+
+// input attributes
+const { progs } = defineProps(['progs'])
 
 </script>
 <template>

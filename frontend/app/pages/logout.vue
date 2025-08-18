@@ -1,7 +1,7 @@
 <script setup>
-  // composables
-  const { logout } = useAuth()
+// composables
+const { logout } = useAuth()
 
-  // log out
-  await logout()
+// log out
+await logout()
 </script>

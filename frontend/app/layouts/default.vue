@@ -16,7 +16,7 @@ async function home() {
 </script>
 <template>
   <v-app theme="light">
-    <v-app-bar density="compact" color="#3367D6" extension-height="50" extended="true">
+    <v-app-bar density="compact" color="#3367D6" extension-height="50" extended>
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </template>

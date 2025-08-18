@@ -2,6 +2,7 @@ export default function () {
 
   // composables
   const { auth } = useAuth()
+  const { busy, setBusy, unsetBusy } = useBusy()
   const { showAlert } = useShowAlert()
   const config = useRuntimeConfig()
 
@@ -12,6 +13,7 @@ export default function () {
     console.log('API', '/ai')
     const apiHome = config.public['apiBase'] || window.location.origin
     try {
+      setBusy()
       const ret = await $fetch(`${apiHome}/api/ai`, {
         method: 'post',
         body: {
@@ -22,6 +24,7 @@ export default function () {
           apikey: auth.value.apiKey
         }
       })
+      unsetBusy()
       if (ret && ret.ok === true && ret.response && ret.response.title) {
         const ai = ret.response
         console.log('ai', ai)

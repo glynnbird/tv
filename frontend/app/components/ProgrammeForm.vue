@@ -1,6 +1,7 @@
 <script setup>
   // incoming programme to add/edit, whether the page is busy ot not and the submit button title
-  const { prog, busy } = defineProps(['prog', 'busy', 'buttonTitle'])
+  const { prog, buttonTitle } = defineProps(['prog', 'buttonTitle'])
+  const { busy } = useBusy()
 
   // outgoing events from this form e.g. @submit="submitForm()"
   const emitEvent = defineEmits(['submit'])

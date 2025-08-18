@@ -1,24 +1,20 @@
 <script setup>
   // composables
   const { getProgFromAPI, addProg, deleteProg } = useProgsList()
+  const { busy } = useBusy()
   const route = useRoute()
   const id = route.params.id
 
   // local page items
   const prog = ref({})
 
-  // add busy flag
-  const busy = ref(false)
-
   // method - edit programme
   async function edit() {
     if (!prog.value.title) {
       return
     }
-    busy.value = true
     const t = JSON.parse(JSON.stringify(prog.value))
     await addProg(t, false)
-    busy.value = false
 
     // bounce to home page
     await navigateTo('/')
@@ -28,6 +24,7 @@
   if (id) {
     try {
       prog.value = await getProgFromAPI(id)
+
       prog.value.ts = Math.floor(new Date().getTime() / 1000)
     } catch (e) {
       console.error('failed to fetch prog', e)

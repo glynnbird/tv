@@ -2,6 +2,7 @@
   // composables
   const { addProg } = useProgsList()
   const { prefill } = useAI()
+  const { busy, setBusy, unsetBusy } = useBusy()
 
   // local page items
   const aiurl = ref('')
@@ -20,14 +21,12 @@
     ts: Math.floor(new Date().getTime() / 1000)
   })
 
-  // add busy flag
-  const busy = ref(false)
 
   // use AI to pre-fill the form
   async function prefillForm() {
-    busy.value = true
+    setBusy()
     const response = await prefill(aiurl.value)
-    busy.value = false
+    unsetBusy()
     if (response) {
       Object.assign(prog.value, response)
     }
@@ -35,18 +34,13 @@
 
   // method - add new programme 
   async function add() {
-    if (!prog.value.title) {
-      return
-    }
-    
-    // save the new programme
-    busy.value = true
-    const t = JSON.parse(JSON.stringify(prog.value))
-    await addProg(t)
-    busy.value = false 
+    if (prog.value.title) {
+      // save the new programme
+      await addProg(JSON.parse(JSON.stringify(prog.value)))
 
-    // bounce to home page
-    await navigateTo('/')
+      // bounce to home page
+      await navigateTo('/')
+    }
   }
 </script>
 <style>
@@ -55,13 +49,7 @@
 }
 </style>
 <template>
-  <v-progress-linear
-    v-if="busy"
-    color="#BBDEFB"
-    indeterminate
-  ></v-progress-linear>
   <PageTitle title="Add"></PageTitle>
-
   <v-alert title="AI Assistant" color="blue-lighten-4" class="ai">
     <v-form class="ai">
       <v-text-field
@@ -82,5 +70,5 @@
     </v-form>
   </v-alert>
   
-  <ProgrammeForm :prog="prog" :busy="busy" buttonTitle="Add" @submit="add()"></ProgrammeForm>
+  <ProgrammeForm :prog="prog" buttonTitle="Add" @submit="add()"></ProgrammeForm>
 </template>

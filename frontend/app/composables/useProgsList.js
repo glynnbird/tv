@@ -7,6 +7,7 @@ export default function () {
   const progs = useState('progs', () => [])
   const stick = useState('stick', () => { return false })
   const { auth } = useAuth()
+  const { setBusy, unsetBusy } = useBusy()
   const config = useRuntimeConfig()
   const { showAlert } = useShowAlert()
   const apiHome = config.public['apiBase'] || window.location.origin
@@ -16,6 +17,7 @@ export default function () {
     try {
       //  fetch the list from the API
       console.log('API', '/list', `${apiHome}/api/list`)
+      setBusy()
       const r = await $fetch(`${apiHome}/api/list`, {
         method: 'post',
         headers: {
@@ -25,6 +27,7 @@ export default function () {
       })
       progs.value = r.list.map(deserialize)
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
+      unsetBusy()
     } catch (e) {
       console.error('failed to fetch list of progs', e)
     }
@@ -34,6 +37,7 @@ export default function () {
   async function addProg(prog, push=true) {
     console.log('API', '/add')
     try {
+      setBusy()
       const doc = {}
       Object.assign(doc, prog)
       serialize(doc)
@@ -56,6 +60,7 @@ export default function () {
         }
       }
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
+      unsetBusy()
 
       // create alert
       showAlert('Added/updated programme', 'primary')
@@ -68,6 +73,7 @@ export default function () {
     //  fetch the list from the API
     try {
       console.log('API', '/get', `${apiHome}/api/get`)
+      setBusy()
       const r = await $fetch(`${apiHome}/api/get`, {
         method: 'post',
         headers: {
@@ -76,10 +82,11 @@ export default function () {
         },
         body: { id }
       })
+      unsetBusy()
       return r.doc
     } catch(e) {
       console.error('Could not load prog', id, e)
-
+      unsetBusy()
       // create alert
       showAlert('Could not load programme', 'warning')
     }
@@ -105,6 +112,7 @@ export default function () {
 
     console.log('API', '/toggle', id)
     try {
+      setBusy()
       const ret = await $fetch(`${apiHome}/api/toggle`, {
         method: 'post',
         body: {
@@ -116,7 +124,9 @@ export default function () {
           apikey: auth.value.apiKey
         }
       })
+      unsetBusy()
     } catch (e) {
+      unsetBusy()
       console.error('Could not toggle', id, e)
     }
   }
@@ -148,6 +158,7 @@ export default function () {
     if (ind) {
       progs.value.splice(ind, 1)
     }
+    setBusy()
     await $fetch(`${apiHome}/api/del`, {
       method: 'post',
       body: {
@@ -158,9 +169,10 @@ export default function () {
         apikey: auth.value.apiKey
       }
     })
+    unsetBusy()
 
     // create alert
-    showAlert('Deleted Programme', 'secondary')
+    showAlert('Deleted Programme', 'error')
   }
 
   // computed values

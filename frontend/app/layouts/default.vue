@@ -16,7 +16,7 @@ async function home() {
 </script>
 <template>
   <v-app theme="light">
-    <v-app-bar density="compact" color="#3367D6">
+    <v-app-bar density="compact" color="#3367D6" extension-height="50" extended="true">
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </template>
@@ -27,6 +27,10 @@ async function home() {
         <v-chip size="small" label color="white">{{ progs.length }}</v-chip>
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
         <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="$router.back()"></v-btn>
+      </template>
+      <template v-slot:extension>
+        <!-- Tab navigation-->
+        <TabNav></TabNav>
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" location="left">

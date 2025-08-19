@@ -1,5 +1,6 @@
 <script setup>
 const { plusOne, toggle, deleteProg, getImageURL } = useProgsList()
+const { clear } = useSingleProgCache()
 const { prog } = defineProps(['prog', 'showActions'])
 
 // local page items
@@ -90,16 +91,16 @@ const channels = ref(['BBC', 'ITV', 'Channel4', 'Channel5', 'SkyAtlantic', 'Alba
       </v-table>
     </v-card-text>
     <v-card-actions v-if="showActions == 'true'">
-      <v-btn color="primary" variant="flat" @click="toggle(prog.id); prog.watching = !prog.watching">
+      <v-btn color="primary" variant="flat" @click="toggle(prog.id); clear(prog.id); prog.watching = !prog.watching">
         <span v-if="!prog.watching">Watch</span>
         <span v-if="prog.watching">Unwatch</span>
       </v-btn>
       <v-btn v-if="prog.watching && prog.type == 'Series'" color="secondary" variant="flat"
-        @click="plusOne(prog)">+1</v-btn>
+        @click="clear(prog.id); plusOne(prog)">+1</v-btn>
       <v-btn color="warning" variant="flat" :to="`/edit/${prog.id}`">Edit</v-btn>
     </v-card-actions>
   </v-card>
   <div class="pod" v-if="showActions == 'true' && prog.watching">
-    <v-btn color="error" variant="flat" @click="deleteProg(prog.id); navigateTo('/')">Delete</v-btn>
+    <v-btn color="error" variant="flat" @click="deleteProg(prog.id); clear(prog.id); navigateTo('/')">Delete</v-btn>
   </div>
 </template>

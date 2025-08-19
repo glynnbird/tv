@@ -1,7 +1,7 @@
 <script setup>
 // composables
 const { getProgFromAPI, addProg, deleteProg } = useProgsList()
-const { get } = useSingleProgCache()
+const { get, clear } = useSingleProgCache()
 const { busy } = useBusy()
 const route = useRoute()
 const id = route.params.id
@@ -14,6 +14,7 @@ async function edit() {
   if (prog.value.title) {
     const t = JSON.parse(JSON.stringify(prog.value))
     await addProg(t, false)
+    clear(id)
 
     // bounce to home page
     await navigateTo('/')
@@ -45,5 +46,5 @@ if (id) {
   <PageTitle title="Edit"></PageTitle>
   <ProgrammeForm :prog="prog" :busy="busy" buttonTitle="Edit" @submit="edit()"></ProgrammeForm>
   <hr class="divider" />
-  <v-btn color="error" variant="flat" @click="deleteProg(prog.id); navigateTo('/')">Delete</v-btn>
+  <v-btn color="error" variant="flat" @click="deleteProg(prog.id); clear(prog.id); navigateTo('/')">Delete</v-btn>
 </template>

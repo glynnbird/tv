@@ -20,5 +20,12 @@ export default function () {
     }
   }
 
-  return { set, get }
+  function clear(pid) {
+    if (pid === progId.value) {
+      prog.value = {}
+      progId.value = ''
+    }
+  }
+
+  return { set, get, clear }
 }

@@ -10,10 +10,11 @@ export default function () {
   // about a TV programme, which is dispatched to a LLM with a prompt asking it to
   // extract some structured data.
   async function prefill(url) {
+    let retval = null
+    setBusy()
     console.log('API', '/ai')
     const apiHome = config.public['apiBase'] || window.location.origin
     try {
-      setBusy()
       const ret = await $fetch(`${apiHome}/api/ai`, {
         method: 'post',
         body: {
@@ -24,24 +25,22 @@ export default function () {
           apikey: auth.value.apiKey
         }
       })
-      unsetBusy()
       if (ret && ret.ok === true && ret.response && ret.response.title) {
         const ai = ret.response
         console.log('ai', ai)
         ai.stars = ai.stars.join(',')
         ai.date = new Date(ai.date)
-        return ai
+        retval =  ai
       } else {
         console.log('AI response not useful', ret.response)
         showAlert('No useful prefill data found', 'error')
-        return null 
       }
     } catch (e) {
-      unsetBusy()
       console.error('Could not invoke AI', e)
       showAlert('No useful prefill data found', 'error')
-      return null
     }
+    unsetBusy()
+    return retval
   }
 
   return { prefill }

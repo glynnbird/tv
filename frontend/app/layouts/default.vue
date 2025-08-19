@@ -22,8 +22,7 @@ async function home() {
       </template>
       <v-app-bar-title @click="home()" style="user-select:none;">TV</v-app-bar-title>
       <template v-slot:append>
-        <v-progress-circular style="margin-right: 10px;" size="small" v-if="busy" color="amber"
-          indeterminate></v-progress-circular>
+        <v-progress-circular v-if="busy" style="margin-right: 10px;" size="small" color="blue" indeterminate></v-progress-circular>
         <v-chip size="small" label color="white">{{ progs.length }}</v-chip>
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
         <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="$router.back()"></v-btn>

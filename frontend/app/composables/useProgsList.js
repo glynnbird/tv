@@ -12,6 +12,15 @@ export default function () {
   const { showAlert } = useShowAlert()
   const apiHome = config.public['apiBase'] || window.location.origin
 
+  // create a custom fetch, prefilled with common stuff
+  const $api = $fetch.create({
+    baseURL: apiHome,
+    method: 'post',
+    headers: {
+      'content-type': 'application/json',
+      apikey: auth.value.apiKey
+    }
+  })
 
   // empty prog
   function emptyProg() {
@@ -38,41 +47,29 @@ export default function () {
 
   // load progs from the API
   async function loadFromAPI() {
+    setBusy()
     try {
       //  fetch the list from the API
-      console.log('API', '/list', `${apiHome}/api/list`)
-      setBusy()
-      const r = await $fetch(`${apiHome}/api/list`, {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        }
-      })
+      console.log('API', '/api/list')
+      const r = await $api('/api/list')
       progs.value = r.list.map(deserialize)
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
-      unsetBusy()
+      
     } catch (e) {
       console.error('failed to fetch list of progs', e)
     }
+    unsetBusy()
   }
 
   // add a new programme
   async function addProg(prog, push = true) {
-    console.log('API', '/add')
+    setBusy()
     try {
-      setBusy()
+      console.log('API', '/api/add')
       const doc = {}
       Object.assign(doc, prog)
       serialize(doc)
-      const ret = await $fetch(`${apiHome}/api/add`, {
-        method: 'post',
-        body: doc,
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        }
-      })
+      const ret = await $api('/api/add', { body: doc })
       prog.id = ret.id
       prog.date = new Date(prog.date)
       if (push) {
@@ -84,37 +81,30 @@ export default function () {
         }
       }
       localStorage.setItem(PROGS_KEY, JSON.stringify(progs.value))
-      unsetBusy()
-
+      
       // create alert
       showAlert('Added/updated programme', 'primary')
     } catch (e) {
       console.error(e)
     }
+    unsetBusy()
   }
 
   async function getProgFromAPI(id) {
+    let retval = {}
+    setBusy()
     //  fetch the list from the API
     try {
-      console.log('API', '/get', `${apiHome}/api/get`)
-      setBusy()
-      const r = await $fetch(`${apiHome}/api/get`, {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        },
-        body: { id }
-      })
-      unsetBusy()
-      return r.doc
+      console.log('API', '/api/get')
+      const r = await $api('/api/get', { body: { id } })
+      retval = r.doc
     } catch (e) {
       console.error('Could not load prog', id, e)
-      unsetBusy()
       // create alert
       showAlert('Could not load programme', 'warning')
     }
-    return {}
+    unsetBusy()
+    return retval
   }
 
   const locateIndex = (id) => {
@@ -134,25 +124,18 @@ export default function () {
       progs.value[ind].watching = !progs.value[ind].watching
     }
 
-    console.log('API', '/toggle', id)
+    console.log('API', '/api/toggle', id)
+    setBusy()
     try {
-      setBusy()
-      const ret = await $fetch(`${apiHome}/api/toggle`, {
-        method: 'post',
-        body: {
-          id,
-          ts: Math.floor(new Date().getTime() / 1000)
-        },
-        headers: {
-          'content-type': 'application/json',
-          apikey: auth.value.apiKey
-        }
-      })
-      unsetBusy()
+      const body = {
+        id,
+        ts: Math.floor(new Date().getTime() / 1000)
+      }
+      const ret = await $api('/api/toggle', { body })
     } catch (e) {
-      unsetBusy()
       console.error('Could not toggle', id, e)
     }
+    unsetBusy()
   }
 
   // add one to the progress count
@@ -183,16 +166,8 @@ export default function () {
       progs.value.splice(ind, 1)
     }
     setBusy()
-    await $fetch(`${apiHome}/api/del`, {
-      method: 'post',
-      body: {
-        id
-      },
-      headers: {
-        'content-type': 'application/json',
-        apikey: auth.value.apiKey
-      }
-    })
+    console.log('API', '/api/del', id)
+    await $api('/api/del', { body: { id } })
     unsetBusy()
 
     // create alert

@@ -211,5 +211,5 @@ export default function () {
     }, 1)
   }
 
-  return { progs, emptyProg, getImageURL, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs, watchedProgs, futureProgs }
+  return { progs, locateIndex, emptyProg, getImageURL, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs, watchedProgs, futureProgs }
 }

@@ -69,7 +69,7 @@ const channels = ref(['BBC', 'ITV', 'Channel4', 'Channel5', 'SkyAtlantic', 'Alba
     </v-img>
     <v-card-text v-if="showActions == 'true'">
       <p>{{ prog.description }}</p>
-      <v-chip-group v-if="prog.stars.length > 0">
+      <v-chip-group v-if="prog.stars && prog.stars.length > 0">
         <v-chip v-for="star in prog.stars" :key="star">
           {{ star }}
         </v-chip>

@@ -1,6 +1,7 @@
 <script setup>
 // composables
 const { getProgFromAPI, addProg, deleteProg } = useProgsList()
+const { get } = useSingleProgCache()
 const { busy } = useBusy()
 const route = useRoute()
 const id = route.params.id
@@ -22,8 +23,13 @@ async function edit() {
 // if we have and id, load the programme from the API
 if (id) {
   try {
-    prog.value = await getProgFromAPI(id)
-    prog.value.ts = Math.floor(new Date().getTime() / 1000)
+    const p = get(id)
+    if (p) {
+      prog.value = p
+    } else {
+      prog.value = await getProgFromAPI(id)
+      prog.value.ts = Math.floor(new Date().getTime() / 1000)
+    }
   } catch (e) {
     console.error('failed to fetch prog', e)
   }

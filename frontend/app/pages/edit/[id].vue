@@ -1,7 +1,7 @@
 <script setup>
 // composables
 const { getProgFromAPI, addProg, deleteProg } = useProgsList()
-const { get, clear } = useSingleProgCache()
+const { getProgCache } = useSingleProgCache()
 const { busy } = useBusy()
 const route = useRoute()
 const id = route.params.id
@@ -14,7 +14,6 @@ async function edit() {
   if (prog.value.title) {
     const t = JSON.parse(JSON.stringify(prog.value))
     await addProg(t, false)
-    clear(id)
 
     // bounce to home page
     await navigateTo('/')
@@ -24,7 +23,7 @@ async function edit() {
 // if we have and id, load the programme from the API
 if (id) {
   try {
-    const p = get(id)
+    const p = getProgCache(id)
     if (p) {
       prog.value = p
     } else {

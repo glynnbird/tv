@@ -1,31 +1,26 @@
 // the default export
 export default function () {
-  const prog = useState('prog', () => {})
-  const progId = useState('progId', () => '')
+  const { progs, locateIndex } = useProgsList()
 
-  // stash the last loaded full programme object and id
-  function set(pid, p) {
-    prog.value = p
-    progId.value = pid
-    console.log('prog cache set', pid)
+  function setProgCache(id, prog) {
+    const i = locateIndex(id)
+    if (i) {
+      console.log('prog cache set', id)
+      prog.full = true
+      progs.value[i] = prog
+    }
   }
 
-  function get(pid) {
-    if (pid === progId.value) {
-      console.log('prog cache hit', pid)
-      return prog.value
+  function getProgCache(id) {
+    const i = locateIndex(id)
+    if (i && progs.value[i].full) {
+      console.log('prog cache hit', id)
+      return progs.value[i]
     } else {
-      console.log('prog cache miss', pid)
+      console.log('prog cache miss', id)
       return null
     }
   }
 
-  function clear(pid) {
-    if (pid === progId.value) {
-      prog.value = {}
-      progId.value = ''
-    }
-  }
-
-  return { set, get, clear }
+  return { setProgCache, getProgCache }
 }

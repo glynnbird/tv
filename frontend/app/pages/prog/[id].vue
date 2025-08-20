@@ -2,7 +2,7 @@
 
 // composables
 const { getProgFromAPI, emptyProg, locateIndex, progs } = useProgsList()
-const { get, set } = useSingleProgCache()
+const { getProgCache, setProgCache } = useSingleProgCache()
 const route = useRoute()
 const id = route.params.id
 
@@ -13,7 +13,7 @@ const prog = ref({})
 if (id) {
   try {
     // if the programme is in the prog cache, use it
-    const p = get(id)
+    const p = getProgCache(id)
     if (p) {
       prog.value = p
     } else {
@@ -29,7 +29,7 @@ if (id) {
       setTimeout(async () => {
         prog.value = await getProgFromAPI(id)
         prog.value.date = new Date(prog.value.date)
-        set(id, prog.value)
+        setProgCache(id, prog.value)
       }, 1)
     }
   } catch (e) {

@@ -14,7 +14,7 @@ export async function onRequest(context) {
   if (json.id) {
     let response
     // load the original
-    doc = await get(context.env.TVKV, json.id)
+    const doc = await get(context.env.TVKV, json.id)
 
     // delete the id from the KV store
     response = await del(context.env.TVKV, json.id)

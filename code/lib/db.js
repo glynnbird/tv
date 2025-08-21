@@ -51,28 +51,27 @@ export const archivelist = async function (kv) {
 
 // save an old doc into the archive
 export const archive = async function (kv, json) {
+  const doc = json.doc
   const metadata = {
-    date: json.date,
-    title: json.title,
-    watching: json.watching,
-    on: json.on,
-    uptoep: json.uptoep,
-    uptomax: json.uptomax,
-    type: json.type,
-    season: json.season,
-    ts: json.ts
+    date: doc.date,
+    title: jdocson.title,
+    watching: doc.watching,
+    on: doc.on,
+    uptoep: doc.uptoep,
+    uptomax: doc.uptomax,
+    type: doc.type,
+    season: doc.season,
+    ts: doc.ts
   }
-  json.metadata = metadata
 
   // if there's all the parts we need
-  if (json.id && json.doc && json.metadata) {
+  if (json.id && json.doc && metadata) {
     // write core doc
     const coreDoc = {
       id: json.id,
       doc: json.doc,
       _ts: new Date().toISOString(),
     }
-    delete coreDoc.doc.metadata
     await kv.put(`archivedoc:${json.id}`, JSON.stringify(coreDoc), { metadata: metadata })
 
     // send response

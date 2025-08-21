@@ -19,9 +19,9 @@ The web interface display three "tabs": Available to watch, Watching and Future 
 
 Screenshots of the three tabs:
 
-| Available to watch | Watching | Future |
+| Ready | Now | Future |
 | ------------------ | ---------| ------ |
-| ![available](screenshots/tab1.png) | ![watching](screenshots/tab2.png) | ![future](screenshots/tab3.png) |
+| ![readu](screenshots/tab1.png) | ![now](screenshots/tab2.png) | ![future](screenshots/tab3.png) |
 
 Notice on the third tab, if the programme is within a week of transmission and on a non-streaming service, it has a red "record" button on, indicating it could be available to set to record.
 
@@ -66,6 +66,7 @@ The front end app has been highly optimised for performance:
 2. The programme list is cached in local storage so that the app can load and show it's last state quickly - it then fetches the programme list in the background to pick up any changes.
 3. The images are loaded in "eager" mode, meaning they're fetched ahead of time making the UI snappier. Because we don't have the image url in the `metadata` field, the front end renders its images using the `/api/img` endpoint, which 301s the browser to the URL of each programme's image.
 4. The KV store's eventual consistency is hidden by writing edits & deletes to the local copy of the data, as well as to the cloud via API calls.
+5. As a user navigates from the programme list to an individual programme, the full details of the programme are fetched and this version replaces the summary version in the in-memory programme list. This acts as a cache - if the user visits this programme again, we already have it. If the user goes to edit that programme, we already have it. The UI becomes very snappy indeed.
 
 ## API
 

@@ -12,15 +12,14 @@ export async function onRequest(context) {
 
   // if there's a id
   if (json.id) {
-    let response
     // load the original
-    const doc = await get(context.env.TVKV, json.id)
+    const getResponse = await get(context.env.TVKV, json.id)
 
     // delete the id from the KV store
-    response = await del(context.env.TVKV, json.id)
+    const response = await del(context.env.TVKV, json.id)
 
     // save the doc as an archived doc
-    await archive(context.env.TVKV, { id: json.id, doc })
+    await archive(context.env.TVKV, { id: json.id, doc: getResponse.doc })
 
     // send response
     return new Response(JSON.stringify(response), okResponse)

@@ -29,20 +29,9 @@ export async function onRequest(context) {
       uptomax: json.uptomax || '',
       ts: json.ts || 0
     }
-    const metadata = {
-      date: doc.date,
-      title: doc.title,
-      watching: doc.watching,
-      on: doc.on,
-      uptoep: doc.uptoep,
-      uptomax: doc.uptomax,
-      type: doc.type,
-      season: doc.season,
-      ts: doc.ts
-    }
 
     // add to KV store
-    const response = await add(context.env.TVKV, { id, doc, metadata })
+    const response = await add(context.env.TVKV, { id, doc })
 
     // send response
     return new Response(JSON.stringify(response), okResponse)

@@ -48,13 +48,10 @@ export const archivelist = async function (kv) {
   })
   return output
 }
-
-// save an old doc into the archive
-export const archive = async function (kv, json) {
-  const doc = json.doc
-  const metadata = {
+const generateMetadata = function (doc) {
+  return {
     date: doc.date,
-    title: jdocson.title,
+    title: doc.title,
     watching: doc.watching,
     on: doc.on,
     uptoep: doc.uptoep,
@@ -63,6 +60,10 @@ export const archive = async function (kv, json) {
     season: doc.season,
     ts: doc.ts
   }
+}
+// save an old doc into the archive
+export const archive = async function (kv, json) {
+  const metadata = generateMetadata(json.doc)
 
   // if there's all the parts we need
   if (json.id && json.doc && metadata) {
@@ -84,20 +85,17 @@ export const add = async function (kv, json) {
   if (!json.id) {
     json.id = new Date().getTime().toString()
   }
-  if (!json.metadata) {
-    json.metadata = {}
-  }
+  const metadata = generateMetadata(json.doc)
 
   // if there's all the parts we need
-  if (json.id && json.doc && json.metadata) {
+  if (json.id && json.doc && metadata) {
     // write core doc
     const coreDoc = {
       id: json.id,
       doc: json.doc,
       _ts: new Date().toISOString(),
     }
-    delete coreDoc.doc.metadata
-    await kv.put(`doc:${json.id}`, JSON.stringify(coreDoc), { metadata: json.metadata })
+    await kv.put(`doc:${json.id}`, JSON.stringify(coreDoc), { metadata })
 
     // send response
     return { ok: true, id: json.id }

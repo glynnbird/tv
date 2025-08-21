@@ -5,6 +5,7 @@ export default function () {
 
   // composables
   const progs = useState('progs', () => [])
+  const archivedProgs = useState('archivedProgs', () => [])
   const stick = useState('stick', () => { return false })
   const { auth } = useAuth()
   const { setBusy, unsetBusy } = useBusy()
@@ -57,6 +58,21 @@ export default function () {
       
     } catch (e) {
       console.error('failed to fetch list of progs', e)
+    }
+    unsetBusy()
+  }
+
+  // load archivedprogs from the API
+  async function loadArchivedFromAPI() {
+    setBusy()
+    try {
+      //  fetch the list from the API
+      console.log('API', '/api/archivelist')
+      const r = await $api('/api/archivelist')
+      archivedProgs.value = r.list.map(deserialize).sort(newestFirst)
+      
+    } catch (e) {
+      console.error('failed to fetch list of archived progs', e)
     }
     unsetBusy()
   }
@@ -211,5 +227,5 @@ export default function () {
     }, 1)
   }
 
-  return { progs, locateIndex, emptyProg, getImageURL, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs, watchedProgs, futureProgs }
+  return { progs, archivedProgs, loadArchivedFromAPI, locateIndex, emptyProg, getImageURL, addProg, loadFromAPI, plusOne, toggle, deleteProg, getProgFromAPI, availableProgs, watchedProgs, futureProgs }
 }

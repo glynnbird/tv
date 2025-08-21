@@ -27,7 +27,7 @@ async function home() {
         <v-btn v-if="route.name === 'index'" icon="mdi-plus" @click="navigateTo('/add')"></v-btn>
         <v-btn v-if="route.name !== 'index'" icon="mdi-chevron-left" @click="$router.back()"></v-btn>
       </template>
-      <template v-slot:extension>
+      <template v-slot:extension v-if="route.name !== 'archive'">
         <!-- Tab navigation-->
         <TabNav></TabNav>
       </template>
@@ -35,6 +35,7 @@ async function home() {
     <v-navigation-drawer v-model="drawer" location="left">
       <v-list>
         <v-list-item prepend-icon="mdi-home" title="Home" @click="navigateTo('/')"></v-list-item>
+        <v-list-item prepend-icon="mdi-archive" title="Archive" @click="navigateTo('/archive')"></v-list-item>
         <v-list-item prepend-icon="mdi-information" title="About" @click="navigateTo('/about')"></v-list-item>
         <v-list-item v-if="auth.authenticated" prepend-icon="mdi-logout" title="Logout"
           @click="navigateTo('/logout')"></v-list-item>

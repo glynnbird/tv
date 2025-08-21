@@ -136,8 +136,11 @@ export default function () {
   // toggle the watched flag for a programme
   async function toggle(id) {
     const ind = locateIndex(id)
+    console.log('toggle index', ind)
     if (ind !== -1) {
+      console.log('current', progs.value[ind].watching)
       progs.value[ind].watching = !progs.value[ind].watching
+      console.log('now', progs.value[ind].watching)
     }
 
     console.log('API', '/api/toggle', id)

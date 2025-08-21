@@ -90,7 +90,7 @@ const channels = ref(['BBC', 'ITV', 'Channel4', 'Channel5', 'SkyAtlantic', 'Alba
       </v-table>
     </v-card-text>
     <v-card-actions v-if="showActions == 'true'">
-      <v-btn color="primary" variant="flat" @click="toggle(prog.id); prog.watching = !prog.watching">
+      <v-btn color="primary" variant="flat" @click="toggle(prog.id)">
         <span v-if="!prog.watching">Watch</span>
         <span v-if="prog.watching">Unwatch</span>
       </v-btn>

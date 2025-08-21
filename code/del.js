@@ -1,6 +1,6 @@
 import { okResponse, notOkResponse, notOk } from './lib/constants.js'
 import { mustBePOST, mustBeJSON, apiKey, handleCORS } from './lib/checks.js'
-import { del, archive } from './lib/db.js'
+import { get, del, archive } from './lib/db.js'
 
 export async function onRequest(context) {
   // handle POST/JSON/apikey checks

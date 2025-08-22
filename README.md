@@ -39,6 +39,10 @@ Cloudflare KV items have three components:
 - `metadata` - a 1KB JSON object that is returned when listing keys. We pack most programme data into here so that we can get nearly everything we need from just the programme list: e.g. `{"date":"2025-03-05","title":"A Cruel Love","watching":true,"on":"ITV","uptoep":"0","uptomax":"6","type":"Series","season":"","ts":1749823312}` - that is everything except the programme `description`, `stars` and `pic` fields which may take us over the 1KB limit.
 - `value` - JSON.stringified full document. 
 
+The KV "list" API allows fetching of a list of key/metadata pairs (not the `value`) optionally by key prefix. We use this to list all the current Tv programmes with "list KV items starting with 'doc:'" or list archived programmes with "list KV items starting with 'archivedoc:'". This returns the id/metadata pairs which provides enough information to render as list of programmes.
+
+Only when fetching individual keys (e.g. when a user clicks on a single TV programme) do we fetch the "value" - the full JSON object.
+
 ```js
 {
   "key": "doc:1748465815905",
@@ -57,16 +61,17 @@ Cloudflare KV items have three components:
 }
 ```
 
+But we need the image URL to render the images in the list. This is achieved using the `GET /api/img?id=X` API call - we use this as each card's image URL and the API call bounces the browser to the programme's image URL. 
 
 ## Performance
 
 The front end app has been highly optimised for performance:
 
 1. It uses [Vite PWA](https://vite-pwa-org.netlify.app/) to make the web app a Progressive Web App (PWA), meaning that the assets of the application are cached locally making for a faster load time (after the first load). 
-2. The programme list is cached in local storage so that the app can load and show it's last state quickly - it then fetches the programme list in the background to pick up any changes.
-3. The images are loaded in "eager" mode, meaning they're fetched ahead of time making the UI snappier. Because we don't have the image url in the `metadata` field, the front end renders its images using the `/api/img` endpoint, which 301s the browser to the URL of each programme's image.
+2. The programme list is cached in local storage so that the app can load and show its last state quickly - it then fetches the programme list in the background to pick up any changes.
+3. The images are loaded in "eager" mode, meaning they're fetched ahead of time making the UI snappier.
 4. The KV store's eventual consistency is hidden by writing edits & deletes to the local copy of the data, as well as to the cloud via API calls.
-5. As a user navigates from the programme list to an individual programme, the full details of the programme are fetched and this version replaces the summary version in the in-memory programme list. This acts as a cache - if the user visits this programme again, we already have it. If the user goes to edit that programme, we already have it. The UI becomes very snappy indeed.
+5. As a user navigates from the programme list to an individual programme, the full details of the programme are fetched and this version replaces the summary version in the in-memory programme list. This acts as a cache - if the user visits the same programme again, we already have it. If the user goes to edit that programme, we already have it. The UI becomes very snappy indeed.
 
 ## API
 
@@ -138,6 +143,8 @@ curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d'{"url":"ht
 ```
 
 ## Bounce to the URL of the programme's picture - GET /api/img?id=X
+
+No auth requried for this API call, because it is executed in an `<img>` tag in the browser.
 
 Query-string parameters:
 

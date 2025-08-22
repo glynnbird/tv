@@ -37,23 +37,23 @@ Cloudflare KV items have three components:
 
 - `key` - a short string that defines the key of the item, and the sort order of the returned items. In our case the key looks like this: `doc:1740677332455` - a timestamp following a `doc:` prefix.
 - `metadata` - a 1KB JSON object that is returned when listing keys. We pack most programme data into here so that we can get nearly everything we need from just the programme list: e.g. `{"date":"2025-03-05","title":"A Cruel Love","watching":true,"on":"ITV","uptoep":"0","uptomax":"6","type":"Series","season":"","ts":1749823312}` - that is everything except the programme `description`, `stars` and `pic` fields which may take us over the 1KB limit.
-- `value` - some text. This contains the a JSON.stringified object that contains the `id`, a `doc` - the whole document and `_ts`, a timestamp.
+- `value` - JSON.stringified full document. 
 
 ```js
 {
-  "key": "doc:1740677332455",
+  "key": "doc:1748465815905",
   "metadata": {
-    "date": "2025-03-05",
-    "title": "A Cruel Love",
-    "watching": true,
-    "on": "ITV",
+    "date": "2025-09-16T23:00:00.000Z",
+    "on": "AppleTV",
+    "season": "4",
+    "title": "The Morning Show",
+    "ts": 1755702282,
+    "type": "Series",
     "uptoep": "0",
     "uptomax": "6",
-    "type": "Series",
-    "season": "",
-    "ts": 1749823312
+    "watching": false
   },
-  "value": "{\"id\":\"1740677332455\",\"doc\":{\"title\":\"A Cruel Love\",\"description\":\"Ruth Ellis's hidden story exposes British obsessions with class, sex, and death; in 1955 London's club-land, Ruth, 28, becomes the capital's youngest club manager; her success unravels due to an abusive relationship with racing driver David Blakely\",\"stars\":[\"Lucy Boynton\",\"Toby Jones\"],\"on\":\"ITV\",\"date\":\"2025-03-05\",\"season\":\"\",\"pic\":\"https://hips.hearstapps.com/hmg-prod/images/a-cruel-love-the-ruth-ellis-story-release-date-cast-plot-news-67af2e57d4f4a.jpg?crop=0.667xw:1.00xh;0.264xw,0&resize=1120:*\",\"watching\":true,\"type\":\"Series\",\"uptoep\":\"0\",\"uptomax\":\"6\",\"ts\":1749823312},\"_ts\":\"2025-06-13T14:01:51.910Z\"}"
+  "value": "{\"id\":\"1748465815905\",\"title\":\"The Morning Show\",\"description\":\"News drama\",\"stars\":[\"Jennifer Aniston\",\"Reese Witherspoon\"],\"on\":\"AppleTV\",\"date\":\"2025-09-16T23:00:00.000Z\",\"season\":\"4\",\"pic\":\"https://tvline.com/wp-content/uploads/2025/05/the-morning-show-season-4-b.jpg?w=600&h=400&crop=1\",\"watching\":false,\"type\":\"Series\",\"uptoep\":\"0\",\"uptomax\":\"6\",\"ts\":1755702282}"
 }
 ```
 
@@ -98,8 +98,8 @@ Parameters:
 e.g.
 
 ```sh
-curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d'{"id":"1740677332455"}' "https://$URL/api/get"
-{"ok":true,"doc":{"title":"A Cruel Love","description":"Ruth Ellis's hidden story exposes British obsessions with class, sex, and death; in 1955 London's club-land, Ruth, 28, becomes the capital's youngest club manager; her success unravels due to an abusive relationship with racing driver David Blakely","stars":["Lucy Boynton","Toby Jones"],"on":"ITV","date":"2025-03-05","season":"","pic":"https://hips.hearstapps.com/hmg-prod/images/a-cruel-love-the-ruth-ellis-story-release-date-cast-plot-news-67af2e57d4f4a.jpg?crop=0.667xw:1.00xh;0.264xw,0&resize=1120:*","watching":true,"type":"Series","uptoep":"0","uptomax":"6","ts":1749823312,"id":"1740677332455"}}
+curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d '{"id":"1755803479358"}'  "https://$URL/api/get"       
+{"ok":true,"doc":{"id":"1755803479358","title":"All Creatures Great and Small","description":"The series follows James Herriot and his colleagues as they navigate the opportunities that a new world brings in 1945, just as the war in Europe is coming to a close.","stars":["Nicholas Ralph","Rachel Shenton","Samuel West","Callum Woodhouse","Anna Madeley","Patricia Hodge","Tony Pitts","Imogen Clawson","Lucy-Jo Hudson"],"on":"Channel5","date":"2025-09-29T23:00:00.000Z","season":6,"pic":"https://images.immediate.co.uk/production/volatile/sites/3/2025/08/all-creatures-season-6-7f79c32.jpg?quality=90&webp=true&fit=1100,733","watching":false,"type":"Series","uptoep":"0","uptomax":6,"ts":1755807610}}
 ```
 
 ## List multiple programmes - POST /api/list
@@ -126,7 +126,6 @@ curl -X POST -H'Content-type:application/json' -H"apikey: $APIKEY" -d'{"id":"168
 {"ok":true}
 ```
 
-
 ## AI-powered prefill of a form - POST /api/ai
 
 Parameters:
@@ -145,7 +144,7 @@ Query-string parameters:
 - `id` - the id of the programme (required)
 
 ```sh
-curl -v "https://$URL/api/img?id=1681482390981"
+curl -v "https://$URL/api/img?id=1681482390981&ts1"
 < HTTP/2 301
 < date: Fri, 13 Jun 2025 14:36:46 GMT
 < content-type: text/plain;charset=UTF-8

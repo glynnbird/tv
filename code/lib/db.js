@@ -6,7 +6,7 @@ export const toggle = async function (kv, id, ts) {
   }
   const j = JSON.parse(value)
   await del(kv, id)
-  j.watching = !j.doc.watching
+  j.watching = !j.watching
   j.ts = ts
   await add(kv, j)
   return { ok: true }

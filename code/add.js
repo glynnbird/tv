@@ -16,6 +16,7 @@ export async function onRequest(context) {
     const id = json.id || (new Date().getTime()).toString()
 
     const doc = {
+      id,
       title: json.title,
       description: json.description || '',
       stars: json.stars || [],
@@ -31,7 +32,7 @@ export async function onRequest(context) {
     }
 
     // add to KV store
-    const response = await add(context.env.TVKV, { id, doc })
+    const response = await add(context.env.TVKV, doc)
 
     // send response
     return new Response(JSON.stringify(response), okResponse)

@@ -19,7 +19,7 @@ export async function onRequest(context) {
     const response = await del(context.env.TVKV, json.id)
 
     // save the doc as an archived doc
-    await archive(context.env.TVKV, { id: json.id, doc: getResponse.doc })
+    await archive(context.env.TVKV, getResponse.doc)
 
     // send response
     return new Response(JSON.stringify(response), okResponse)

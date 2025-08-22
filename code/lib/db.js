@@ -6,12 +6,8 @@ export const toggle = async function (kv, id, ts) {
   }
   const j = JSON.parse(value)
   await del(kv, id)
-  j.doc.watching = !j.doc.watching
-  j.doc.ts = ts
-  j.metadata = metadata
-  j.metadata.watching = j.doc.watching
-  j.metadata.on = j.doc.on
-  j.metadata.ts = ts
+  j.watching = !j.doc.watching
+  j.ts = ts
   await add(kv, j)
   return { ok: true }
 }
@@ -22,8 +18,7 @@ export const get = async function (kv, id) {
     return { ok: false }
   } else {
     const j = JSON.parse(r)
-    j.doc.id = id
-    return { ok: true, doc: j.doc }
+    return { ok: true, doc: j }
   }
 }
 
@@ -63,39 +58,26 @@ const generateMetadata = function (doc) {
 }
 // save an old doc into the archive
 export const archive = async function (kv, json) {
-  const metadata = generateMetadata(json.doc)
+  const metadata = generateMetadata(json)
 
   // if there's all the parts we need
-  if (json.id && json.doc && metadata) {
-    // write core doc
-    const coreDoc = {
-      id: json.id,
-      doc: json.doc,
-      _ts: new Date().toISOString(),
-    }
-    await kv.put(`archivedoc:${json.id}`, JSON.stringify(coreDoc), { metadata: metadata })
+  if (json && json.id && metadata) {
+    await kv.put(`archivedoc:${json.id}`, JSON.stringify(json), { metadata: metadata })
 
     // send response
     return { ok: true, id: json.id }
   }
-
 }
 
 export const add = async function (kv, json) {
   if (!json.id) {
     json.id = new Date().getTime().toString()
   }
-  const metadata = generateMetadata(json.doc)
+  const metadata = generateMetadata(json)
 
   // if there's all the parts we need
-  if (json.id && json.doc && metadata) {
-    // write core doc
-    const coreDoc = {
-      id: json.id,
-      doc: json.doc,
-      _ts: new Date().toISOString(),
-    }
-    await kv.put(`doc:${json.id}`, JSON.stringify(coreDoc), { metadata })
+  if (json && json.id && metadata) {
+    await kv.put(`doc:${json.id}`, JSON.stringify(json), { metadata })
 
     // send response
     return { ok: true, id: json.id }

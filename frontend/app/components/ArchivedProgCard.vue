@@ -26,7 +26,7 @@ const { prog } = defineProps(['prog'])
 }
 </style>
 <template>
-  <v-card class="cardsep" :key="prog.id" :to="`/prog/${prog.id}`">
+  <v-card class="cardsep" :key="prog.id">
     <v-card-title>
       {{ prog.title }}
       <v-chip v-if="prog.season" label color="white">{{ prog.season }}</v-chip>

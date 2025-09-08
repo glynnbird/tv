@@ -11,7 +11,7 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@vite-pwa/nuxt": "^1.0.4",
-    "nuxt": "^4.1.0",
+    "nuxt": "^4.1.1",
     "vite-plugin-vuetify": "^2.1.2"
   },
   "overrides": {
@@ -20,6 +20,12 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "latest"
   },
-  "os": ["darwin","linux"],
-  "cpu": ["arm64","x64"]
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "cpu": [
+    "arm64",
+    "x64"
+  ]
 }

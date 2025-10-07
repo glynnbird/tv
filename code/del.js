@@ -18,8 +18,10 @@ export async function onRequest(context) {
     // delete the id from the KV store
     const response = await del(context.env.TVKV, json.id)
 
-    // save the doc as an archived doc
-    await archive(context.env.TVKV, getResponse.doc)
+    // save the doc as an archived doc, only for watched progs
+    if (getResponse.doc.watching) {
+      await archive(context.env.TVKV, getResponse.doc)
+    }
 
     // send response
     return new Response(JSON.stringify(response), okResponse)

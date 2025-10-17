@@ -13,8 +13,8 @@ export const toggle = async function (kv, id, ts) {
 }
 
 export const get = async function (kv, id, archived=false) {
-  const id = archived ? `archivedoc:${id}` : `doc:${id}`
-  const r = await kv.get(id)
+  const docid = archived ? `archivedoc:${id}` : `doc:${id}`
+  const r = await kv.get(docid)
   if (r === null) {
     return { ok: false }
   } else {

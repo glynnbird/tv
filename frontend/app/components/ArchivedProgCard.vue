@@ -31,7 +31,7 @@ const { getImageURL } = useProgsList()
 </style>
 <template>
   <v-card class="cardsep" :key="prog.id">
-    <v-img cover eager transition="false" min-height="200" :src="getImageURL(prog, true)" class="progimg">
+    <v-img cover transition="false" min-height="200" :src="getImageURL(prog, true)" class="progimg">
       <v-card-title class="text-white shadow">
         {{ prog.title }}
         <v-chip v-if="prog.season" label color="white">{{ prog.season }}</v-chip>

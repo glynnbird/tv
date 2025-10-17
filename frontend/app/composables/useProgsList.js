@@ -42,8 +42,8 @@ export default function () {
   }
   
   // calculate the image URL for a programme
-  function getImageURL(prog) {
-    return `${apiHome}/api/img?id=${prog.id}&ts=${prog.ts || '0'}`
+  function getImageURL(prog, archived=false) {
+    return `${apiHome}/api/img?id=${prog.id}&ts=${prog.ts || '0'}&archived=${archived}`
   }
 
   // load progs from the API

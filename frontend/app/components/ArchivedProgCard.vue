@@ -1,5 +1,6 @@
 <script setup>
 const { prog } = defineProps(['prog'])
+const { getImageURL } = useProgsList()
 </script>
 <style>
 .sep {
@@ -24,32 +25,17 @@ const { prog } = defineProps(['prog'])
   font-size: 12px;
   font-weight: bold;
 }
+.progimg {
+  background-color: #eee;
+}
 </style>
 <template>
   <v-card class="cardsep" :key="prog.id">
-    <v-card-title>
-      {{ prog.title }}
-      <v-chip v-if="prog.season" label color="white">{{ prog.season }}</v-chip>
-    </v-card-title>
-    <v-card-text>
-      <v-chip class="sep" v-if="prog.on" variant="flat" color="grey-lighten-2" label size="default">
-        {{ prog.on }}
-      </v-chip>
-      <v-chip class="sep" variant="flat" label size="default" color="grey-lighten-2"
-        v-if="prog.type === 'Series' && prog.uptoep && prog.uptomax">
-        {{ prog.uptoep }} / {{ prog.uptomax }}
-      </v-chip>
-      <v-chip class="sep" variant="flat" label size="default" color="grey-lighten-2"
-        v-if="prog.type === 'Film' || prog.type == 'Single'">
-        {{ prog.type }}
-      </v-chip>
-      <v-chip class="sep" variant="flat" label size="default" color="white">
-        <HumanDate :date="prog.date" />
-      </v-chip>
-      <v-progress-linear class="cardsep" height="15" color="red-lighten-2"
-        v-if="prog.watching && prog.type === 'Series'" :model-value="prog.uptoep" :max="prog.uptomax">
-        <span class="percent">{{ Math.ceil(100 * prog.uptoep / prog.uptomax) }}%</span>
-      </v-progress-linear>
-    </v-card-text>
+    <v-img cover eager transition="false" min-height="200" :src="getImageURL(prog, true)" class="progimg">
+      <v-card-title class="text-white shadow">
+        {{ prog.title }}
+        <v-chip v-if="prog.season" label color="white">{{ prog.season }}</v-chip>
+      </v-card-title>
+    </v-img>
   </v-card>
 </template>

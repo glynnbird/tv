@@ -9,10 +9,11 @@ export async function onRequest(context) {
   if (!id) {
     return new Response(notOk, notOkResponse)
   }
+  const archived = (searchParams.get('archived') === 'true')
 
   // if there's a id
   if (id) {
-    const response = await get(context.env.TVKV, id)
+    const response = await get(context.env.TVKV, id, archived)
     if (response && response.doc && response.doc.pic) {
       // send 301 response
 

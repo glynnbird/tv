@@ -17,6 +17,13 @@ export default defineNuxtConfig({
       })
     }
   ],
+  app: {
+    head: {
+      link: [
+        { rel:"manifest", href:"/manifest.webmanifest"  }
+      ]
+    }
+  },
   ssr: false,
   pwa: {
     strategies: 'generateSW',

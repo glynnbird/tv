@@ -7,6 +7,11 @@ const now = ref(new Date().toISOString())
 const ts = new Date().getTime() + 1000 * 60 * 60 * 24 * 7
 const nextWeek = ref(new Date(ts).toISOString().substring(0, 10))
 const channels = ref(['BBC', 'ITV', 'Channel4', 'Channel5', 'SkyAtlantic', 'Alba', 'U'])
+
+async function delProg(id) {
+  await deleteProg(id)
+  await navigateTo('/')
+}
 </script>
 <style>
 .sep {
@@ -100,6 +105,6 @@ const channels = ref(['BBC', 'ITV', 'Channel4', 'Channel5', 'SkyAtlantic', 'Alba
     </v-card-actions>
   </v-card>
   <div class="pod" v-if="showActions == 'true' && prog.watching">
-    <v-btn color="error" variant="flat" @click="deleteProg(prog.id); navigateTo('/')">Delete</v-btn>
+    <v-btn color="error" variant="flat" @click="delProg(prog.id)">Delete</v-btn>
   </div>
 </template>

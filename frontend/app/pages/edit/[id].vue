@@ -20,6 +20,11 @@ async function edit() {
   }
 }
 
+async function delProg(id) {
+  await deleteProg(id)
+  await navigateTo('/')
+}
+
 // if we have and id, load the programme from the API
 if (id) {
   try {
@@ -45,5 +50,5 @@ if (id) {
   <PageTitle title="Edit"></PageTitle>
   <ProgrammeForm :prog="prog" :busy="busy" buttonTitle="Edit" @submit="edit()"></ProgrammeForm>
   <hr class="divider" />
-  <v-btn color="error" variant="flat" @click="deleteProg(prog.id); clear(prog.id); navigateTo('/')">Delete</v-btn>
+  <v-btn color="error" variant="flat" @click="delProg(prog.id)">Delete</v-btn>
 </template>

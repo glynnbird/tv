@@ -78,7 +78,7 @@ export async function onRequest(context) {
   // parse the json
   const json = await context.request.json()
 
-  // if there's a id
+  // if there's a url
   if (json.url) {
     console.log('url', json.url)
 
@@ -98,7 +98,6 @@ export async function onRequest(context) {
 
       // strip the tags
       html = strip(html)
-      console.log('stripped HTML', html)
 
       // send it to the AI model
       const response = await context.env.AI.run(MODEL, {
@@ -108,7 +107,6 @@ export async function onRequest(context) {
           { role: "user", content: `${PROMPT} ---- ${html}` }
         ]
       })
-      console.log('ai response', response.response)
 
       // strip backticks from the response
       const r = extractCodeBlock(response.response)
@@ -136,5 +134,4 @@ export async function onRequest(context) {
 
   // everyone else gets a 400 response
   return new Response(notOk, notOkResponse)
-
 }

@@ -1,6 +1,6 @@
 <script setup>
 const { plusOne, toggle, deleteProg, getImageURL } = useProgsList()
-const { prog } = defineProps(['prog', 'showActions'])
+const { prog, showActions, readonly } = defineProps({ prog: Object, showActions: Boolean, readonly: Boolean })
 
 // local page items
 const now = ref(new Date().toISOString())
@@ -40,9 +40,10 @@ async function delProg(id) {
 .progimg {
   background-color: #eee;
 }
+
 </style>
 <template>
-  <v-card class="cardsep" :key="prog.id" :to="`/prog/${prog.id}`">
+  <v-card class="cardsep" :key="prog.id" :to="readonly? null : `/prog/${prog.id}`">
     <v-img cover eager transition="false" min-height="200"
       :src="getImageURL(prog)" class="progimg">
       <v-card-title class="text-white shadow">

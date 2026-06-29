@@ -1,11 +1,11 @@
 <script setup>
 
 // input attributes
-const { progs } = defineProps(['progs'])
+const { progs, readonly } = defineProps({ progs: Array, readonly: Boolean })
 
 </script>
 <template>
-  <ProgCard v-for="prog in progs" :prog="prog" showActions="false"></ProgCard>
+  <ProgCard v-for="prog in progs" :prog="prog" showActions="false" :readonly="readonly"></ProgCard>
 
   <!-- if empty, show instructions -->
   <div v-if="progs.length === 0">

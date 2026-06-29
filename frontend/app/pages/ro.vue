@@ -4,5 +4,10 @@ definePageMeta({ layout : 'custom'})
 
 </script>
 <template>
-<ProgList :progs="watchedProgs" readonly></ProgList>
+  <TabNav target="/ro"></TabNav>
+  <!-- refresh the app -->
+  <PWARefresh></PWARefresh>
+
+  <!-- tab content -->
+  <TabContent readonly></TabContent>
 </template>

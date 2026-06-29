@@ -29,7 +29,7 @@ async function home() {
       </template>
       <template v-slot:extension v-if="route.name !== 'archive'">
         <!-- Tab navigation-->
-        <TabNav></TabNav>
+        <TabNav target="/"></TabNav>
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" location="left">

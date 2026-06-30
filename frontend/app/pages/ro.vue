@@ -1,6 +1,15 @@
 <script setup>
-const { watchedProgs } = useProgsList()
-definePageMeta({ layout : 'custom'})
+  const route = useRoute()
+  const { auth } = useAuth()
+  const apikey = route.query.apikey
+  if (apikey) {
+    auth.value = {
+      authenticated: true,
+      apiKey: apikey
+    }
+  }
+  const { watchedProgs } = useProgsList()
+  definePageMeta({ layout : 'custom'})
 
 </script>
 <template>

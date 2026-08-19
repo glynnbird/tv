@@ -9,19 +9,19 @@ export default defineConfig([
     input: 'ai.js',
     output: { format: 'esm', file: '../functions/api/ai.js' },
   },
-    {
+  {
     input: 'archivelist.js',
     output: { format: 'esm', file: '../functions/api/archivelist.js' },
   },
   {
     input: 'del.js',
     output: { format: 'esm', file: '../functions/api/del.js' },
-  },  
+  },
   {
     input: 'get.js',
     output: { format: 'esm', file: '../functions/api/get.js' },
   },
-    {
+  {
     input: 'img.js',
     output: { format: 'esm', file: '../functions/api/img.js' },
   },
@@ -29,7 +29,7 @@ export default defineConfig([
     input: 'list.js',
     output: { format: 'esm', file: '../functions/api/list.js' },
   },
-    {
+  {
     input: 'toggle.js',
     output: { format: 'esm', file: '../functions/api/toggle.js' },
   }

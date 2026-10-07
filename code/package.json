@@ -10,6 +10,6 @@
   "author": "Glynn Bird <glynn.bird@gmail.com>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "rolldown": "^1.2.4"
+    "rolldown": "^1.2.12"
   }
 }

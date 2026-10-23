@@ -10,6 +10,10 @@ export default defineConfig([
     output: { format: 'esm', file: '../functions/api/ai.js' },
   },
   {
+    input: 'ai2.js',
+    output: { format: 'esm', file: '../functions/api/ai2.js' },
+  },
+  {
     input: 'archivelist.js',
     output: { format: 'esm', file: '../functions/api/archivelist.js' },
   },

@@ -87,7 +87,7 @@ export async function onRequest(context) {
       html = strip(html)
 
       // send it to the AI model
-      const response = await context.env.AI.run(MODEL, {
+      const { answers } = await context.env.AI.run(MODEL, {
         state: html,
         fields: {
           title:            { type: "text", instructions: "the title of the TV programme" },
@@ -100,7 +100,7 @@ export async function onRequest(context) {
           season: {type: "number", instructions: "the forthcoming season number, as an integer greater than 0, or 0 if unavailable."}
         },
       })
-      console.log("AI says",response.response)
+      console.log("AI says", answers)
 
       // strip backticks from the response
       //const r = extractCodeBlock(response.response)
@@ -112,7 +112,7 @@ export async function onRequest(context) {
         // return object
         const obj = {
           ok: true,
-          response: response.response,
+          response: answers,
           imageURL: imageURL
         }
 

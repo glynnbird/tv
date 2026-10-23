@@ -4,6 +4,13 @@ import { okResponse, notOk, notOkResponse, missingResponse } from './lib/constan
 import { mustBePOST, mustBeJSON, apiKey, handleCORS } from './lib/checks.js'
 
 const MODEL = '@cf/cloudflare/clairic'
+const LLMMODEL = '@cf/meta/llama-4-scout-17b-16e-instruct'
+const MAX_TOKENS = 512
+const PROMPT = `
+Please summarise the following text as a JSON object with the following attributes:
+- stars: an array of strings containing up to five cast members, with no duplicates.
+Please return a JSON object and nothing else.
+`
 
 function strip(html) {
   // Remove <script> tags and their content
@@ -48,6 +55,15 @@ function extractOgImage(html) {
   return match[1];
 }
 
+function extractCodeBlock(str) {
+  const matches = str.match(/```j?s?o?n?([^`]+)```/)
+  if (str) {
+    return matches[1]
+  } else {
+    return ''
+  }
+}
+
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
   const r = handleCORS(context.request) || apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
@@ -77,7 +93,7 @@ export async function onRequest(context) {
       // strip the tags
       html = strip(html)
 
-      // send it to the AI model
+      // send it to the entity extractionAI model
       const { answers } = await context.env.AI.run(MODEL, {
         state: html,
         fields: {
@@ -91,14 +107,30 @@ export async function onRequest(context) {
           season: {type: "number", instructions: "the forthcoming season number, as an integer greater than 0, or 0 if unavailable."}
         },
       })
-      console.log("AI says", answers)
+      console.log("AI entity extraction says", answers)
+      
+      // only keep the value of each field
+      Object.keys(answers).forEach(function(k){ answers[k] = answers[k].value })
+      answers.pic = imageURL
+
+      // send it to the LLM to find the main stars in the TV programme
+      const response = await context.env.AI.run(MODEL, {
+        stream: false,
+        max_tokens: MAX_TOKENS,
+        messages: [
+          { role: "user", content: `${PROMPT} ---- ${html}` }
+        ]
+      })
+
+      // strip backticks from the response
+      const r = extractCodeBlock(response.response)
+      answers.stars = JSON.parse(r).stars
 
       try {
         // return object
         const obj = {
           ok: true,
-          response: answers.map(function(a){ return a.value }),
-          imageURL: imageURL
+          response: answers
         }
 
         // send response

@@ -48,15 +48,6 @@ function extractOgImage(html) {
   return match[1];
 }
 
-function extractCodeBlock(str) {
-  const matches = str.match(/```j?s?o?n?([^`]+)```/)
-  if (str) {
-    return matches[1]
-  } else {
-    return ''
-  }
-}
-
 export async function onRequest(context) {
   // handle POST/JSON/apikey chcecks
   const r = handleCORS(context.request) || apiKey(context.request, context.env) || mustBePOST(context.request) || mustBeJSON(context.request)
@@ -92,7 +83,7 @@ export async function onRequest(context) {
         fields: {
           title:            { type: "text", instructions: "the title of the TV programme" },
           description:      { type: "text", instructions: "a brief synopsis of the TV programme" },  
-          stars:              { type: "list", items: "text", instructions: "List of main stars in the TV programme - up to five cast members, with no duplicates." },
+          //stars:              { type: "list", items: "text", instructions: "List of main stars in the TV programme - up to five cast members, with no duplicates." },
           on:                  { type: "text", instructions: "the channel it is broadcast on in the UK - one of 'BBC','ITV','Channel4','Channel5','Netflix','AppleTV','Disney','Amazon','SkyAtlantic','Alba','Paramount','U'" },
           date:                { type: "date", instructions: "an ISO-8601 string representing the date of first broadcast in the UK. If no year is mentioned in the text, assume the current year." },
           type:                { type: "text", instructions: "either \"Film\" for a movie, \"Series\" for a series and \"Single\" for everything else."},
@@ -102,17 +93,11 @@ export async function onRequest(context) {
       })
       console.log("AI says", answers)
 
-      // strip backticks from the response
-      //const r = extractCodeBlock(response.response)
-
       try {
-        //const r2 = JSON.parse(r)
-        //r2.pic = imageURL
-
         // return object
         const obj = {
           ok: true,
-          response: answers,
+          response: answers.map(function(a){ return a.value }),
           imageURL: imageURL
         }
 

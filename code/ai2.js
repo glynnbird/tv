@@ -88,7 +88,6 @@ export async function onRequest(context) {
 
       // send it to the AI model
       const response = await context.env.AI.run(MODEL, {
-        stream: false,
         state: html,
         fields: {
           title:            { type: "text", instructions: "the title of the TV programme" },

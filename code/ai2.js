@@ -114,7 +114,7 @@ export async function onRequest(context) {
       answers.pic = imageURL
 
       // send it to the LLM to find the main stars in the TV programme
-      const response = await context.env.AI.run(MODEL, {
+      const response = await context.env.AI.run(LLMMODEL, {
         stream: false,
         max_tokens: MAX_TOKENS,
         messages: [

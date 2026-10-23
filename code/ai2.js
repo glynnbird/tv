@@ -97,6 +97,10 @@ export async function onRequest(context) {
       Object.keys(answers).forEach(function (k) { answers[k] = answers[k].value })
       answers.pic = imageURL
       answers.stars = answers.stars.filter(function (s) { return s.includes(' ') }).slice(0, 5)
+      if (answers.type && answers.type.length > 0) {
+        answers.type = answers.type[0].toUpperCase() + answers.type.slice(1)
+      }
+      
 
       try {
         // return object

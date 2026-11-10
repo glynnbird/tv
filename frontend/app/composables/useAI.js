@@ -15,7 +15,7 @@ export default function () {
     console.log('API', '/ai')
     const apiHome = config.public['apiBase'] || window.location.origin
     try {
-      const ret = await $fetch(`${apiHome}/api/ai2`, {
+      const ret = await $fetch(`${apiHome}/api/ai`, {
         method: 'post',
         body: {
           url

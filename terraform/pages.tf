@@ -40,7 +40,7 @@ resource "cloudflare_pages_project" "frontend_project" {
 
       ai_bindings = {
         AI = {
-          project_id = "944eea34-53ff-4f90-b4b6-ffd698e0ffad"
+          project_id = var.cloudflare_ai_project_id
         }
       }
 
@@ -64,7 +64,7 @@ resource "cloudflare_pages_project" "frontend_project" {
 
       ai_bindings = {
         AI = {
-          project_id = "944eea34-53ff-4f90-b4b6-ffd698e0ffad"
+          project_id = var.cloudflare_ai_project_id
         }
       }
 

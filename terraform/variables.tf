@@ -19,3 +19,6 @@ variable "cloudflare_subdomain" {
 variable "github_username" {
   type = string
 }
+variable "cloudflare_ai_project_id" {
+  type = string
+}

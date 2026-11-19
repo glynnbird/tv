@@ -1,4 +1,13 @@
 
+# --- Look up the existing project to get its UUID for the AI binding ---
+# (Only needed because ai_bindings.project_id is the project's OWN id,
+#  which can't be self-referenced. Remove if/when the provider auto-fills it.)
+data "cloudflare_pages_project" "tv" {
+  account_id = var.cloudflare_account_id
+  project_name       = "tv"
+}
+
+
 resource "cloudflare_pages_project" "frontend_project" {
   account_id        = var.cloudflare_account_id
   name              = "tv"
@@ -40,7 +49,7 @@ resource "cloudflare_pages_project" "frontend_project" {
 
       ai_bindings = {
         AI = {
-          project_id = var.cloudflare_ai_project_id
+          project_id = data.cloudflare_pages_project.tv.canonical_deployment.project_id 
         }
       }
 
@@ -64,7 +73,7 @@ resource "cloudflare_pages_project" "frontend_project" {
 
       ai_bindings = {
         AI = {
-          project_id = var.cloudflare_ai_project_id
+          project_id = data.cloudflare_pages_project.tv.canonical_deployment.project_id 
         }
       }
 
